@@ -1,5 +1,5 @@
-import somen.norm_lens
-import somen.norm_rot
-import somen.norm_tau
-import somen.norm_src
+from tempura import norm_lens
+from tempura import norm_rot
+from tempura import norm_tau
+from tempura import norm_src
 
