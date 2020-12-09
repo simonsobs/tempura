@@ -1,4 +1,4 @@
-import libtempura
+from . import _libtempura 
 
 def qtt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
   """
@@ -20,7 +20,7 @@ def qtt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
   Usage:
     :Ag,Ac = tempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype):
   """
-  return libtempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype)
+  return _libtempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype)
 
 def qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype= ''):
   """
@@ -43,7 +43,7 @@ def qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype= ''):
   Usage:
     :Ag,Ac = tempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype):
   """
-  return libtempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype)
+  return _libtempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype)
 
 def qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype= ''):
   """
@@ -66,7 +66,7 @@ def qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype= ''):
   Usage:
     :Ag,Ac = tempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype):
   """
-  return libtempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype)
+  return _libtempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype)
 
 def qee(lmax,rlmin,rlmax,fC,OCE,gtype= ''):
   """
@@ -88,7 +88,7 @@ def qee(lmax,rlmin,rlmax,fC,OCE,gtype= ''):
   Usage:
     :Ag,Ac = tempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype):
   """
-  return libtempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype)
+  return _libtempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype)
 
 def qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype= ''):
   """
@@ -111,7 +111,7 @@ def qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype= ''):
   Usage:
     :Ag,Ac = tempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype):
   """
-  return libtempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype)
+  return _libtempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype)
 
 def qbb(lmax,rlmin,rlmax,fC,OCB,gtype= ''):
   """
@@ -133,7 +133,7 @@ def qbb(lmax,rlmin,rlmax,fC,OCB,gtype= ''):
   Usage:
     :Ag,Ac = tempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype):
   """
-  return libtempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype)
+  return _libtempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype)
 
 def qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype= ''):
   """
@@ -158,7 +158,7 @@ def qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype= ''):
   Usage:
     :Ig,Ic = tempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype):
   """
-  return libtempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype)
+  return _libtempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype)
 
 def qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype= ''):
   """
@@ -183,7 +183,7 @@ def qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype= ''):
   Usage:
     :Ig,Ic = tempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype):
   """
-  return libtempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype)
+  return _libtempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype)
 
 def qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype= ''):
   """
@@ -208,7 +208,7 @@ def qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype= ''):
   Usage:
     :Ig,Ic = tempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype):
   """
-  return libtempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype)
+  return _libtempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype)
 
 def qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype= ''):
   """
@@ -234,7 +234,7 @@ def qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype= ''):
   Usage:
     :Ig,Ic = tempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype):
   """
-  return libtempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype)
+  return _libtempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype)
 
 def qmv(lmax,QDO,Al,Il):
   """
@@ -253,7 +253,7 @@ def qmv(lmax,QDO,Al,Il):
   Usage:
     :MV,Nl = tempura.norm_lens.qmv(lmax,QDO,Al,Il):
   """
-  return libtempura.norm_lens.qmv(lmax,QDO,Al,Il)
+  return _libtempura.norm_lens.qmv(lmax,QDO,Al,Il)
 
 def qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype= ''):
   """
@@ -277,7 +277,7 @@ def qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype= ''):
   Usage:
     :Ag,Ac,Nlg,Nlc = tempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype):
   """
-  return libtempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype)
+  return _libtempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype)
 
 def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter= 1,conv= 1e-6):
   """
@@ -304,7 +304,7 @@ def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter= 1,conv= 1e-
   Usage:
     :Ag,Ac = tempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv):
   """
-  return libtempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv)
+  return _libtempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv)
 
 def ttt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
   """
@@ -325,7 +325,7 @@ def ttt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
   Usage:
     :Ag = tempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype):
   """
-  return libtempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype)
+  return _libtempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype)
 
 def stt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
   """
@@ -346,5 +346,5 @@ def stt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
   Usage:
     :Ag = tempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype):
   """
-  return libtempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype)
+  return _libtempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype)
 

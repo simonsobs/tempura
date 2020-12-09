@@ -1,4 +1,4 @@
-import libtempura
+from . import _libtempura
 
 def qtt(lmax,rlmin,rlmax,OCT):
   """
@@ -16,5 +16,5 @@ def qtt(lmax,rlmin,rlmax,OCT):
   Usage:
     :As = tempura.norm_src.qtt(lmax,rlmin,rlmax,OCT):
   """
-  return libtempura.norm_src.qtt(lmax,rlmin,rlmax,OCT)
+  return _libtempura.norm_src.qtt(lmax,rlmin,rlmax,OCT)
 
