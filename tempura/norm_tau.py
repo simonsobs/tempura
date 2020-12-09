@@ -1,4 +1,4 @@
-import libtempura
+from . import _libtempura
 
 def qtt(lmax,rlmin,rlmax,fC,OCT):
   """
@@ -16,7 +16,7 @@ def qtt(lmax,rlmin,rlmax,fC,OCT):
   Usage:
     :At = tempura.norm_tau.qtt(lmax,rlmin,rlmax,fC,OCT):
   """
-  return libtempura.norm_tau.qtt(lmax,rlmin,rlmax,fC,OCT)
+  return _libtempura.norm_tau.qtt(lmax,rlmin,rlmax,fC,OCT)
 
 def qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB=None):
   """
@@ -39,7 +39,7 @@ def qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB=None):
     :At = tempura.norm_tau.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB):
   """
   if BB is None: BB= EE*0
-  return libtempura.norm_tau.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB)
+  return _libtempura.norm_tau.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB)
 
 def oeb(lmax,rlmin,rlmax,EB,OCE,OCB):
   """
@@ -59,7 +59,7 @@ def oeb(lmax,rlmin,rlmax,EB,OCE,OCB):
   Usage:
     :At = tempura.norm_tau.oeb(lmax,rlmin,rlmax,EB,OCE,OCB):
   """
-  return libtempura.norm_tau.oeb(lmax,rlmin,rlmax,EB,OCE,OCB)
+  return _libtempura.norm_tau.oeb(lmax,rlmin,rlmax,EB,OCE,OCB)
 
 def stt(lmax,rlmin,rlmax,fC,OCT):
   """
@@ -77,5 +77,5 @@ def stt(lmax,rlmin,rlmax,fC,OCT):
   Usage:
     :At = tempura.norm_tau.stt(lmax,rlmin,rlmax,fC,OCT):
   """
-  return libtempura.norm_tau.stt(lmax,rlmin,rlmax,fC,OCT)
+  return _libtempura.norm_tau.stt(lmax,rlmin,rlmax,fC,OCT)
 

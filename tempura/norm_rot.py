@@ -1,4 +1,4 @@
-import libtempura
+from . import _libtempura
 
 def qtb(lmax,rlmin,rlmax,fC,OCT,OCB):
   """
@@ -17,7 +17,7 @@ def qtb(lmax,rlmin,rlmax,fC,OCT,OCB):
   Usage:
     :Aa = tempura.norm_rot.qtb(lmax,rlmin,rlmax,fC,OCT,OCB):
   """
-  return libtempura.norm_rot.qtb(lmax,rlmin,rlmax,fC,OCT,OCB)
+  return _libtempura.norm_rot.qtb(lmax,rlmin,rlmax,fC,OCT,OCB)
 
 def qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB=None):
   """
@@ -40,7 +40,7 @@ def qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB=None):
     :Aa = tempura.norm_rot.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB):
   """
   if BB is None: BB= EE*0
-  return libtempura.norm_rot.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB)
+  return _libtempura.norm_rot.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB)
 
 def teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB=None):
   """
@@ -64,5 +64,5 @@ def teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB=None):
     :Aa = tempura.norm_rot.teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB):
   """
   if BB is None: BB= EE*0
-  return libtempura.norm_rot.teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB)
+  return _libtempura.norm_rot.teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB)
 
