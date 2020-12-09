@@ -14,11 +14,13 @@ The code was verified in the following stiduies:
 
 ### Installation
 
-  Go to the root directory and type one of the following command:
+  Run 
 
-    - ./MAKEALL.sh all       (for generating all modules)
+    python setup.py build_ext -i
   
-  You will find modules under "wrap/"
+  You can then 'import tempura' if this repository is in your PYTHONPATH.
+
+  We are working on making this package available on PyPI (for a pip install).
 
 
 ### Examples
