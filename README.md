@@ -1,4 +1,4 @@
-# Tool for Efficient coMPUtation of mode-coupling estimatoR normAlization (TEMPURA)
+### Tool for Efficient coMPUtation of mode-coupling estimatoR normAlization (TEMPURA)
 
 This package contains a python module to compute analytic normalization of quadratic estimators for lensing, cosmic birefringence, patchy tau and point sources, based on separable formula. 
 
@@ -12,7 +12,7 @@ The code was verified in the following stiduies:
    Namikawa PRD, 97 (2018) 063505, https://arxiv.org/abs/1711.00058
 
 
-# Installation
+### Installation
 
   [1] Compile Fortran public software
 
@@ -27,12 +27,12 @@ The code was verified in the following stiduies:
   You will find modules under "wrap/"
 
 
-# Examples
+### Examples
 
 You can find the example codes at "example" directory. 
 
 
-# Contact
+### Contact
 
   tn334 at cam.ac.uk
 
