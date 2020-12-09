@@ -14,12 +14,6 @@ The code was verified in the following stiduies:
 
 ### Installation
 
-  [1] Compile Fortran public software
-
-  Go to "F90/src/" 
-
-  [2] Create Fortran wrapper
-
   Go to the root directory and type one of the following command:
 
     - ./MAKEALL.sh all       (for generating all modules)
@@ -29,11 +23,11 @@ The code was verified in the following stiduies:
 
 ### Examples
 
-You can find the example codes at "example" directory. 
+You can find the example codes at "test" directory. 
 
 
 ### Contact
 
-  tn334 at cam.ac.uk
+  Toshiya Namikawa (namikawa.toshiya9@gmail.com)
 
 
