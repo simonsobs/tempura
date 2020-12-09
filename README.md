@@ -23,7 +23,7 @@ The code was verified in the following stiduies:
 
 ### Examples
 
-You can find the example codes at "example" directory. 
+You can find the example codes at "test" directory. 
 
 
 ### Contact
