@@ -3,3 +3,4 @@ out.log
 *.pyc
 .#*
 *.so
+*.png
