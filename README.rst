@@ -20,7 +20,7 @@ tempura
 (T)ool for (E)fficient co(MPU)tation of mode-coupling estimato(R) norm(A)lization
 ---------------------------------------------------------------------------------
 
-.. image:: tests/data/image.png
+.. image:: pytempura/tests/data/image.png
 
 This package contains a python module to compute analytic normalization of quadratic estimators for lensing, cosmic birefringence, patchy tau and point sources, based on separable formula. 
 

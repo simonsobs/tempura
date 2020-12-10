@@ -6,3 +6,4 @@ out.log
 *.png
 .ipynb_checkpoints
 *.egg-info
+*.coverage
