@@ -11,7 +11,7 @@ module norm_tau
 contains
 
 
-subroutine qtt(lmax,rlmin,rlmax,fC,OCT,At)
+subroutine qtt(lmax,rlmin,rlmax,fC,OCT,At,N)
 !*  Normalization of reconstructed amplitude modulation from the temperature quadratic estimator
 !*
 !*  Args:
@@ -26,7 +26,8 @@ subroutine qtt(lmax,rlmin,rlmax,fC,OCT,At)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: fC, OCT
+  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:N) :: fC, OCT
   double precision, intent(out), dimension(0:lmax) :: At
   !internal
   integer :: rL(2), l
@@ -60,7 +61,7 @@ subroutine qtt(lmax,rlmin,rlmax,fC,OCT,At)
 end subroutine qtt
 
 
-subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,At)
+subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,At,N)
 !*  Normalization of reconstructed amplitude modulation from the EB quadratic estimator
 !*
 !*  Args:
@@ -79,10 +80,11 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,At)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: EE, OCE, OCB
+  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:N) :: EE, OCE, OCB
   double precision, intent(out), dimension(0:lmax) :: At
   !optional
-  double precision, intent(in), dimension(0:rlmax), optional :: BB
+  double precision, intent(in), dimension(0:N), optional :: BB
   !f2py double precision :: BB = 0
   !docstr :: BB = EE*0
   !internal
@@ -124,7 +126,7 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,At)
 end subroutine qeb
 
 
-subroutine oeb(lmax,rlmin,rlmax,EB,OCE,OCB,At)
+subroutine oeb(lmax,rlmin,rlmax,EB,OCE,OCB,At,N)
 !*  Normalization of reconstructed amplitude from the EB quadratic estimator
 !*  The kernels are the same as the rotation normalization but with a factor of 4. 
 !*
@@ -141,7 +143,8 @@ subroutine oeb(lmax,rlmin,rlmax,EB,OCE,OCB,At)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: EB, OCE, OCB
+  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:N) :: EB, OCE, OCB
   double precision, intent(out), dimension(0:lmax) :: At
   !internal
   integer :: l, rL(2)
@@ -178,7 +181,7 @@ subroutine oeb(lmax,rlmin,rlmax,EB,OCE,OCB,At)
 end subroutine oeb
 
 
-subroutine stt(lmax,rlmin,rlmax,fC,OCT,At)
+subroutine stt(lmax,rlmin,rlmax,fC,OCT,At,N)
 !*  Unnormalized response between patchy tau and poisson sources/inhomogeneous noise with the temperature quadratic estimator
 !*
 !*  Args:
@@ -193,7 +196,8 @@ subroutine stt(lmax,rlmin,rlmax,fC,OCT,At)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: fC, OCT
+  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:N) :: fC, OCT
   double precision, intent(out), dimension(0:lmax) :: At
   !internal
   integer :: rL(2), l

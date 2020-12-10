@@ -11,7 +11,7 @@ module norm_src
 contains
 
 
-subroutine qtt(lmax,rlmin,rlmax,OCT,As)
+subroutine qtt(lmax,rlmin,rlmax,OCT,As,N)
 !*  Normalization of reconstructed src field from the temperature quadratic estimator
 !*
 !*  Args:
@@ -26,7 +26,8 @@ subroutine qtt(lmax,rlmin,rlmax,OCT,As)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: OCT
+  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:N) :: OCT
   double precision, intent(out), dimension(0:lmax) :: As
   !internal
   integer :: rL(2), l
