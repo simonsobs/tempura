@@ -44,7 +44,7 @@ Run
    $ python setup.py build_ext -i
 
   
-You can then 'import tempura' if this repository is in your PYTHONPATH.
+You can then 'import pytempura' if this repository is in your PYTHONPATH.
 
 We are working on making this package available on PyPI (for a pip install).
 
