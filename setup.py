@@ -107,7 +107,11 @@ class CustomBuild(build_ext):
         print("Running build...")
         ret = build_ext.run(self)
         fs = glob.glob(f'_libtempura*.so')
-        assert len(fs)==1
+        try:
+            assert len(fs)==1
+        except:
+            print(fs)
+            raise
         shutil.move(fs[0],f'pytempura/{fs[0]}')
         return ret
 
