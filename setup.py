@@ -65,6 +65,7 @@ def pip_install(package):
 
 requirements =  ['numpy>=1.16',
                  'setuptools>=39',
+                 'matplotlib>=2.0',
                  'pytest-cov>=2.6',
                  'coveralls>=1.5',
                  'pytest>=4.6']
@@ -72,6 +73,7 @@ requirements =  ['numpy>=1.16',
 
 test_requirements = ['pip>=9.0',
                      'bumpversion>=0.5.',
+                     'matplotlib>=2.0',
                      'wheel>=0.30',
                      'watchdog>=0.8',
                      'flake8>=3.5',
