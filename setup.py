@@ -65,6 +65,7 @@ def pip_install(package):
 
 requirements =  ['numpy>=1.16',
                  'setuptools>=39',
+                 'matplotlib>=2.0',
                  'pytest-cov>=2.6',
                  'coveralls>=1.5',
                  'pytest>=4.6']
@@ -72,6 +73,7 @@ requirements =  ['numpy>=1.16',
 
 test_requirements = ['pip>=9.0',
                      'bumpversion>=0.5.',
+                     'matplotlib>=2.0',
                      'wheel>=0.30',
                      'watchdog>=0.8',
                      'flake8>=3.5',
@@ -105,8 +107,12 @@ class CustomBuild(build_ext):
         print("Running build...")
         ret = build_ext.run(self)
         fs = glob.glob(f'_libtempura*.so')
-        assert len(fs)==1
-        shutil.move(fs[0],f'tempura/{fs[0]}')
+        try:
+            assert len(fs)==1
+        except:
+            print(fs)
+            raise
+        shutil.move(fs[0],f'pytempura/{fs[0]}')
         return ret
 
 # Cascade your overrides here.
@@ -128,8 +134,8 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="tempura",
-    package_dir={"tempura": "tempura"},
+    description="Normalization for mode-coupling estimators",
+    package_dir={"pytempura": "pytempura"},
     entry_points={
     },
     ext_modules=[
@@ -145,9 +151,9 @@ setup(
     # long_description=readme + '\n\n' + history,
     include_package_data=True,    
     keywords='CMB lensing',
-    name='tempura',
+    name='pytempura',
     packages=find_packages(),
-    test_suite='tempura.tests',
+    test_suite='pytempura.tests',
     tests_require=test_requirements,
     url='https://github.com/simonsobs/tempura',
     version=versioneer.get_version(),
