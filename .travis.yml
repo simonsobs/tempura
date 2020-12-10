@@ -17,7 +17,7 @@ env:
   global:
     - TWINE_USERNAME=__token__
     # Note: TWINE_PASSWORD is set to an API token in Travis settings
-    - CIBW_BEFORE_BUILD="python3 -m pip install numpy scipy cython"
+    - CIBW_BEFORE_BUILD="python3 -m pip install numpy scipy cython versioneer"
     - CIBW_BUILD_VERBOSITY=3
     - CIBW_BUILD="cp3?-*x86_64"
     - CIBW_SKIP="cp33-* cp34-* cp35-*"
@@ -27,7 +27,7 @@ env:
 install:
   - python3 -m pip install -U pip
   - python3 -m easy_install -U setuptools
-  - python3 -m pip install pytest-cov
+  - python3 -m pip install pytest-cov versioneer
   - python3 -m pip install cibuildwheel==1.4.2
 
 script:
