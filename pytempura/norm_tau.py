@@ -14,7 +14,7 @@ def qtt(lmax,rlmin,rlmax,fC,OCT):
     :At [*l*] (*double*): tau normalization, with bounds (0:lmax)
 
   Usage:
-    :At = tempura.norm_tau.qtt(lmax,rlmin,rlmax,fC,OCT):
+    :At = pytempura.norm_tau.qtt(lmax,rlmin,rlmax,fC,OCT):
   """
   return _libtempura.norm_tau.qtt(lmax,rlmin,rlmax,fC,OCT)
 
@@ -36,7 +36,7 @@ def qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB=None):
     :At [*l*] (*double*): Amplitude modulation normalization, with bounds (0:lmax)
 
   Usage:
-    :At = tempura.norm_tau.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB):
+    :At = pytempura.norm_tau.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB):
   """
   if BB is None: BB= EE*0
   return _libtempura.norm_tau.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB)
@@ -57,7 +57,7 @@ def oeb(lmax,rlmin,rlmax,EB,OCE,OCB):
     :At [*l*] (*double*): Normalization, with bounds (0:lmax)
 
   Usage:
-    :At = tempura.norm_tau.oeb(lmax,rlmin,rlmax,EB,OCE,OCB):
+    :At = pytempura.norm_tau.oeb(lmax,rlmin,rlmax,EB,OCE,OCB):
   """
   return _libtempura.norm_tau.oeb(lmax,rlmin,rlmax,EB,OCE,OCB)
 
@@ -75,7 +75,7 @@ def stt(lmax,rlmin,rlmax,fC,OCT):
     :At [*l*] (*double*): tau normalization, with bounds (0:lmax)
 
   Usage:
-    :At = tempura.norm_tau.stt(lmax,rlmin,rlmax,fC,OCT):
+    :At = pytempura.norm_tau.stt(lmax,rlmin,rlmax,fC,OCT):
   """
   return _libtempura.norm_tau.stt(lmax,rlmin,rlmax,fC,OCT)
 

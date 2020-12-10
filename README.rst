@@ -12,8 +12,8 @@ tempura
 .. image:: https://coveralls.io/repos/github/simonsobs/tempura/badge.svg?branch=master
 		   :target: https://coveralls.io/github/simonsobs/tempura?branch=master
 
-.. image:: https://badge.fury.io/py/tempura.svg
-		       :target: https://badge.fury.io/py/tempura
+.. image:: https://badge.fury.io/py/pytempura.svg
+		       :target: https://badge.fury.io/py/pytempura
 
 
 	   

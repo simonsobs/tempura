@@ -18,7 +18,7 @@ def qtt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
     :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = tempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype):
+    :Ag,Ac = pytempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype):
   """
   return _libtempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype)
 
@@ -41,7 +41,7 @@ def qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype= ''):
     :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = tempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype):
+    :Ag,Ac = pytempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype):
   """
   return _libtempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype)
 
@@ -64,7 +64,7 @@ def qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype= ''):
     :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = tempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype):
+    :Ag,Ac = pytempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype):
   """
   return _libtempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype)
 
@@ -86,7 +86,7 @@ def qee(lmax,rlmin,rlmax,fC,OCE,gtype= ''):
     :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = tempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype):
+    :Ag,Ac = pytempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype):
   """
   return _libtempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype)
 
@@ -109,7 +109,7 @@ def qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype= ''):
     :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = tempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype):
+    :Ag,Ac = pytempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype):
   """
   return _libtempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype)
 
@@ -131,7 +131,7 @@ def qbb(lmax,rlmin,rlmax,fC,OCB,gtype= ''):
     :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = tempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype):
+    :Ag,Ac = pytempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype):
   """
   return _libtempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype)
 
@@ -156,7 +156,7 @@ def qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype= ''):
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
   Usage:
-    :Ig,Ic = tempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype):
+    :Ig,Ic = pytempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype):
   """
   return _libtempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype)
 
@@ -181,7 +181,7 @@ def qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype= ''):
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
   Usage:
-    :Ig,Ic = tempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype):
+    :Ig,Ic = pytempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype):
   """
   return _libtempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype)
 
@@ -206,7 +206,7 @@ def qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype= ''):
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
   Usage:
-    :Ig,Ic = tempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype):
+    :Ig,Ic = pytempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype):
   """
   return _libtempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype)
 
@@ -232,7 +232,7 @@ def qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype= ''):
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
   Usage:
-    :Ig,Ic = tempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype):
+    :Ig,Ic = pytempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype):
   """
   return _libtempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype)
 
@@ -251,7 +251,7 @@ def qmv(lmax,QDO,Al,Il):
     :Nl [*6,l*] (*double*): Weights for each estimator (TT, TE, EE, TB, EB, BB=0), with bounds (0:lmax)
 
   Usage:
-    :MV,Nl = tempura.norm_lens.qmv(lmax,QDO,Al,Il):
+    :MV,Nl = pytempura.norm_lens.qmv(lmax,QDO,Al,Il):
   """
   return _libtempura.norm_lens.qmv(lmax,QDO,Al,Il)
 
@@ -275,7 +275,7 @@ def qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype= ''):
     :Nlc [*6,l*] (*double*): Same as Nlg but for curl mode
 
   Usage:
-    :Ag,Ac,Nlg,Nlc = tempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype):
+    :Ag,Ac,Nlg,Nlc = pytempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype):
   """
   return _libtempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype)
 
@@ -302,7 +302,7 @@ def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter= 1,conv= 1e-
     :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = tempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv):
+    :Ag,Ac = pytempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv):
   """
   return _libtempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv)
 
@@ -323,7 +323,7 @@ def ttt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
     :Ag [*l*] (*double*): Cross normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag = tempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype):
+    :Ag = pytempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype):
   """
   return _libtempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype)
 
@@ -344,7 +344,7 @@ def stt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
     :Ag [*l*] (*double*): Cross normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag = tempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype):
+    :Ag = pytempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype):
   """
   return _libtempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype)
 

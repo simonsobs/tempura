@@ -12,7 +12,7 @@ See :ref:`UsagePage` as well.
 norm_lens - Lensing normalization
 ---------------------------------
 
-.. automodule:: tempura.norm_lens
+.. automodule:: pytempura.norm_lens
    :members:    
    :undoc-members:
 
@@ -20,21 +20,21 @@ norm_lens - Lensing normalization
 norm_src - Point source normalization
 -------------------------------------
 
-.. automodule:: tempura.norm_src
+.. automodule:: pytempura.norm_src
    :members:    
    :undoc-members:
 
 norm_rot - Rotation normalization
 ---------------------------------
 
-.. automodule:: tempura.norm_rot
+.. automodule:: pytempura.norm_rot
    :members:    
    :undoc-members:
 
 norm_tau - Tau normalization
 ----------------------------
 
-.. automodule:: tempura.norm_tau
+.. automodule:: pytempura.norm_tau
    :members:    
    :undoc-members:
 

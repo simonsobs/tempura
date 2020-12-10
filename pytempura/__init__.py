@@ -9,8 +9,8 @@ __version__ = get_versions()['version']
 del get_versions
 
 
-from tempura import norm_lens
-from tempura import norm_rot
-from tempura import norm_tau
-from tempura import norm_src
+from . import norm_lens
+from . import norm_rot
+from . import norm_tau
+from . import norm_src
 

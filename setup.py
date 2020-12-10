@@ -106,7 +106,7 @@ class CustomBuild(build_ext):
         ret = build_ext.run(self)
         fs = glob.glob(f'_libtempura*.so')
         assert len(fs)==1
-        shutil.move(fs[0],f'tempura/{fs[0]}')
+        shutil.move(fs[0],f'pytempura/{fs[0]}')
         return ret
 
 # Cascade your overrides here.
@@ -128,8 +128,8 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="tempura",
-    package_dir={"tempura": "tempura"},
+    description="Normalization for mode-coupling estimators",
+    package_dir={"pytempura": "pytempura"},
     entry_points={
     },
     ext_modules=[
@@ -145,9 +145,9 @@ setup(
     # long_description=readme + '\n\n' + history,
     include_package_data=True,    
     keywords='CMB lensing',
-    name='tempura',
+    name='pytempura',
     packages=find_packages(),
-    test_suite='tempura.tests',
+    test_suite='pytempura.tests',
     tests_require=test_requirements,
     url='https://github.com/simonsobs/tempura',
     version=versioneer.get_version(),

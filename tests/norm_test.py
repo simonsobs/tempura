@@ -1,6 +1,6 @@
 import numpy as np, sys
 import matplotlib.pyplot as plt
-import tempura as cs
+import pytempura 
 
 
 # First define parameters
@@ -42,10 +42,10 @@ QDO = [True,True,True,True,True,True] # this means that TT, TE, EE, TB and EB ar
 # "Wg" ("Wc") below is the optimal weight for constructing the MV estimator; $$\phi^{MV} = A^{MV}\sum_q W_q \phi^q$$ where $W$ is Wg (Wc) and $q = TT, TE, \dots$. 
 # BB is not output, and the array has 6 normalizations (TT, TE, EE, TB, EB and MV)
 
-Ag, Ac, Wg, Wc = cs.norm_lens.qall(QDO,Lmax,rlmin,rlmax,lcl,ocl)
+Ag, Ac, Wg, Wc = pytempura.norm_lens.qall(QDO,Lmax,rlmin,rlmax,lcl,ocl)
 
 # Iterative EB
-ebAg,ebAc = cs.norm_lens.qeb_iter(Lmax,rlmax,rlmin,rlmax,rlmin,rlmax,lcl[1],lcl[1],lcl[2],Cpp,iter= 5,conv= 1e-3)
+ebAg,ebAc = pytempura.norm_lens.qeb_iter(Lmax,rlmax,rlmin,rlmax,rlmin,rlmax,lcl[1],lcl[1],lcl[2],Cpp,iter= 5,conv= 1e-3)
 
 
 # plot spectra (gradient)

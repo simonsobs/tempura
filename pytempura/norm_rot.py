@@ -15,7 +15,7 @@ def qtb(lmax,rlmin,rlmax,fC,OCT,OCB):
     :Aa [*l*] (*double*): Pol. rot. angle normalization, with bounds (0:lmax)
 
   Usage:
-    :Aa = tempura.norm_rot.qtb(lmax,rlmin,rlmax,fC,OCT,OCB):
+    :Aa = pytempura.norm_rot.qtb(lmax,rlmin,rlmax,fC,OCT,OCB):
   """
   return _libtempura.norm_rot.qtb(lmax,rlmin,rlmax,fC,OCT,OCB)
 
@@ -37,7 +37,7 @@ def qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB=None):
     :Aa [*l*] (*double*): Pol. rot. angle normalization, with bounds (0:lmax)
 
   Usage:
-    :Aa = tempura.norm_rot.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB):
+    :Aa = pytempura.norm_rot.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB):
   """
   if BB is None: BB= EE*0
   return _libtempura.norm_rot.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB)
@@ -61,7 +61,7 @@ def teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB=None):
     :Aa [*l*] (*double*): Pol. rot. angle normalization, with bounds (0:lmax)
 
   Usage:
-    :Aa = tempura.norm_rot.teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB):
+    :Aa = pytempura.norm_rot.teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB):
   """
   if BB is None: BB= EE*0
   return _libtempura.norm_rot.teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB)
