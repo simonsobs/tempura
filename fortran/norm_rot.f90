@@ -11,7 +11,7 @@ module norm_rot
 contains
 
 
-subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Aa)
+subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Aa,N)
 !*  Normalization of reconstructed pol. rot. angle from the TB quadratic estimator
 !*
 !*  Args:
@@ -27,7 +27,8 @@ subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Aa)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: fC, OCT, OCB
+  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:N) :: fC, OCT, OCB
   double precision, intent(out), dimension(0:lmax) :: Aa
   !internal
   integer :: l, rL(2)
@@ -55,7 +56,7 @@ subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Aa)
 end subroutine qtb
 
 
-subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,Aa)
+subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,Aa,N)
 !*  Normalization of reconstructed pol. rot. angle from the EB quadratic estimator
 !*
 !*  Args:
@@ -74,10 +75,11 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,Aa)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: EE, OCE, OCB
+  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:N) :: EE, OCE, OCB
   double precision, intent(out), dimension(0:lmax) :: Aa
   !optional
-  double precision, intent(in), dimension(0:rlmax), optional :: BB
+  double precision, intent(in), dimension(0:N), optional :: BB
   !f2py double precision :: BB = 0
   !docstr :: BB = EE*0
   !internal
@@ -119,7 +121,7 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,Aa)
 end subroutine qeb
 
 
-subroutine teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB,Aa)
+subroutine teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB,Aa,N)
 !*  Response of reconstructed pol. rot. angle to amplitude in the EB quadratic estimator
 !*
 !*  Args:
@@ -139,10 +141,11 @@ subroutine teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB,Aa)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: EE, EB, OCE, OCB
+  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:N) :: EE, EB, OCE, OCB
   double precision, intent(out), dimension(0:lmax) :: Aa
   !optional
-  double precision, intent(in), dimension(0:rlmax), optional :: BB
+  double precision, intent(in), dimension(0:N), optional :: BB
   !f2py double precision :: BB = 0
   !docstr :: BB = EE*0
   !internal
