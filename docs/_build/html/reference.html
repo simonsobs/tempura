@@ -1,0 +1,924 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2 Reference &mdash; tempura 0+untagged.15.gb2d2a6f.dirty documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="contributing.html" />
+    <link rel="prev" title="1 Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> tempura
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0+untagged.15.gb2d2a6f.dirty
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html"><span class="sectnum">1</span> Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><span class="sectnum">2</span> Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-tempura.norm_lens"><span class="sectnum">2.1</span> norm_lens - Lensing normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tempura.norm_src"><span class="sectnum">2.2</span> norm_src - Point source normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tempura.norm_rot"><span class="sectnum">2.3</span> norm_rot - Rotation normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-tempura.norm_tau"><span class="sectnum">2.4</span> norm_tau - Tau normalization</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">tempura</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="sectnum">2</span> Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/reference.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="reference">
+<span id="referencepage"></span><h1><span class="sectnum">2</span> Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h1>
+<p>See <a class="reference internal" href="usage.html#usagepage"><span class="std std-ref">1   Usage</span></a> as well.</p>
+<div class="section" id="module-tempura.norm_lens">
+<span id="norm-lens-lensing-normalization"></span><h2><span class="sectnum">2.1</span> norm_lens - Lensing normalization<a class="headerlink" href="#module-tempura.norm_lens" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tempura.norm_lens.qtt">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qtt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qtt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qtt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory TT spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>l</em>] (<em>double</em>): CMB lensing potential normalization, with bounds (0:lmax)
+:Ac [<em>l</em>] (<em>double</em>): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag,Ac = tempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qte">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qte</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed CMB lensing potential and its curl mode from the TE quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory TE spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>l</em>] (<em>double</em>): CMB lensing potential normalization, with bounds (0:lmax)
+:Ac [<em>l</em>] (<em>double</em>): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag,Ac = tempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qtb">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qtb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">OCB</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qtb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qtb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed CMB lensing potential and its curl mode from the TB quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory TE spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>l</em>] (<em>double</em>): CMB lensing potential normalization, with bounds (0:lmax)
+:Ac [<em>l</em>] (<em>double</em>): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag,Ac = tempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qee">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qee</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qee"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed CMB lensing potential and its curl mode from the E-mode quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory EE spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>l</em>] (<em>double</em>): CMB lensing potential normalization, with bounds (0:lmax)
+:Ac [<em>l</em>] (<em>double</em>): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag,Ac = tempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qeb">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qeb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCB</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qeb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qeb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory EE spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>l</em>] (<em>double</em>): CMB lensing potential normalization, with bounds (0:lmax)
+:Ac [<em>l</em>] (<em>double</em>): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag,Ac = tempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qbb">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qbb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCB</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qbb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qbb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed CMB lensing potential and its curl mode from the B-mode quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory BB spectrum, with bounds (0:rlmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>l</em>] (<em>double</em>): CMB lensing potential normalization, with bounds (0:lmax)
+:Ac [<em>l</em>] (<em>double</em>): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag,Ac = tempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qttte">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qttte</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fCTT</span></em>, <em class="sig-param"><span class="n">fCTE</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCTE</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qttte"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qttte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correlation between unnormalized TT and TE quadratic estimators</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fCTT [<em>l</em>] (<em>double</em>): Theory TT spectrum, with bounds (0:rlmax)
+:param : fCTE [<em>l</em>] (<em>double</em>): Theory TE spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)
+:param : OCTE [<em>l</em>] (<em>double</em>): Observed TE spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ig [<em>l</em>] (<em>double</em>): Correlation between lensing potential estimators, with bounds (0:lmax)
+:Ic [<em>l</em>] (<em>double</em>): Correlation between curl mode estimators, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ig,Ic = tempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qttee">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qttee</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fCTT</span></em>, <em class="sig-param"><span class="n">fCEE</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCTE</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qttee"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qttee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correlation between unnormalized TT and EE quadratic estimators</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fCTT [<em>l</em>] (<em>double</em>): Theory TT spectrum, with bounds (0:rlmax)
+:param : fCEE [<em>l</em>] (<em>double</em>): Theory EE spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)
+:param : OCTE [<em>l</em>] (<em>double</em>): Observed TE spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ig [<em>l</em>] (<em>double</em>): Correlation between lensing potential estimators, with bounds (0:lmax)
+:Ic [<em>l</em>] (<em>double</em>): Correlation between curl mode estimators, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ig,Ic = tempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qteee">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qteee</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fCEE</span></em>, <em class="sig-param"><span class="n">fCTE</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCTE</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qteee"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qteee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correlation between unnormalized TE and EE quadratic estimators</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fCEE [<em>l</em>] (<em>double</em>): Theory EE spectrum, with bounds (0:rlmax)
+:param : fCTE [<em>l</em>] (<em>double</em>): Theory TE spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)
+:param : OCTE [<em>l</em>] (<em>double</em>): Observed TE spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ig [<em>l</em>] (<em>double</em>): Correlation between lensing potential estimators, with bounds (0:lmax)
+:Ic [<em>l</em>] (<em>double</em>): Correlation between curl mode estimators, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ig,Ic = tempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qtbeb">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qtbeb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fCEE</span></em>, <em class="sig-param"><span class="n">fCBB</span></em>, <em class="sig-param"><span class="n">fCTE</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCB</span></em>, <em class="sig-param"><span class="n">OCTE</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qtbeb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qtbeb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correlation between unnormalized TB and EB quadratic estimators</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fCEE [<em>l</em>] (<em>double</em>): Theory EE spectrum, with bounds (0:rlmax)
+:param : fCBB [<em>l</em>] (<em>double</em>): Theory BB spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)
+:param : OCTE [<em>l</em>] (<em>double</em>): Observed TE spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ig [<em>l</em>] (<em>double</em>): Correlation between lensing potential estimators, with bounds (0:lmax)
+:Ic [<em>l</em>] (<em>double</em>): Correlation between curl mode estimators, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ig,Ic = tempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qmv">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qmv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">QDO</span></em>, <em class="sig-param"><span class="n">Al</span></em>, <em class="sig-param"><span class="n">Il</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qmv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qmv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute MV estimator normalization. Currently BB is ignored.</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of the output power spectra
+:param : QDO[<em>6</em>] (<em>bool</em>): Specifying which estimators to be combined for the minimum variance estimator, with size (6). The oder is TT, TE, EE, TB, EB and BB. Currently, BB is always False
+:param : Al [<em>5,l</em>] (<em>double</em>): Normalizations of each estimator (TT, TE, EE, TB, EB).
+:param : Il [<em>4,l</em>] (<em>double</em>): Correlation between different estimators (TTxTE, TTxEE, TExEE, TBxEB).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>MV [<em>l</em>] (<em>double</em>): Normalization of the MV estimator, with bounds (0:lmax)
+:Nl [<em>6,l</em>] (<em>double</em>): Weights for each estimator (TT, TE, EE, TB, EB, BB=0), with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">MV,Nl = tempura.norm_lens.qmv(lmax,QDO,Al,Il)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qall">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">QDO</span></em>, <em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OC</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qall"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute MV estimator normalization. Currently BB is ignored.</p>
+<p>:param : QDO[<em>6</em>] (<em>bool</em>): Specifying which estimators to be combined for the minimum variance estimator, with size (6). The oder is TT, TE, EE, TB, EB and BB.
+:param : lmax (<em>int</em>): Maximum multipole of the output power spectra
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC/OC [<em>l</em>] (<em>double</em>): Theory/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>6,l</em>] (<em>double</em>): Normalization of the TT, TE, EE, TB, EB, and MV estimators for lensing potential, with bounds (6,0:lmax)
+:Ac [<em>6,l</em>] (<em>double</em>): Same as Ag but for curl mode
+:Nlg [<em>6,l</em>] (<em>double</em>): Weights for TT, TE, EE, TB, EB, and BB (=0) estimators for lensing potential, with bounds (6,0:lmax)
+:Nlc [<em>6,l</em>] (<em>double</em>): Same as Nlg but for curl mode</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag,Ac,Nlg,Nlc = tempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.qeb_iter">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">qeb_iter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">elmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">dlmin</span></em>, <em class="sig-param"><span class="n">dlmax</span></em>, <em class="sig-param"><span class="n">CE</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCB</span></em>, <em class="sig-param"><span class="n">Cpp</span></em>, <em class="sig-param"><span class="n">iter</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">conv</span><span class="o">=</span><span class="default_value">1e-06</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#qeb_iter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.qeb_iter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization
+:param : elmax (<em>int</em>): Maximum multipole of input EE spectra, CE and OCE
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : dlmin/dlmax (<em>int</em>): Minimum/Maximum multipole of E mode and lensing potential for delensing
+:param : CE [<em>l</em>] (<em>double</em>): Theory EE angular power spectrum, with bounds (0:elmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:elmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)
+:param : Cpp [<em>l</em>] (<em>double</em>): Theory lensing potential spectrum, with bounds (0:dlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">iter (<em>int</em>)</dt>
+<dd class="field-odd"><p>number of iteration, default to 1 (no iteration)</p>
+</dd>
+<dt class="field-even">conv (<em>double</em>)</dt>
+<dd class="field-even"><p>a parameter for convergence the iteration, default to 0.001</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>l</em>] (<em>double</em>): CMB lensing potential normalization, with bounds (0:lmax)
+:Ac [<em>l</em>] (<em>double</em>): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag,Ac = tempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.ttt">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">ttt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#ttt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.ttt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unnormalized response between lensing potential and amplitude modulation from the temperature quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory TT spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>l</em>] (<em>double</em>): Cross normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag = tempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_lens.stt">
+<code class="sig-prename descclassname">tempura.norm_lens.</code><code class="sig-name descname">stt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">gtype</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_lens.html#stt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_lens.stt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unnormalized response between lensing potential and poisson sources/inhomogeneous nosie with the temperature quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory TT spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optional):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">gtype (<em>str</em>)</dt>
+<dd class="field-odd"><p>Type of output, i.e., convergence (gtype=’k’) or lensing potential (gtype=’’, default)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Ag [<em>l</em>] (<em>double</em>): Cross normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Ag = tempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tempura.norm_src">
+<span id="norm-src-point-source-normalization"></span><h2><span class="sectnum">2.2</span> norm_src - Point source normalization<a class="headerlink" href="#module-tempura.norm_src" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tempura.norm_src.qtt">
+<code class="sig-prename descclassname">tempura.norm_src.</code><code class="sig-name descname">qtt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">OCT</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_src.html#qtt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_src.qtt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed src field from the temperature quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory TT spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>As [<em>l</em>] (<em>double</em>): src field normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">As = tempura.norm_src.qtt(lmax,rlmin,rlmax,OCT)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tempura.norm_rot">
+<span id="norm-rot-rotation-normalization"></span><h2><span class="sectnum">2.3</span> norm_rot - Rotation normalization<a class="headerlink" href="#module-tempura.norm_rot" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tempura.norm_rot.qtb">
+<code class="sig-prename descclassname">tempura.norm_rot.</code><code class="sig-name descname">qtb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCT</span></em>, <em class="sig-param"><span class="n">OCB</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_rot.html#qtb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_rot.qtb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed pol. rot. angle from the TB quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory TE spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Aa [<em>l</em>] (<em>double</em>): Pol. rot. angle normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Aa = tempura.norm_rot.qtb(lmax,rlmin,rlmax,fC,OCT,OCB)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_rot.qeb">
+<code class="sig-prename descclassname">tempura.norm_rot.</code><code class="sig-name descname">qeb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">EE</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCB</span></em>, <em class="sig-param"><span class="n">BB</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_rot.html#qeb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_rot.qeb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed pol. rot. angle from the EB quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : EE [<em>l</em>] (<em>double</em>): Theory EE spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optionals):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">BB [<em>l</em>] (<em>double</em>)</dt>
+<dd class="field-odd"><p>Theory BB spectrum, with bounds (0:rlmax)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Aa [<em>l</em>] (<em>double</em>): Pol. rot. angle normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Aa = tempura.norm_rot.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_rot.teb">
+<code class="sig-prename descclassname">tempura.norm_rot.</code><code class="sig-name descname">teb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">EE</span></em>, <em class="sig-param"><span class="n">EB</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCB</span></em>, <em class="sig-param"><span class="n">BB</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_rot.html#teb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_rot.teb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Response of reconstructed pol. rot. angle to amplitude in the EB quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : EE [<em>l</em>] (<em>double</em>): Theory EE spectrum, with bounds (0:rlmax)
+:param : EB [<em>l</em>] (<em>double</em>): Theory EB spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optionals):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">BB [<em>l</em>] (<em>double</em>)</dt>
+<dd class="field-odd"><p>Theory BB spectrum, with bounds (0:rlmax)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Aa [<em>l</em>] (<em>double</em>): Pol. rot. angle normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">Aa = tempura.norm_rot.teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-tempura.norm_tau">
+<span id="norm-tau-tau-normalization"></span><h2><span class="sectnum">2.4</span> norm_tau - Tau normalization<a class="headerlink" href="#module-tempura.norm_tau" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="tempura.norm_tau.qtt">
+<code class="sig-prename descclassname">tempura.norm_tau.</code><code class="sig-name descname">qtt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCT</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_tau.html#qtt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_tau.qtt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed amplitude modulation from the temperature quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory TT spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>At [<em>l</em>] (<em>double</em>): tau normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">At = tempura.norm_tau.qtt(lmax,rlmin,rlmax,fC,OCT)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_tau.qeb">
+<code class="sig-prename descclassname">tempura.norm_tau.</code><code class="sig-name descname">qeb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">EE</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCB</span></em>, <em class="sig-param"><span class="n">BB</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_tau.html#qeb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_tau.qeb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed amplitude modulation from the EB quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : EE [<em>l</em>] (<em>double</em>): Theory EE spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)</p>
+<dl class="simple">
+<dt>Args(optionals):</dt><dd><dl class="field-list simple">
+<dt class="field-odd">BB [<em>l</em>] (<em>double</em>)</dt>
+<dd class="field-odd"><p>Theory BB spectrum, with bounds (0:rlmax)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>At [<em>l</em>] (<em>double</em>): Amplitude modulation normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">At = tempura.norm_tau.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_tau.oeb">
+<code class="sig-prename descclassname">tempura.norm_tau.</code><code class="sig-name descname">oeb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">EB</span></em>, <em class="sig-param"><span class="n">OCE</span></em>, <em class="sig-param"><span class="n">OCB</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_tau.html#oeb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_tau.oeb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalization of reconstructed amplitude from the EB quadratic estimator
+The kernels are the same as the rotation normalization but with a factor of 4.</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : EB [<em>l</em>] (<em>double</em>): Theory EB spectrum, with bounds (0:rlmax)
+:param : OCE [<em>l</em>] (<em>double</em>): Observed EE spectrum, with bounds (0:rlmax)
+:param : OCB [<em>l</em>] (<em>double</em>): Observed BB spectrum, with bounds (0:rlmax)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>At [<em>l</em>] (<em>double</em>): Normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">At = tempura.norm_tau.oeb(lmax,rlmin,rlmax,EB,OCE,OCB)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="tempura.norm_tau.stt">
+<code class="sig-prename descclassname">tempura.norm_tau.</code><code class="sig-name descname">stt</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lmax</span></em>, <em class="sig-param"><span class="n">rlmin</span></em>, <em class="sig-param"><span class="n">rlmax</span></em>, <em class="sig-param"><span class="n">fC</span></em>, <em class="sig-param"><span class="n">OCT</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tempura/norm_tau.html#stt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tempura.norm_tau.stt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unnormalized response between patchy tau and poisson sources/inhomogeneous noise with the temperature quadratic estimator</p>
+<p>:param : lmax (<em>int</em>): Maximum multipole of output normalization spectrum
+:param : rlmin/rlmax (<em>int</em>): Minimum/Maximum multipole of CMB for reconstruction
+:param : fC [<em>l</em>] (<em>double</em>): Theory TT spectrum, with bounds (0:rlmax)
+:param : OCT [<em>l</em>] (<em>double</em>): Observed TT spectrum, with bounds (0:rlmax)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>At [<em>l</em>] (<em>double</em>): tau normalization, with bounds (0:lmax)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">At = tempura.norm_tau.stt(lmax,rlmin,rlmax,fC,OCT)</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="contributing.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="usage.html" class="btn btn-neutral float-left" title="1 Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Toshiya Namikawa
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

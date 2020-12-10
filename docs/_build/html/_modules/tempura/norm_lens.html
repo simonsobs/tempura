@@ -1,0 +1,557 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>tempura.norm_lens &mdash; tempura 0+untagged.15.gb2d2a6f.dirty documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> tempura
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0+untagged.15.gb2d2a6f.dirty
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">tempura</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html"><span class="sectnum">1</span> Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference.html"><span class="sectnum">2</span> Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">tempura</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>tempura.norm_lens</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for tempura.norm_lens</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_libtempura</span> 
+
+<div class="viewcode-block" id="qtt"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qtt">[docs]</a><span class="k">def</span> <span class="nf">qtt</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fC [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)</span>
+<span class="sd">    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag,Ac = tempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qtt</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qte"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qte">[docs]</a><span class="k">def</span> <span class="nf">qte</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Normalization of reconstructed CMB lensing potential and its curl mode from the TE quadratic estimator</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fC [*l*] (*double*): Theory TE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)</span>
+<span class="sd">    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag,Ac = tempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qte</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qtb"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qtb">[docs]</a><span class="k">def</span> <span class="nf">qtb</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Normalization of reconstructed CMB lensing potential and its curl mode from the TB quadratic estimator</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fC [*l*] (*double*): Theory TE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCB [*l*] (*double*): Observed BB spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)</span>
+<span class="sd">    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag,Ac = tempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qtb</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qee"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qee">[docs]</a><span class="k">def</span> <span class="nf">qee</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Normalization of reconstructed CMB lensing potential and its curl mode from the E-mode quadratic estimator</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fC [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)</span>
+<span class="sd">    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag,Ac = tempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qee</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qeb"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qeb">[docs]</a><span class="k">def</span> <span class="nf">qeb</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fC [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCB [*l*] (*double*): Observed BB spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)</span>
+<span class="sd">    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag,Ac = tempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qeb</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qbb"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qbb">[docs]</a><span class="k">def</span> <span class="nf">qbb</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Normalization of reconstructed CMB lensing potential and its curl mode from the B-mode quadratic estimator</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fC [*l*] (*double*): Theory BB spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCB [*l*] (*double*): Observed BB spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)</span>
+<span class="sd">    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag,Ac = tempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qbb</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qttte"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qttte">[docs]</a><span class="k">def</span> <span class="nf">qttte</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fCTT</span><span class="p">,</span><span class="n">fCTE</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCTE</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Correlation between unnormalized TT and TE quadratic estimators</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fCTT [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :fCTE [*l*] (*double*): Theory TE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCTE [*l*] (*double*): Observed TE spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ig [*l*] (*double*): Correlation between lensing potential estimators, with bounds (0:lmax)</span>
+<span class="sd">    :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ig,Ic = tempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qttte</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fCTT</span><span class="p">,</span><span class="n">fCTE</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCTE</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qttee"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qttee">[docs]</a><span class="k">def</span> <span class="nf">qttee</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fCTT</span><span class="p">,</span><span class="n">fCEE</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCTE</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Correlation between unnormalized TT and EE quadratic estimators</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fCTT [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :fCEE [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCTE [*l*] (*double*): Observed TE spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ig [*l*] (*double*): Correlation between lensing potential estimators, with bounds (0:lmax)</span>
+<span class="sd">    :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ig,Ic = tempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qttee</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fCTT</span><span class="p">,</span><span class="n">fCEE</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCTE</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qteee"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qteee">[docs]</a><span class="k">def</span> <span class="nf">qteee</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fCEE</span><span class="p">,</span><span class="n">fCTE</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCTE</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Correlation between unnormalized TE and EE quadratic estimators</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fCEE [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :fCTE [*l*] (*double*): Theory TE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCTE [*l*] (*double*): Observed TE spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ig [*l*] (*double*): Correlation between lensing potential estimators, with bounds (0:lmax)</span>
+<span class="sd">    :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ig,Ic = tempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qteee</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fCEE</span><span class="p">,</span><span class="n">fCTE</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCTE</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qtbeb"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qtbeb">[docs]</a><span class="k">def</span> <span class="nf">qtbeb</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fCEE</span><span class="p">,</span><span class="n">fCBB</span><span class="p">,</span><span class="n">fCTE</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">OCTE</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Correlation between unnormalized TB and EB quadratic estimators</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fCEE [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :fCBB [*l*] (*double*): Theory BB spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCB [*l*] (*double*): Observed BB spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCTE [*l*] (*double*): Observed TE spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ig [*l*] (*double*): Correlation between lensing potential estimators, with bounds (0:lmax)</span>
+<span class="sd">    :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ig,Ic = tempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qtbeb</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fCEE</span><span class="p">,</span><span class="n">fCBB</span><span class="p">,</span><span class="n">fCTE</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">OCTE</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qmv"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qmv">[docs]</a><span class="k">def</span> <span class="nf">qmv</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">QDO</span><span class="p">,</span><span class="n">Al</span><span class="p">,</span><span class="n">Il</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Compute MV estimator normalization. Currently BB is ignored. </span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of the output power spectra</span>
+<span class="sd">    :QDO[*6*] (*bool*): Specifying which estimators to be combined for the minimum variance estimator, with size (6). The oder is TT, TE, EE, TB, EB and BB. Currently, BB is always False</span>
+<span class="sd">    :Al [*5,l*] (*double*): Normalizations of each estimator (TT, TE, EE, TB, EB).</span>
+<span class="sd">    :Il [*4,l*] (*double*): Correlation between different estimators (TTxTE, TTxEE, TExEE, TBxEB).</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :MV [*l*] (*double*): Normalization of the MV estimator, with bounds (0:lmax)</span>
+<span class="sd">    :Nl [*6,l*] (*double*): Weights for each estimator (TT, TE, EE, TB, EB, BB=0), with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :MV,Nl = tempura.norm_lens.qmv(lmax,QDO,Al,Il):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qmv</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">QDO</span><span class="p">,</span><span class="n">Al</span><span class="p">,</span><span class="n">Il</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qall"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qall">[docs]</a><span class="k">def</span> <span class="nf">qall</span><span class="p">(</span><span class="n">QDO</span><span class="p">,</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OC</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Compute MV estimator normalization. Currently BB is ignored. </span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :QDO[*6*] (*bool*): Specifying which estimators to be combined for the minimum variance estimator, with size (6). The oder is TT, TE, EE, TB, EB and BB.</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of the output power spectra</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fC/OC [*l*] (*double*): Theory/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*6,l*] (*double*): Normalization of the TT, TE, EE, TB, EB, and MV estimators for lensing potential, with bounds (6,0:lmax)</span>
+<span class="sd">    :Ac [*6,l*] (*double*): Same as Ag but for curl mode</span>
+<span class="sd">    :Nlg [*6,l*] (*double*): Weights for TT, TE, EE, TB, EB, and BB (=0) estimators for lensing potential, with bounds (6,0:lmax)</span>
+<span class="sd">    :Nlc [*6,l*] (*double*): Same as Nlg but for curl mode</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag,Ac,Nlg,Nlc = tempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qall</span><span class="p">(</span><span class="n">QDO</span><span class="p">,</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OC</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="qeb_iter"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.qeb_iter">[docs]</a><span class="k">def</span> <span class="nf">qeb_iter</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">elmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">dlmin</span><span class="p">,</span><span class="n">dlmax</span><span class="p">,</span><span class="n">CE</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">Cpp</span><span class="p">,</span><span class="nb">iter</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">conv</span><span class="o">=</span> <span class="mf">1e-6</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization</span>
+<span class="sd">    :elmax (*int*): Maximum multipole of input EE spectra, CE and OCE</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :dlmin/dlmax (*int*): Minimum/Maximum multipole of E mode and lensing potential for delensing</span>
+<span class="sd">    :CE [*l*] (*double*): Theory EE angular power spectrum, with bounds (0:elmax)</span>
+<span class="sd">    :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:elmax)</span>
+<span class="sd">    :OCB [*l*] (*double*): Observed BB spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :Cpp [*l*] (*double*): Theory lensing potential spectrum, with bounds (0:dlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :iter (*int*): number of iteration, default to 1 (no iteration)</span>
+<span class="sd">    :conv (*double*): a parameter for convergence the iteration, default to 0.001</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)</span>
+<span class="sd">    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag,Ac = tempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">qeb_iter</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">elmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">dlmin</span><span class="p">,</span><span class="n">dlmax</span><span class="p">,</span><span class="n">CE</span><span class="p">,</span><span class="n">OCE</span><span class="p">,</span><span class="n">OCB</span><span class="p">,</span><span class="n">Cpp</span><span class="p">,</span><span class="nb">iter</span><span class="p">,</span><span class="n">conv</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ttt"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.ttt">[docs]</a><span class="k">def</span> <span class="nf">ttt</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Unnormalized response between lensing potential and amplitude modulation from the temperature quadratic estimator</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fC [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*l*] (*double*): Cross normalization, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag = tempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">ttt</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="stt"><a class="viewcode-back" href="../../reference.html#tempura.norm_lens.stt">[docs]</a><span class="k">def</span> <span class="nf">stt</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">gtype</span><span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  Unnormalized response between lensing potential and poisson sources/inhomogeneous nosie with the temperature quadratic estimator</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    :lmax (*int*): Maximum multipole of output normalization spectrum</span>
+<span class="sd">    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction</span>
+<span class="sd">    :fC [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)</span>
+<span class="sd">    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)</span>
+
+<span class="sd">  Args(optional):</span>
+<span class="sd">    :gtype (*str*): Type of output, i.e., convergence (gtype=&#39;k&#39;) or lensing potential (gtype=&#39;&#39;, default)</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    :Ag [*l*] (*double*): Cross normalization, with bounds (0:lmax)</span>
+
+<span class="sd">  Usage:</span>
+<span class="sd">    :Ag = tempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype):</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="n">_libtempura</span><span class="o">.</span><span class="n">norm_lens</span><span class="o">.</span><span class="n">stt</span><span class="p">(</span><span class="n">lmax</span><span class="p">,</span><span class="n">rlmin</span><span class="p">,</span><span class="n">rlmax</span><span class="p">,</span><span class="n">fC</span><span class="p">,</span><span class="n">OCT</span><span class="p">,</span><span class="n">gtype</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Toshiya Namikawa
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -4,3 +4,5 @@ out.log
 .#*
 *.so
 *.png
+.ipynb_checkpoints
+*.egg-info
