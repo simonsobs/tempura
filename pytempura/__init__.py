@@ -13,4 +13,4 @@ from . import norm_lens
 from . import norm_rot
 from . import norm_tau
 from . import norm_src
-
+from .norm import *

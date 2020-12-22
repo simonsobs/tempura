@@ -329,7 +329,7 @@ def ttt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
 
 def stt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
   """
-  Unnormalized response between lensing potential and poisson sources/inhomogeneous nosie with the temperature quadratic estimator
+  Unnormalized response between lensing potential and poisson sources/inhomogeneous noise with the temperature quadratic estimator
 
   Args:
     :lmax (*int*): Maximum multipole of output normalization spectrum

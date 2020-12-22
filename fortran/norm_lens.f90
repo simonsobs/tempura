@@ -784,6 +784,7 @@ subroutine qmv(lmax,QDO,Al,Il,MV,Nl,N)
     if (QDO(QTT).and.QDO(QEE)) M(1,3) = Il(2,l)*Al(QTT,l)*Al(QEE,l)
     if (QDO(QTE).and.QDO(QEE)) M(2,3) = Il(3,l)*Al(QTE,l)*Al(QEE,l)
     if (QDO(QTB).and.QDO(QEB)) M(4,5) = Il(4,l)*Al(QTB,l)*Al(QEB,l)
+
     do X = 1, qn
       M(X,X) = 1d10 ! some large value for not used estimator
       if (QDO(X)) M(X,X) = Al(X,l)
