@@ -34,7 +34,6 @@ subroutine qtt(lmax,rlmin,rlmax,OCT,As,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(lmax) :: S0, G0
 
-  write(*,*) 'norm qTT (src)'
   rL = (/rlmin,rlmax/)
 
   do l = rlmin, rlmax

@@ -34,7 +34,6 @@ subroutine qtt(lmax,rlmin,rlmax,fC,OCT,At,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(min(2*rlmax,lmax)) :: S0, G0
 
-  write(*,*) 'norm qTT (tau)'
   rL = (/rlmin,rlmax/)
 
   do l = rlmin, rlmax
@@ -92,7 +91,6 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,At,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(3,lmax) :: SG
 
-  write(*,*) 'norm qEB (tau)'
   rL = (/rlmin,rlmax/)
   SG = 0d0
 
@@ -151,7 +149,6 @@ subroutine oeb(lmax,rlmin,rlmax,EB,OCE,OCB,At,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(3,lmax) :: SG
 
-  write(*,*) 'norm qEB (tau)'
   rL = (/rlmin,rlmax/)
   SG = 0d0
 
@@ -204,7 +201,6 @@ subroutine stt(lmax,rlmin,rlmax,fC,OCT,At,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(min(2*rlmax,lmax)) :: S0, G0
 
-  write(*,*) 'cross norm TT (tau x src)'
   rL = (/rlmin,rlmax/)
 
   do l = rlmin, rlmax

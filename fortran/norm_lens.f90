@@ -40,7 +40,6 @@ subroutine qtt(lmax,rlmin,rlmax,fC,OCT,Ag,Ac,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: S0, G0
 
-  write(*,*) 'norm qTT (lens)'
   rL = (/rlmin,rlmax/)
 
   lk2 = 1d0
@@ -107,7 +106,6 @@ subroutine qte(lmax,rlmin,rlmax,fC,OCT,OCE,Ag,Ac,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: S0, Sp, Gc
 
-  write(*,*) 'norm qTE (lens)'
   rL = (/rlmin,rlmax/)
 
   lk2 = 1d0
@@ -182,7 +180,6 @@ subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Ag,Ac,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: Sm
 
-  write(*,*) 'norm qTB (lens)'
   rL = (/rlmin,rlmax/)
 
   lk2 = 1d0
@@ -245,7 +242,6 @@ subroutine qee(lmax,rlmin,rlmax,fC,OCE,Ag,Ac,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: Sp, Gp
 
-  write(*,*) 'norm qEE (lens)'
   rL = (/rlmin,rlmax/)
 
   lk2 = 1d0
@@ -312,7 +308,6 @@ subroutine qeb(lmax,rlmin,rlmax,fC,OCE,OCB,Ag,Ac,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: Sm
 
-  write(*,*) 'norm qEB (lens)'
   rL = (/rlmin,rlmax/)
 
   lk2 = 1d0
@@ -375,7 +370,6 @@ subroutine qbb(lmax,rlmin,rlmax,fC,OCB,Ag,Ac,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: Sp, Gp
 
-  write(*,*) 'norm qBB (lens)'
   rL = (/rlmin,rlmax/)
 
   lk2 = 1d0
@@ -440,8 +434,6 @@ subroutine qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,N)
   double precision, dimension(lmax) :: lk2
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: S0, Gc, G0, Sc
-
-  write(*,*) 'norm qTTTE (lens)'
 
   rL = (/rlmin,rlmax/)
   Ig = 0d0
@@ -528,7 +520,6 @@ subroutine qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,Ig,Ic,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: Sc, Gc
 
-  write(*,*) 'norm qTTEE (lens)'
   rL = (/rlmin,rlmax/)
   Ig = 0d0
   Ic = 0d0
@@ -601,7 +592,6 @@ subroutine qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: Sc,Gp,Gc,Sp
 
-  write(*,*) 'norm qTEEE (lens)'
   rL = (/rlmin,rlmax/)
   Ig = 0d0
   Ic = 0d0
@@ -687,7 +677,6 @@ subroutine qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,gtype,N)
   double precision, dimension(2,lmax) :: Gm, Sm
   double precision, dimension(rlmin:rlmax) :: W1, W2
 
-  write(*,*) 'norm qTBEB (lens)'
   rL = (/rlmin,rlmax/)
   Ig = 0d0
   Ic = 0d0
@@ -755,7 +744,6 @@ subroutine qmv(lmax,QDO,Al,Il,MV,Nl,N)
   double precision :: d1, d2, M1(5,5)
   double precision, allocatable :: M(:,:)
 
-  write(*,*) 'norm qMV (lens)'
   id = 0
 
   qmax = qn
@@ -949,7 +937,6 @@ subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter
     !convergence check using gradient mode
     if (n>=2) then
       ratio = (sum(Ag)/sum(AgEB)-1d0)/dble(dlmax)
-      write(*,*) n, ratio
     end if
     Ag = AgEB
 
@@ -997,7 +984,6 @@ subroutine ttt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: S0, G0
 
-  write(*,*) 'cross norm TT (lens x tau)'
   rL = (/rlmin,rlmax/)
 
   lk2 = 1d0
@@ -1058,7 +1044,6 @@ subroutine stt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(2,lmax) :: S0, G0
 
-  write(*,*) 'cross norm TT (lens x src)'
   rL = (/rlmin,rlmax/)
 
   lk2 = 1d0

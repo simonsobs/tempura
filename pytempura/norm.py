@@ -5,7 +5,7 @@ from . import norm_tau
 from . import norm_rot
 
 
-est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC','MASK','TAU','ROT','SRC_X_TT']
+est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','TAU','ROT']
 
 
 
@@ -60,6 +60,9 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,
     if ('TB' in ests) or  (('MV' in ests) and no_corr):
         r_tb = np.asarray(norm_lens.qtb(k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['BB'],gtype= ''))
         if ('TB' in ests): res[_gk('TB')] = r_tb
+    if ('BB' in ests):
+        r_bb = np.asarray(norm_lens.qbb(k_ellmax,lmin,lmax,ucl['BB'],tcl['BB'],gtype= ''))
+        res[_gk('BB')] = r_bb
     if 'MV' in ests:
         if no_corr:
             r_mv = r_tt * 0
@@ -90,10 +93,51 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,
         raise NotImplementedError # Just haven't gotten around to interfacing this
     if 'TAU' in ests:
         raise NotImplementedError # Just haven't gotten around to interfacing this
-    if 'SRC_X_TT' in ests:
-        res[_gk('SRC_X_TT')] = norm_lens.stt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
 
     return res
+
+def get_cross(est1,est2,response_cls,total_cls,lmin,lmax,k_ellmax=None):
+    """
+    Get the un-normalized cross-response between two estimators est1
+    and est2.
     
+    Args:
+        est1 (str): A string belonging to one of ['TT','TE','EE','EB',
+    'TB','MV','MVPOL','src','mask','tau','rot']
+
+        est2 (str): Same as est1.
+
+        response_cls (dict): A dictionary mapping strings TT,EE,TE to 1d numpy 
+    arrays containing the noiseless power spectra used in the lensing response.
+    For unbiased results, lensed spectra are recommended for EE and TE, and
+    the gradient cross-spectrum for TT. The array elements should correspond to 
+    multipoles 0,1,2,...,lmax.
+
+        total_cls (dict): A dictionary mapping strings TT,EE,TE,BB to 1d numpy 
+    arrays containing the total power spectra assumed in the filters.
+    The array elements should correspond to multipoles 0,1,2,...,lmax.
+
+        lmin (int): The minimum multipole to be used.
+        lmax (int): The maximum multipole to be used.
+        k_ellmax (optional,int): The maximum multipole in the output noise curve.
+    Defaults to lmax.
+    """
+    est1 = est1.upper()
+    est2 = est2.upper()
+    ucl = response_cls
+    tcl = total_cls
+    if k_ellmax is None: k_ellmax = lmax
+    if set((est1,est2))==set(('SRC','TT')):
+        return norm_lens.stt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
+    elif set((est1,est2))==set(('TT','TE')):
+        return norm_lens.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+    elif set((est1,est2))==set(('TT','EE')):
+        return norm_lens.qttee(k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+    elif set((est1,est2))==set(('TE','EE')):
+        return norm_lens.qteee(k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+    elif set((est1,est2))==set(('TB','EB')):
+        return norm_lens.qtbeb(k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
+    else:
+        return np.zeros((2,k_ellmax+1))
 
     

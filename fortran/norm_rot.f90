@@ -35,7 +35,6 @@ subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Aa,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(lmax) :: Sm
 
-  write(*,*) 'norm qTB (rot)'
   rL = (/rlmin,rlmax/)
 
   do l = rlmin, rlmax
@@ -87,7 +86,6 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,Aa,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(3,lmax) :: SG
 
-  write(*,*) 'norm qEB (rot)'
   rL = (/rlmin,rlmax/)
   SG = 0d0
 
@@ -153,7 +151,6 @@ subroutine teb(lmax,rlmin,rlmax,EE,EB,OCE,OCB,BB,Aa,N)
   double precision, dimension(rlmin:rlmax) :: W1, W2
   double precision, dimension(3,lmax) :: SG
 
-  write(*,*) 'norm qEB (rot)'
   rL = (/rlmin,rlmax/)
   SG = 0d0
 
