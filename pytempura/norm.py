@@ -43,7 +43,7 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
     assert [est in est_list for est in ests], 'Unrecognized estimator.'
     assert [c in coup_list for c in coup], 'Unrecognized field.'
     
-    assert [len(coup)==1], 'Can only calculate norms for one field at a time. Please run separately for different fields.'
+    assert len(coup) == 1 , 'Can only calculate norms for one field at a time. Please run separately for different fields.'
     
     if k_ellmax is None: k_ellmax = lmax
     ucl = response_cls
