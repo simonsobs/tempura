@@ -102,17 +102,18 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
             res[_gk('SRC')] = norm_src.qtt(k_ellmax,lmin,lmax,tcl['TT'])
         if 'ROT' in ests:
             raise NotImplementedError # Just haven't gotten around to interfacing this
-    
+
     if 'TAU' in coup:
-        if ('TT' in ests):
-            r_tt = np.asarray(norm_tau.qtt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'])) 
-            if ('TT' in ests): res[_gk('TT')] = r_tt
-        if ('EB' in ests) or ('MVPOL' in ests) or (('MV' in ests) and no_corr):
-            r_eb = np.asarray(norm_tau.qeb(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB']))
-            if ('EB' in ests): res[_gk('EB')] = r_eb
         
-        else:
-            raise NotImplementedError # Have not implemented oeb or stt, and have not written a method for tau MV yet
+        if 'TT' in ests:
+            r_tt = np.asarray(norm_tau.qtt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'])) 
+            res[_gk('TT')] = r_tt
+            
+        if 'EB' in ests:
+            r_eb = np.asarray(norm_tau.qeb(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB']))
+            res[_gk('EB')] = r_eb
+        
+       # Have not implemented oeb or stt, and have not written a method for tau MV yet
 
     return res
 
