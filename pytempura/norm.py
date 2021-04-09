@@ -9,8 +9,9 @@ est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','TAU','ROT']
 
 
 
-def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,
-              include_bb_mv=False,no_corr=True):
+def get_norms(estimators, response_cls, total_cls, lmin, lmax,
+              k_ellmax=None, include_bb_mv=False, no_corr=True,
+              profile=None):
     """
     Get norms for estimators such that A_est = N_est. In the case of lensing,
     this corresponds to the normalizations of the lensing potential.
@@ -88,7 +89,19 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,
     if 'MASK' in ests:
         raise NotImplementedError
     if 'SRC' in ests:
-        res[_gk('SRC')] = norm_src.qtt(k_ellmax,lmin,lmax,tcl['TT'])
+        if profile is not None:
+            try:
+                assert len(profile) > k_ellmax
+            except AssertionError as e:
+                print("profile must have length at least k_ellmax+1")
+            profile = profile[:k_ellmax+1]
+            cl_tt = tcl['TT'][:k_ellmax+1]/profile**2
+            prefactor = profile**2
+        else:
+            cl_tt = tcl['TT']
+            prefactor = 1.
+        res[_gk('SRC')] = prefactor * norm_src.qtt(k_ellmax,lmin,lmax,cl_tt)
+        
     if 'ROT' in ests:
         raise NotImplementedError # Just haven't gotten around to interfacing this
     if 'TAU' in ests:
@@ -96,7 +109,8 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,
 
     return res
 
-def get_cross(est1,est2,response_cls,total_cls,lmin,lmax,k_ellmax=None):
+def get_cross(est1, est2, response_cls, total_cls,
+              lmin, lmax, k_ellmax=None, profile=None):
     """
     Get the un-normalized cross-response between two estimators est1
     and est2.
@@ -128,7 +142,15 @@ def get_cross(est1,est2,response_cls,total_cls,lmin,lmax,k_ellmax=None):
     tcl = total_cls
     if k_ellmax is None: k_ellmax = lmax
     if set((est1,est2))==set(('SRC','TT')):
-        return norm_lens.stt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
+        if profile is not None:
+            profile = profile[:k_ellmax+1]
+            cl_tt_total = tcl['TT'][:k_ellmax+1] / profile
+            prefactor = 1./profile
+        else:
+            cl_tt_total = tcl['TT']
+            prefactor = 1.
+        return prefactor * norm_lens.stt(k_ellmax, lmin, lmax, ucl['TT'],
+                                         cl_tt_total, gtype= '')
     elif set((est1,est2))==set(('TT','TE')):
         return norm_lens.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
     elif set((est1,est2))==set(('TT','EE')):
