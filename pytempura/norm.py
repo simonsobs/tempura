@@ -34,6 +34,11 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
         lmax (int): The maximum multipole to be used.
         k_ellmax (optional,int): The maximum multipole in the output noise curve.
     Defaults to lmax.
+
+        profile (numpy array): A numpy array of length at least k_ellmax+1, used
+    for profile hardening for the source estimator. Default is None in which case
+    the source estimator will correspond to the point source case.
+
     """
     ests = [e.upper() for e in estimators]
     assert [est in est_list for est in ests], 'Unrecognized estimator.'
@@ -94,6 +99,7 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
                 assert len(profile) > k_ellmax
             except AssertionError as e:
                 print("profile must have length at least k_ellmax+1")
+                raise(e)
             profile = profile[:k_ellmax+1]
             cl_tt = tcl['TT'][:k_ellmax+1]/profile**2
             prefactor = profile**2
@@ -135,6 +141,9 @@ def get_cross(est1, est2, response_cls, total_cls,
         lmax (int): The maximum multipole to be used.
         k_ellmax (optional,int): The maximum multipole in the output noise curve.
     Defaults to lmax.
+        profile (numpy array): A numpy array of length at least k_ellmax+1, used
+    for profile hardening for the source estimator. Default is None in which case
+    the source estimator will correspond to the point source case.
     """
     est1 = est1.upper()
     est2 = est2.upper()
