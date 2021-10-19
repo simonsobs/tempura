@@ -124,8 +124,8 @@ subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,l
   allocate(W(2,rL(1):rL(2)),Wg(2,rL(1):rL(2))); W=0d0; Wg=0d0
 
   do l = glmin, glmax
-    Wg(1,:) = TT(l)**2 / OCT0(l)
-    Wg(2,:) = TT(l) / OCT0(l)
+    Wg(1,l) = TT(l)**2 / OCT0(l)
+    Wg(2,l) = TT(l) / OCT0(l)
   end do
 
   do l = llmin, llmax

@@ -1,10 +1,11 @@
 from . import _libtempura
 
-def qtt(lmax,rlmin,rlmax,TT,OCT,gtype=''):
+def qtt(est,lmax,rlmin,rlmax,TT,OCT,gtype=''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :TT [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
@@ -14,19 +15,43 @@ def qtt(lmax,rlmin,rlmax,TT,OCT,gtype=''):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 
   Returns:
-    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)
-    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+    :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = _libtempura.norm_lens.qtt(lmax,rlmin,rlmax,TT,OCT,gtype):
+    :Al = _libtempura.norm_general.qtt(est,lmax,rlmin,rlmax,TT,OCT,gtype):
   """
-  return _libtempura.norm_lens.qtt(lmax,rlmin,rlmax,TT,OCT,gtype)
+  return _libtempura.norm_general.qtt(est,lmax,rlmin,rlmax,TT,OCT,gtype)
 
-def qte(lmax,rlmin,rlmax,TE,OCT,OCE,gtype=''):
+def qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,gtype=''):
+  """
+  Normalization of reconstructed fields from the temperature quadratic estimator (asymmetric case)
+
+  Args:
+    :lmax (*int*): Maximum multipole of output normalization spectrum
+    :glmin/glmax (*int*): Minimum/Maximum multipole of gradient leg
+    :llmin/llmax (*int*): Minimum/Maximum multipole of C-inverse leg
+    :rlmax (*int*): Minimum/Maximum multipole of TT
+    :TT [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
+    :OCT0 [*l*] (*double*): Observed TT spectrum for gradient leg, with bounds (0:glmax)
+    :OCT1 [*l*] (*double*): Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
+
+  Args(optional):
+    :gtype (*str*): Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+
+  Returns:
+    :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
+
+  Usage:
+    :Al = _libtempura.norm_general.qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,gtype):
+  """
+  return _libtempura.norm_general.qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,gtype)
+
+def qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,gtype=''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the TE quadratic estimator
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :TE [*l*] (*double*): Theory TE spectrum, with bounds (0:rlmax)
@@ -37,19 +62,19 @@ def qte(lmax,rlmin,rlmax,TE,OCT,OCE,gtype=''):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 
   Returns:
-    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)
-    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+    :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = _libtempura.norm_lens.qte(lmax,rlmin,rlmax,TE,OCT,OCE,gtype):
+    :Al = _libtempura.norm_general.qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,gtype):
   """
-  return _libtempura.norm_lens.qte(lmax,rlmin,rlmax,TE,OCT,OCE,gtype)
+  return _libtempura.norm_general.qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,gtype)
 
-def qtb(lmax,rlmin,rlmax,TE,OCT,OCB,gtype=''):
+def qtb(est,lmax,rlmin,rlmax,TE,OCT,OCB,gtype=''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the TB quadratic estimator
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :TE [*l*] (*double*): Theory TE spectrum, with bounds (0:rlmax)
@@ -60,19 +85,19 @@ def qtb(lmax,rlmin,rlmax,TE,OCT,OCB,gtype=''):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 
   Returns:
-    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)
-    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+    :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = _libtempura.norm_lens.qtb(lmax,rlmin,rlmax,TE,OCT,OCB,gtype):
+    :Al = _libtempura.norm_general.qtb(est,lmax,rlmin,rlmax,TE,OCT,OCB,gtype):
   """
-  return _libtempura.norm_lens.qtb(lmax,rlmin,rlmax,TE,OCT,OCB,gtype)
+  return _libtempura.norm_general.qtb(est,lmax,rlmin,rlmax,TE,OCT,OCB,gtype)
 
-def qee(lmax,rlmin,rlmax,EE,OCE,gtype=''):
+def qee(est,lmax,rlmin,rlmax,EE,OCE,gtype=''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the E-mode quadratic estimator
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :EE [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)
@@ -82,19 +107,19 @@ def qee(lmax,rlmin,rlmax,EE,OCE,gtype=''):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 
   Returns:
-    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)
-    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+    :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = _libtempura.norm_lens.qee(lmax,rlmin,rlmax,EE,OCE,gtype):
+    :Al = _libtempura.norm_general.qee(est,lmax,rlmin,rlmax,EE,OCE,gtype):
   """
-  return _libtempura.norm_lens.qee(lmax,rlmin,rlmax,EE,OCE,gtype)
+  return _libtempura.norm_general.qee(est,lmax,rlmin,rlmax,EE,OCE,gtype)
 
-def qeb(lmax,rlmin,rlmax,EE,OCE,OCB,gtype=''):
+def qeb(est,lmax,rlmin,rlmax,EE,OCE,OCB,gtype=''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fC [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)
@@ -105,19 +130,19 @@ def qeb(lmax,rlmin,rlmax,EE,OCE,OCB,gtype=''):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 
   Returns:
-    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)
-    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+    :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = _libtempura.norm_lens.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,gtype):
+    :Al = _libtempura.norm_general.qeb(est,lmax,rlmin,rlmax,EE,OCE,OCB,gtype):
   """
-  return _libtempura.norm_lens.qeb(lmax,rlmin,rlmax,EE,OCE,OCB,gtype)
+  return _libtempura.norm_general.qeb(est,lmax,rlmin,rlmax,EE,OCE,OCB,gtype)
 
-def qbb(lmax,rlmin,rlmax,BB,OCB,gtype=''):
+def qbb(est,lmax,rlmin,rlmax,BB,OCB,gtype=''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the B-mode quadratic estimator
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :BB [*l*] (*double*): Theory BB spectrum, with bounds (0:rlmax)
@@ -127,19 +152,19 @@ def qbb(lmax,rlmin,rlmax,BB,OCB,gtype=''):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 
   Returns:
-    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)
-    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+    :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = _libtempura.norm_lens.qbb(lmax,rlmin,rlmax,BB,OCB,gtype):
+    :Al = _libtempura.norm_general.qbb(est,lmax,rlmin,rlmax,BB,OCB,gtype):
   """
-  return _libtempura.norm_lens.qbb(lmax,rlmin,rlmax,BB,OCB,gtype)
+  return _libtempura.norm_general.qbb(est,lmax,rlmin,rlmax,BB,OCB,gtype)
 
-def qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype=''):
+def qttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype=''):
   """
   Correlation between unnormalized TT and TE quadratic estimators
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fCTT [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
@@ -156,15 +181,16 @@ def qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype=''):
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
   Usage:
-    :Ig,Ic = _libtempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype):
+    :Ig,Ic = _libtempura.norm_general.qttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype):
   """
-  return _libtempura.norm_lens.qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype)
+  return _libtempura.norm_general.qttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype)
 
-def qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype=''):
+def qttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype=''):
   """
   Correlation between unnormalized TT and EE quadratic estimators
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fCTT [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
@@ -181,15 +207,16 @@ def qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype=''):
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
   Usage:
-    :Ig,Ic = _libtempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype):
+    :Ig,Ic = _libtempura.norm_general.qttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype):
   """
-  return _libtempura.norm_lens.qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype)
+  return _libtempura.norm_general.qttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype)
 
-def qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype=''):
+def qteee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype=''):
   """
   Correlation between unnormalized TE and EE quadratic estimators
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fCEE [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)
@@ -206,15 +233,16 @@ def qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype=''):
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
   Usage:
-    :Ig,Ic = _libtempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype):
+    :Ig,Ic = _libtempura.norm_general.qteee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype):
   """
-  return _libtempura.norm_lens.qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype)
+  return _libtempura.norm_general.qteee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype)
 
-def qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype=''):
+def qtbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype=''):
   """
   Correlation between unnormalized TB and EB quadratic estimators
 
   Args:
+    :est (*str*): Estimator type
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fCEE [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)
@@ -232,15 +260,16 @@ def qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype=''):
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
   Usage:
-    :Ig,Ic = _libtempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype):
+    :Ig,Ic = _libtempura.norm_general.qtbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype):
   """
-  return _libtempura.norm_lens.qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype)
+  return _libtempura.norm_general.qtbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype)
 
-def qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype=''):
+def qall(est,QDO,lmax,rlmin,rlmax,fC,OC,gtype=''):
   """
   Compute MV estimator normalization. Currently BB is ignored. 
 
   Args:
+    :est (*str*): Estimator type
     :QDO[*6*] (*bool*): Specifying which estimators to be combined for the minimum variance estimator, with size (6). The oder is TT, TE, EE, TB, EB and BB.
     :lmax (*int*): Maximum multipole of the output power spectra
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
@@ -256,9 +285,9 @@ def qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype=''):
     :Nlc [*6,l*] (*double*): Same as Nlg but for curl mode
 
   Usage:
-    :Ag,Ac,Nlg,Nlc = _libtempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype):
+    :Ag,Ac,Nlg,Nlc = _libtempura.norm_general.qall(est,QDO,lmax,rlmin,rlmax,fC,OC,gtype):
   """
-  return _libtempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype)
+  return _libtempura.norm_general.qall(est,QDO,lmax,rlmin,rlmax,fC,OC,gtype)
 
 def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter=1,conv=1e-6):
   """
@@ -283,15 +312,16 @@ def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter=1,conv=1e-6)
     :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
 
   Usage:
-    :Ag,Ac = _libtempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv):
+    :Ag,Ac = _libtempura.norm_general.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv):
   """
-  return _libtempura.norm_lens.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv)
+  return _libtempura.norm_general.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv)
 
-def ttt(lmax,rlmin,rlmax,fC,OCT,gtype=''):
+def xtt(xest,lmax,rlmin,rlmax,fC,OCT,gtype=''):
   """
-  Unnormalized response between lensing potential and amplitude modulation from the temperature quadratic estimator
+  Unnormalized response between two estimators from the temperature quadratic estimator
 
   Args:
+    :xest (*str*): Combination of two estimator types
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fC [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
@@ -301,31 +331,10 @@ def ttt(lmax,rlmin,rlmax,fC,OCT,gtype=''):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 
   Returns:
-    :Ag [*l*] (*double*): Cross normalization, with bounds (0:lmax)
+    :Ag [*l*] (*double*): Unnormalized response, with bounds (0:lmax)
 
   Usage:
-    :Ag = _libtempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype):
+    :Ag = _libtempura.norm_general.xtt(xest,lmax,rlmin,rlmax,fC,OCT,gtype):
   """
-  return _libtempura.norm_lens.ttt(lmax,rlmin,rlmax,fC,OCT,gtype)
-
-def stt(lmax,rlmin,rlmax,fC,OCT,gtype=''):
-  """
-  Unnormalized response between lensing potential and poisson sources/inhomogeneous noise with the temperature quadratic estimator
-
-  Args:
-    :lmax (*int*): Maximum multipole of output normalization spectrum
-    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
-    :fC [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
-    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)
-
-  Args(optional):
-    :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
-
-  Returns:
-    :Ag [*l*] (*double*): Cross normalization, with bounds (0:lmax)
-
-  Usage:
-    :Ag = _libtempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype):
-  """
-  return _libtempura.norm_lens.stt(lmax,rlmin,rlmax,fC,OCT,gtype)
+  return _libtempura.norm_general.xtt(xest,lmax,rlmin,rlmax,fC,OCT,gtype)
 

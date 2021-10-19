@@ -9,7 +9,7 @@ module norm_lens
 contains
 
 
-subroutine qtt(lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,N)
+subroutine qtt(lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator
 !*
 !*  Args:
@@ -27,24 +27,24 @@ subroutine qtt(lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,N)
 !*
   implicit none
   !I/O
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:N) :: TT, OCT
+  double precision, intent(in), dimension(0:temp_arg) :: TT, OCT
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
-  call quad_qtt('lens',lmax,rlmin,rlmax,TT,OCT,Al,gtype)
+  call quad_tt('lens',lmax,rlmin,rlmax,TT,OCT,Al,gtype)
   Ag = Al(1,:)
   Ac = Al(2,:)
 
 end subroutine qtt
 
 
-subroutine qte(lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,N)
+subroutine qte(lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TE quadratic estimator
 !*
 !*  Args:
@@ -64,13 +64,13 @@ subroutine qte(lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,N)
 
   implicit none
   !I/O
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in) , dimension(0:N) :: TE, OCT, OCE
+  double precision, intent(in) , dimension(0:temp_arg) :: TE, OCT, OCE
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
@@ -81,7 +81,7 @@ subroutine qte(lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,N)
 end subroutine qte
 
 
-subroutine qtb(lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,N)
+subroutine qtb(lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TB quadratic estimator
 !*
 !*  Args:
@@ -100,13 +100,13 @@ subroutine qtb(lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,N)
 !*
   implicit none
   !I/O
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in) , dimension(0:N) :: TE, OCT, OCB
+  double precision, intent(in) , dimension(0:temp_arg) :: TE, OCT, OCB
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
@@ -117,7 +117,7 @@ subroutine qtb(lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,N)
 end subroutine qtb
 
 
-subroutine qee(lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,N)
+subroutine qee(lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the E-mode quadratic estimator
 !*
 !*  Args:
@@ -136,12 +136,12 @@ subroutine qee(lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in) , dimension(0:N) :: EE, OCE
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in) , dimension(0:temp_arg) :: EE, OCE
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
@@ -152,7 +152,7 @@ subroutine qee(lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,N)
 end subroutine qee
 
 
-subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,N)
+subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 !*
 !*  Args:
@@ -172,15 +172,14 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in) , dimension(0:N) :: EE, OCE, OCB
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in) , dimension(0:temp_arg) :: EE, OCE, OCB
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
   !internal
   double precision, allocatable :: BB(:)
-  !internal
   double precision, dimension(2,0:lmax) :: Al
 
   allocate(BB(0:rlmax))
@@ -193,7 +192,7 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,N)
 end subroutine qeb
 
 
-subroutine qbb(lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,N)
+subroutine qbb(lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the B-mode quadratic estimator
 !*
 !*  Args:
@@ -212,12 +211,12 @@ subroutine qbb(lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:N) :: BB, OCB
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:temp_arg) :: BB, OCB
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
@@ -228,7 +227,7 @@ subroutine qbb(lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,N)
 end subroutine qbb
 
 
-subroutine qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,N)
+subroutine qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,temp_arg)
 !*  Correlation between unnormalized TT and TE quadratic estimators
 !*
 !*  Args:
@@ -250,19 +249,19 @@ subroutine qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:N) :: fCTT, fCTE, OCT, OCE, OCTE
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:temp_arg) :: fCTT, fCTE, OCT, OCE, OCTE
   double precision, intent(out), dimension(0:lmax) :: Ig, Ic
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
 
   call quad_ttte('lens',lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype)
 
 end subroutine qttte
 
 
-subroutine qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,Ig,Ic,gtype,N)
+subroutine qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,Ig,Ic,gtype,temp_arg)
 !*  Correlation between unnormalized TT and EE quadratic estimators
 !*
 !*  Args:
@@ -284,19 +283,19 @@ subroutine qttee(lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,Ig,Ic,gtype,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:N) :: fCTT, fCEE, OCT, OCE, OCTE
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:temp_arg) :: fCTT, fCEE, OCT, OCE, OCTE
   double precision, intent(out), dimension(0:lmax) :: Ig, Ic
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
 
   call quad_ttee('lens',lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,Ig,Ic,gtype)
 
 end subroutine qttee
 
 
-subroutine qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,N)
+subroutine qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,temp_arg)
 !*  Correlation between unnormalized TE and EE quadratic estimators
 !*
 !*  Args:
@@ -318,19 +317,19 @@ subroutine qteee(lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:N) :: fCEE,fCTE,OCT,OCE,OCTE
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:temp_arg) :: fCEE, fCTE, OCT, OCE, OCTE
   double precision, intent(out), dimension(0:lmax) :: Ig, Ic
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
 
   call quad_teee('lens',lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype)
 
 end subroutine qteee
 
 
-subroutine qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,gtype,N)
+subroutine qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,gtype,temp_arg)
 !*  Correlation between unnormalized TB and EB quadratic estimators
 !*
 !*  Args:
@@ -353,19 +352,19 @@ subroutine qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,gtype,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:N) :: fCEE,fCBB,fCTE,OCT,OCE,OCTE,OCB
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:temp_arg) :: fCEE, fCBB, fCTE, OCT, OCE, OCTE, OCB
   double precision, intent(out), dimension(0:lmax) :: Ig, Ic
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
 
   call quad_tbeb('lens',lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,gtype)
 
 end subroutine qtbeb
 
 
-subroutine qall(QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype,N)
+subroutine qall(QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype,temp_arg)
 !*  Compute MV estimator normalization. Currently BB is ignored. 
 !*
 !*  Args:
@@ -385,21 +384,21 @@ subroutine qall(QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype,N)
 !*
   implicit none
   !I/O
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   logical, intent(in), dimension(6) :: QDO
   integer, intent(in) :: rlmin, rlmax, lmax
-  double precision, intent(in), dimension(4,0:N) :: fC, OC
+  double precision, intent(in), dimension(4,0:temp_arg) :: fC, OC
   double precision, intent(out), dimension(6,0:lmax) :: Ag, Ac, Nlg, Nlc
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
 
   call quad_all('lens',QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype)
 
 end subroutine qall
 
 
-subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter,conv,Ne,Nr,Nd)
+subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter,conv,temp_arg_E,temp_arg_B,temp_arg_p)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 !*
 !*  Args:
@@ -423,23 +422,23 @@ subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter
   implicit none
   !I/O
   integer, intent(in) :: lmax, elmax, rlmin, rlmax, dlmin, dlmax
-  integer :: Ne, Nr, Nd ! these are removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:Ne) :: CE, OCE
-  double precision, intent(in), dimension(0:Nr) :: OCB
-  double precision, intent(in), dimension(0:Nd) :: Cpp
+  integer :: temp_arg_E, temp_arg_B, temp_arg_p ! these are removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:temp_arg_E) :: CE, OCE
+  double precision, intent(in), dimension(0:temp_arg_B) :: OCB
+  double precision, intent(in), dimension(0:temp_arg_p) :: Cpp
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
-  integer, intent(in), optional :: iter
-  double precision, intent(in), optional :: conv
-  !f2py integer :: iter = 1
-  !f2py double precision :: conv = 1e-6
+  integer, intent(in) :: iter
+  double precision, intent(in) :: conv
+  !opt4py :: iter = 1
+  !opt4py :: conv = 1e-6
 
   call quad_eb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter,conv)
 
 end subroutine qeb_iter
 
 
-subroutine ttt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,N)
+subroutine ttt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,temp_arg)
 !*  Unnormalized response between lensing potential and amplitude modulation from the temperature quadratic estimator
 !*
 !*  Args:
@@ -457,19 +456,19 @@ subroutine ttt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:N) :: fC, OCT
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:temp_arg) :: fC, OCT
   double precision, intent(out), dimension(0:lmax) :: Ag
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
 
   call quad_x_tt('lensamp',lmax,rlmin,rlmax,fC,OCT,Ag,gtype)
 
 end subroutine ttt
 
 
-subroutine stt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,N)
+subroutine stt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,temp_arg)
 !*  Unnormalized response between lensing potential and poisson sources/inhomogeneous noise with the temperature quadratic estimator
 !*
 !*  Args:
@@ -487,12 +486,12 @@ subroutine stt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:N) :: fC, OCT
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:temp_arg) :: fC, OCT
   double precision, intent(out), dimension(0:lmax) :: Ag
   !optional
-  character(1), intent(in), optional :: gtype
-  !f2py character(1) :: gtype = ''
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
 
   call quad_x_tt('lenssrc',lmax,rlmin,rlmax,fC,OCT,Ag,gtype)
 
