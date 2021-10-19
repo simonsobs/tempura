@@ -34,8 +34,12 @@ subroutine qtt(lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,N)
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
+  !internal
+  double precision, dimension(2,0:lmax) :: Al
 
   call quad_qtt('lens',lmax,rlmin,rlmax,TT,OCT,Al,gtype)
+  Ag = Al(1,:)
+  Ac = Al(2,:)
 
 end subroutine qtt
 
@@ -67,8 +71,12 @@ subroutine qte(lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,N)
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
+  !internal
+  double precision, dimension(2,0:lmax) :: Al
 
   call quad_te('lens',lmax,rlmin,rlmax,TE,OCT,OCE,Al,gtype)
+  Ag = Al(1,:)
+  Ac = Al(2,:)
 
 end subroutine qte
 
@@ -99,8 +107,12 @@ subroutine qtb(lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,N)
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
+  !internal
+  double precision, dimension(2,0:lmax) :: Al
 
   call quad_tb('lens',lmax,rlmin,rlmax,TE,OCT,OCB,Al,gtype)
+  Ag = Al(1,:)
+  Ac = Al(2,:)
 
 end subroutine qtb
 
@@ -130,8 +142,12 @@ subroutine qee(lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,N)
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
+  !internal
+  double precision, dimension(2,0:lmax) :: Al
 
   call quad_ee('lens',lmax,rlmin,rlmax,EE,OCE,Al,gtype)
+  Ag = Al(1,:)
+  Ac = Al(2,:)
 
 end subroutine qee
 
@@ -164,10 +180,14 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,N)
   !f2py character(1) :: gtype = ''
   !internal
   double precision, allocatable :: BB(:)
+  !internal
+  double precision, dimension(2,0:lmax) :: Al
 
   allocate(BB(0:rlmax))
   BB = 0d0
   call quad_eb('lens',lmax,rlmin,rlmax,EE,OCE,OCB,BB,Al,gtype)
+  Ag = Al(1,:)
+  Ac = Al(2,:)
   deallocate(BB)
 
 end subroutine qeb
@@ -198,8 +218,12 @@ subroutine qbb(lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,N)
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
+  !internal
+  double precision, dimension(2,0:lmax) :: Al
 
   call quad_bb('lens',lmax,rlmin,rlmax,BB,OCB,Al,gtype)
+  Ag = Al(1,:)
+  Ac = Al(2,:)
 
 end subroutine qbb
 

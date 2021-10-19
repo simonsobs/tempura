@@ -27,8 +27,13 @@ subroutine qtt(lmax,rlmin,rlmax,OCT,As,N)
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
   double precision, intent(in), dimension(0:N) :: OCT
   double precision, intent(out), dimension(0:lmax) :: As
+  !internal
+  double precision, dimension(2,0:lmax) :: Al
+  double precision, dimension(0:rlmax) :: TT
 
+  TT = 0.5d0
   call quad_qtt('src',lmax,rlmin,rlmax,TT,OCT,Al,'')
+  As = Al(1,:)
 
 end subroutine qtt
 

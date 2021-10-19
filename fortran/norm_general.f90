@@ -9,7 +9,7 @@ module norm_general
 contains
 
 
-subroutine qtt(est,lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,N)
+subroutine qtt(est,lmax,rlmin,rlmax,TT,OCT,Al,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator
 !*
 !*  Args:
@@ -23,8 +23,7 @@ subroutine qtt(est,lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,N)
 !*    :gtype (str)       : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 !*
 !*  Returns:
-!*    :Ag [l] (double)   : CMB lensing potential normalization, with bounds (0:lmax)
-!*    :Ac [l] (double)   : Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+!*    :Al [2,l] (double) : Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 !*
   implicit none
   !I/O
@@ -32,7 +31,7 @@ subroutine qtt(est,lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,N)
   character(*), intent(in) :: est
   integer, intent(in) :: lmax, rlmin, rlmax
   double precision, intent(in), dimension(0:N) :: TT, OCT
-  double precision, intent(out), dimension(0:lmax) :: Ag, Ac
+  double precision, intent(out), dimension(2,0:lmax) :: Al
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
@@ -42,7 +41,43 @@ subroutine qtt(est,lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,N)
 end subroutine qtt
 
 
-subroutine qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,N)
+subroutine qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,gtype,NTT,N0,N1)
+!*  Normalization of reconstructed fields from the temperature quadratic estimator (asymmetric case)
+!*
+!*  Args:
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :glmin/glmax (int) : Minimum/Maximum multipole of gradient leg
+!*    :llmin/llmax (int) : Minimum/Maximum multipole of C-inverse leg
+!*    :rlmax (int)       : Minimum/Maximum multipole of TT
+!*    :TT [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
+!*    :OCT0 [l] (double) : Observed TT spectrum for gradient leg, with bounds (0:glmax)
+!*    :OCT1 [l] (double) : Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
+!*
+!*  Args(optional):
+!*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :Al [2,l] (double) : Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  integer :: NTT, N0, N1 ! this argument is removed by f2py since it appears in the size of an input array argument
+  integer, intent(in) :: lmax, rlmax, glmin, glmax, llmin, llmax
+  double precision, intent(in), dimension(0:NTT) :: TT
+  double precision, intent(in), dimension(0:N0) :: OCT0
+  double precision, intent(in), dimension(0:N1) :: OCT1
+  double precision, intent(out), dimension(2,0:lmax) :: Al
+  !optional
+  character(1), intent(in), optional :: gtype
+  !f2py character(1) :: gtype = ''
+
+  call quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,gtype)
+
+end subroutine qtt_asym
+
+
+subroutine qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,Al,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TE quadratic estimator
 !*
 !*  Args:
@@ -57,8 +92,7 @@ subroutine qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,N)
 !*    :gtype (str)    : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 !*
 !*  Returns:
-!*    :Ag [l] (double) : CMB lensing potential normalization, with bounds (0:lmax)
-!*    :Ac [l] (double) : Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+!*    :Al [2,l] (double) : Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 !*
 
   implicit none
@@ -67,7 +101,7 @@ subroutine qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,N)
   character(*), intent(in) :: est
   integer, intent(in) :: lmax, rlmin, rlmax
   double precision, intent(in) , dimension(0:N) :: TE, OCT, OCE
-  double precision, intent(out), dimension(0:lmax) :: Ag, Ac
+  double precision, intent(out), dimension(2,0:lmax) :: Al
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
@@ -77,7 +111,7 @@ subroutine qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,N)
 end subroutine qte
 
 
-subroutine qtb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,N)
+subroutine qtb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Al,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TB quadratic estimator
 !*
 !*  Args:
@@ -92,8 +126,7 @@ subroutine qtb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,N)
 !*    :gtype (str)    : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 !*
 !*  Returns:
-!*    :Ag [l] (double) : CMB lensing potential normalization, with bounds (0:lmax)
-!*    :Ac [l] (double) : Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+!*    :Al [2,l] (double) : Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 !*
   implicit none
   !I/O
@@ -101,7 +134,7 @@ subroutine qtb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,N)
   character(*), intent(in) :: est
   integer, intent(in) :: lmax, rlmin, rlmax
   double precision, intent(in) , dimension(0:N) :: TE, OCT, OCB
-  double precision, intent(out), dimension(0:lmax) :: Ag, Ac
+  double precision, intent(out), dimension(2,0:lmax) :: Al
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
@@ -111,7 +144,7 @@ subroutine qtb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,N)
 end subroutine qtb
 
 
-subroutine qee(est,lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,N)
+subroutine qee(est,lmax,rlmin,rlmax,EE,OCE,Al,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the E-mode quadratic estimator
 !*
 !*  Args:
@@ -125,8 +158,7 @@ subroutine qee(est,lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,N)
 !*    :gtype (str)    : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 !*
 !*  Returns:
-!*    :Ag [l] (double) : CMB lensing potential normalization, with bounds (0:lmax)
-!*    :Ac [l] (double) : Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+!*    :Al [2,l] (double) : Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 !*
   implicit none
   !I/O
@@ -134,7 +166,7 @@ subroutine qee(est,lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,N)
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
   double precision, intent(in) , dimension(0:N) :: EE, OCE
-  double precision, intent(out), dimension(0:lmax) :: Ag, Ac
+  double precision, intent(out), dimension(2,0:lmax) :: Al
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
@@ -144,7 +176,7 @@ subroutine qee(est,lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,N)
 end subroutine qee
 
 
-subroutine qeb(est,lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,N)
+subroutine qeb(est,lmax,rlmin,rlmax,EE,OCE,OCB,Al,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 !*
 !*  Args:
@@ -159,8 +191,7 @@ subroutine qeb(est,lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,N)
 !*    :gtype (str)    : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 !*
 !*  Returns:
-!*    :Ag [l] (double) : CMB lensing potential normalization, with bounds (0:lmax)
-!*    :Ac [l] (double) : Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+!*    :Al [2,l] (double) : Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 !*
   implicit none
   !I/O
@@ -168,7 +199,7 @@ subroutine qeb(est,lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,N)
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
   double precision, intent(in) , dimension(0:N) :: EE, OCE, OCB
-  double precision, intent(out), dimension(0:lmax) :: Ag, Ac
+  double precision, intent(out), dimension(2,0:lmax) :: Al
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
@@ -183,7 +214,7 @@ subroutine qeb(est,lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,N)
 end subroutine qeb
 
 
-subroutine qbb(est,lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,N)
+subroutine qbb(est,lmax,rlmin,rlmax,BB,OCB,Al,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the B-mode quadratic estimator
 !*
 !*  Args:
@@ -197,8 +228,7 @@ subroutine qbb(est,lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,N)
 !*    :gtype (str)    : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 !*
 !*  Returns:
-!*    :Ag [l] (double) : CMB lensing potential normalization, with bounds (0:lmax)
-!*    :Ac [l] (double) : Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+!*    :Al [2,l] (double) : Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 !*
   implicit none
   !I/O
@@ -206,7 +236,7 @@ subroutine qbb(est,lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,N)
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
   double precision, intent(in), dimension(0:N) :: BB, OCB
-  double precision, intent(out), dimension(0:lmax) :: Ag, Ac
+  double precision, intent(out), dimension(0:lmax) :: Al
   !optional
   character(1), intent(in), optional :: gtype
   !f2py character(1) :: gtype = ''
