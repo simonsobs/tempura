@@ -169,7 +169,7 @@ setup(
 
 print('\n[setup.py request was successful.]')
 
-#os.system('./scripts/generate_interface.sh')
+os.system('./scripts/generate_interface.sh')
 
-#print('\n[python interface files are created under pytempura/]')
+print('\n[python interface files are created under pytempura/]')
 

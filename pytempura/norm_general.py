@@ -22,7 +22,7 @@ def qtt(est,lmax,rlmin,rlmax,TT,OCT,gtype=''):
   """
   return _libtempura.norm_general.qtt(est,lmax,rlmin,rlmax,TT,OCT,gtype)
 
-def qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,gtype=''):
+def qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype=''):
   """
   Normalization of reconstructed fields from the temperature quadratic estimator (asymmetric case)
 
@@ -31,9 +31,9 @@ def qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,gtype=''):
     :glmin/glmax (*int*): Minimum/Maximum multipole of gradient leg
     :llmin/llmax (*int*): Minimum/Maximum multipole of C-inverse leg
     :rlmax (*int*): Minimum/Maximum multipole of TT
-    :TT [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
-    :OCT0 [*l*] (*double*): Observed TT spectrum for gradient leg, with bounds (0:glmax)
-    :OCT1 [*l*] (*double*): Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
+    :TT[*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
+    :OCTG[*l*] (*double*): Observed TT spectrum for gradient leg, with bounds (0:glmax)
+    :OCTL[*l*] (*double*): Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
 
   Args(optional):
     :gtype (*str*): Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -42,9 +42,9 @@ def qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,gtype=''):
     :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
   Usage:
-    :Al = _libtempura.norm_general.qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,gtype):
+    :Al = _libtempura.norm_general.qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype):
   """
-  return _libtempura.norm_general.qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,gtype)
+  return _libtempura.norm_general.qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype)
 
 def qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,gtype=''):
   """
