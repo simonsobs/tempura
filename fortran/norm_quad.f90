@@ -75,7 +75,7 @@ subroutine quad_tt(est,lmax,rlmin,rlmax,TT,OCT,Al,lfac)
 end subroutine quad_tt
 
 
-subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,lfac)
+subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Al,lfac)
 !*  Normalization of reconstructed fields from the temperature quadratic estimator (asymmetric case)
 !*
 !*  Args:
@@ -84,8 +84,8 @@ subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,l
 !*    :llmin/llmax (int) : Minimum/Maximum multipole of C-inverse leg
 !*    :rlmax (int)       : Minimum/Maximum multipole of TT
 !*    :TT [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
-!*    :OCT0 [l] (double) : Observed TT spectrum for gradient leg, with bounds (0:glmax)
-!*    :OCT1 [l] (double) : Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
+!*    :OCTG [l] (double) : Observed TT spectrum for gradient leg, with bounds (0:glmax)
+!*    :OCTL [l] (double) : Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
 !*
 !*  Args(optional):
 !*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -99,38 +99,38 @@ subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,l
   character(1), intent(in) :: lfac
   integer, intent(in) :: lmax, rlmax, glmin, glmax, llmin, llmax
   double precision, intent(in), dimension(0:rlmax) :: TT
-  double precision, intent(in), dimension(0:glmax) :: OCT0
-  double precision, intent(in), dimension(0:llmax) :: OCT1
+  double precision, intent(in), dimension(0:glmax) :: OCTG
+  double precision, intent(in), dimension(0:llmax) :: OCTL
   double precision, intent(out), dimension(2,0:lmax) :: Al
   !internal
   integer :: rL(2), l
   double precision, dimension(lmax) :: lk2
-  double precision, dimension(:,:), allocatable :: W, Wg
+  double precision, dimension(:,:), allocatable :: WL, WG
   double precision, dimension(2,2,lmax) :: SG
 
   if (max(llmax,glmax)/=rlmax)  stop 'error (qtt): max(glmax,llmax) should be lmax of TT'
 
   do l = glmin, glmax
-    if (OCT0(l)==0d0) stop 'error (qtt): observed cltt is zero for gradient leg'
+    if (OCTG(l)==0d0) stop 'error (qtt): observed cltt is zero for gradient leg'
   end do
 
   do l = llmin, llmax
-    if (OCT1(l)==0d0) stop 'error (qtt): observed cltt is zero for C-inverse leg'
+    if (OCTL(l)==0d0) stop 'error (qtt): observed cltt is zero for C-inverse leg'
   end do
 
   rL = (/min(glmin,llmin),rlmax/)
 
   !gradient-leg and C-inverse leg
-  allocate(W(2,rL(1):rL(2)),Wg(2,rL(1):rL(2))); W=0d0; Wg=0d0
+  allocate(WL(2,rL(1):rL(2)),WG(2,rL(1):rL(2))); WL=0d0; WG=0d0
 
   do l = glmin, glmax
-    Wg(1,l) = TT(l)**2 / OCT0(l)
-    Wg(2,l) = TT(l) / OCT0(l)
+    WG(1,l) = TT(l)**2 / OCTG(l)
+    WG(2,l) = TT(l) / OCTG(l)
   end do
 
   do l = llmin, llmax
-    W(1,l) = 1d0 / OCT1(l)
-    W(2,l) = TT(l) / OCT1(l)
+    WL(1,l) = 1d0 / OCTL(l)
+    WL(2,l) = TT(l) / OCTL(l)
   end do
 
   lk2 = 1d0
@@ -138,8 +138,8 @@ subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,l
   select case(est)
   case('lens')
     call get_lfac(lmax,lfac,lk2)
-    call Kernels_lens(rL,W(1,:),Wg(1,:),SG(1,:,:),'S0')
-    call Kernels_lens(rL,W(2,:),Wg(2,:),SG(2,:,:),'G0')
+    call Kernels_lens(rL,WL(1,:),WG(1,:),SG(1,:,:),'S0')
+    call Kernels_lens(rL,WL(2,:),WG(2,:),SG(2,:,:),'G0')
   end select
 
   Al = 0d0

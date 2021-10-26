@@ -41,7 +41,7 @@ subroutine qtt(est,lmax,rlmin,rlmax,TT,OCT,Al,gtype,temp_arg)
 end subroutine qtt
 
 
-subroutine qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,gtype,temp_argTT,temp_arg0,temp_arg1)
+subroutine qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Al,gtype,temp_argTT,temp_argG,temp_argL)
 !*  Normalization of reconstructed fields from the temperature quadratic estimator (asymmetric case)
 !*
 !*  Args:
@@ -49,9 +49,9 @@ subroutine qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,gtype
 !*    :glmin/glmax (int) : Minimum/Maximum multipole of gradient leg
 !*    :llmin/llmax (int) : Minimum/Maximum multipole of C-inverse leg
 !*    :rlmax (int)       : Minimum/Maximum multipole of TT
-!*    :TT [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
-!*    :OCT0 [l] (double) : Observed TT spectrum for gradient leg, with bounds (0:glmax)
-!*    :OCT1 [l] (double) : Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
+!*    :TT[l] (double)    : Theory TT spectrum, with bounds (0:rlmax)
+!*    :OCTG[l] (double)  : Observed TT spectrum for gradient leg, with bounds (0:glmax)
+!*    :OCTL[l] (double)  : Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
 !*
 !*  Args(optional):
 !*    :gtype (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -62,17 +62,17 @@ subroutine qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,gtype
   implicit none
   !I/O
   character(*), intent(in) :: est
-  integer :: temp_argTT, temp_arg0, temp_arg1 ! this argument is removed by f2py since it appears in the size of an input array argument
+  integer :: temp_argTT, temp_argG, temp_argL ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: lmax, rlmax, glmin, glmax, llmin, llmax
   double precision, intent(in), dimension(0:temp_argTT) :: TT
-  double precision, intent(in), dimension(0:temp_arg0) :: OCT0
-  double precision, intent(in), dimension(0:temp_arg1) :: OCT1
+  double precision, intent(in), dimension(0:temp_argG) :: OCTG
+  double precision, intent(in), dimension(0:temp_argL) :: OCTL
   double precision, intent(out), dimension(2,0:lmax) :: Al
   !optional
   character(1), intent(in) :: gtype
   !opt4py :: gtype = ''
 
-  call quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCT0,OCT1,Al,gtype)
+  call quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Al,gtype)
 
 end subroutine qtt_asym
 
