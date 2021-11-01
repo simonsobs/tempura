@@ -3,15 +3,13 @@
 !////////////////////////////////////////////////////!
 
 module norm_src
-  use alkernel, only: kernels_tau
+  use norm_quad
   implicit none
-
-  private kernels_tau
 
 contains
 
 
-subroutine qtt(lmax,rlmin,rlmax,OCT,As,N)
+subroutine qtt(lmax,rlmin,rlmax,OCT,As,temp_arg)
 !*  Normalization of reconstructed src field from the temperature quadratic estimator
 !*
 !*  Args:
@@ -26,31 +24,16 @@ subroutine qtt(lmax,rlmin,rlmax,OCT,As,N)
   implicit none
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
-  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:N) :: OCT
+  integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
+  double precision, intent(in), dimension(0:temp_arg) :: OCT
   double precision, intent(out), dimension(0:lmax) :: As
   !internal
-  integer :: rL(2), l
-  double precision, dimension(rlmin:rlmax) :: W1, W2
-  double precision, dimension(lmax) :: S0, G0
+  double precision, dimension(2,0:lmax) :: Al
+  double precision, dimension(0:rlmax) :: TT
 
-  rL = (/rlmin,rlmax/)
-
-  do l = rlmin, rlmax
-    if (OCT(l)==0d0) stop 'error (norm_src.qtt): observed cltt is zero'
-  end do
-
-  W1 = 0.5d0 / OCT(rlmin:rlmax)
-  S0 = 0d0
-  call kernels_tau(rL,W1,W1,S0,'S0')
-
-  G0 = 0d0
-  call kernels_tau(rL,W1,W1,G0,'G0')
-
-  As = 0d0
-  do l = 1, lmax
-    if (S0(l)+G0(l)/=0d0)  As(l) = 1d0/(S0(l)+G0(l))
-  end do
+  TT = 0.5d0
+  call quad_tt('src',lmax,rlmin,rlmax,TT,OCT,Al,'')
+  As = Al(1,:)
 
 end subroutine qtt
 

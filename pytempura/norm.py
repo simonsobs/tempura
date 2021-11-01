@@ -1,8 +1,6 @@
 import numpy as np
 from . import norm_lens
 from . import norm_src
-from . import norm_tau
-from . import norm_rot
 
 
 est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','TAU','ROT']
