@@ -12,5 +12,6 @@ del get_versions
 from . import norm_lens
 from . import norm_src
 from . import norm_general
+from . import noise_spec
 from .norm import *
 
