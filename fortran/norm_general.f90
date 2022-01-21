@@ -467,11 +467,11 @@ subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter
 end subroutine qeb_iter
 
 
-subroutine xtt(xest,lmax,rlmin,rlmax,fC,OCT,Ag,gtype,temp_arg)
-!*  Unnormalized response between two estimators from the temperature quadratic estimator
+subroutine xtt(est,lmax,rlmin,rlmax,fC,OCT,Rxy,gtype,temp_arg)
+!*  Unnormalized response for the symmetric temperature quadratic estimator
 !*
 !*  Args:
-!*    :xest (str)        : Combination of two estimator types
+!*    :est (str)         : Estimator combination (lensamp,lenssrc,ampsrc)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :fC [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
@@ -481,22 +481,59 @@ subroutine xtt(xest,lmax,rlmin,rlmax,fC,OCT,Ag,gtype,temp_arg)
 !*    :gtype (str)       : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 !*
 !*  Returns:
-!*    :Ag [l] (double)   : Unnormalized response, with bounds (0:lmax)
+!*    :Rxy [l] (double)   : Unnormalized response, with bounds (0:lmax)
 !*
   implicit none
   !I/O
-  character(*), intent(in) :: xest
+  character(*), intent(in) :: est
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   double precision, intent(in), dimension(0:temp_arg) :: fC, OCT
-  double precision, intent(out), dimension(0:lmax) :: Ag
+  double precision, intent(out), dimension(0:lmax) :: Rxy
   !optional
   character(1), intent(in) :: gtype
   !opt4py :: gtype = ''
 
-  call quad_x_tt(xest,lmax,rlmin,rlmax,fC,OCT,Ag,gtype)
+  call quad_xtt(est,lmax,rlmin,rlmax,fC,OCT,Rxy,gtype)
 
 end subroutine xtt
+
+
+subroutine xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Rxy,gtype,temp_argTT,temp_argG,temp_argL)
+!*  Unnormalized response for the asymmetric temperature quadratic estimator
+!*
+!*  Args:
+!*    :est (str)         : Estimator combination (lensamp,lenssrc,amplens,ampsrc,srclens,srcamp)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :glmin/glmax (int) : Minimum/Maximum multipole of gradient leg
+!*    :llmin/llmax (int) : Minimum/Maximum multipole of C-inverse leg
+!*    :rlmax (int)       : Minimum/Maximum multipole of TT
+!*    :TT[l] (double)    : Theory TT spectrum, with bounds (0:rlmax)
+!*    :OCTG[l] (double)  : Observed TT spectrum for gradient leg, with bounds (0:glmax)
+!*    :OCTL[l] (double)  : Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
+!*
+!*  Args(optional):
+!*    :gtype (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :Rxy [l] (double)   : Unnormalized response, with bounds (0:lmax)
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  integer :: temp_argTT, temp_argG, temp_argL ! this argument is removed by f2py since it appears in the size of an input array argument
+  integer, intent(in) :: lmax, rlmax, glmin, glmax, llmin, llmax
+  double precision, intent(in), dimension(0:temp_argTT) :: TT
+  double precision, intent(in), dimension(0:temp_argG) :: OCTG
+  double precision, intent(in), dimension(0:temp_argL) :: OCTL
+  double precision, intent(out), dimension(0:lmax) :: Rxy
+  !optional
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
+
+  call quad_xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Rxy,gtype)
+
+end subroutine xtt_asym
 
 
 end module norm_general

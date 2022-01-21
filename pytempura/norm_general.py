@@ -316,12 +316,12 @@ def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter=1,conv=1e-6)
   """
   return _libtempura.norm_general.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter,conv)
 
-def xtt(xest,lmax,rlmin,rlmax,fC,OCT,gtype=''):
+def xtt(est,lmax,rlmin,rlmax,fC,OCT,gtype=''):
   """
-  Unnormalized response between two estimators from the temperature quadratic estimator
+  Unnormalized response for the symmetric temperature quadratic estimator
 
   Args:
-    :xest (*str*): Combination of two estimator types
+    :est (*str*): Estimator combination (lensamp,lenssrc,ampsrc)
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fC [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
@@ -331,10 +331,35 @@ def xtt(xest,lmax,rlmin,rlmax,fC,OCT,gtype=''):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 
   Returns:
-    :Ag [*l*] (*double*): Unnormalized response, with bounds (0:lmax)
+    :Rxy [*l*] (*double*): Unnormalized response, with bounds (0:lmax)
 
   Usage:
-    :Ag = _libtempura.norm_general.xtt(xest,lmax,rlmin,rlmax,fC,OCT,gtype):
+    :Rxy = _libtempura.norm_general.xtt(est,lmax,rlmin,rlmax,fC,OCT,gtype):
   """
-  return _libtempura.norm_general.xtt(xest,lmax,rlmin,rlmax,fC,OCT,gtype)
+  return _libtempura.norm_general.xtt(est,lmax,rlmin,rlmax,fC,OCT,gtype)
+
+def xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype=''):
+  """
+  Unnormalized response for the asymmetric temperature quadratic estimator
+
+  Args:
+    :est (*str*): Estimator combination (lensamp,lenssrc,amplens,ampsrc,srclens,srcamp)
+    :lmax (*int*): Maximum multipole of output normalization spectrum
+    :glmin/glmax (*int*): Minimum/Maximum multipole of gradient leg
+    :llmin/llmax (*int*): Minimum/Maximum multipole of C-inverse leg
+    :rlmax (*int*): Minimum/Maximum multipole of TT
+    :TT[*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
+    :OCTG[*l*] (*double*): Observed TT spectrum for gradient leg, with bounds (0:glmax)
+    :OCTL[*l*] (*double*): Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
+
+  Args(optional):
+    :gtype (*str*): Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+
+  Returns:
+    :Rxy [*l*] (*double*): Unnormalized response, with bounds (0:lmax)
+
+  Usage:
+    :Rxy = _libtempura.norm_general.xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype):
+  """
+  return _libtempura.norm_general.xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype)
 

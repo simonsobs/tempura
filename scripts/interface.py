@@ -233,7 +233,7 @@ for mod in modname:
             if 'temp_arg' in p:
                 func = func.replace(','+p+',',',')
                 func = func.replace(','+p+')',')')
-        print(func)
+        #print(func)
         args = func_rm_args(args,'temp_arg')
 
         # call lib (should not place after chargs)
@@ -253,7 +253,7 @@ for mod in modname:
         func = func_rm_args_opt(func,popt)
         func = func_rm_args_opt(func,pext)
         func = func_rm_args_opt(func,pops,True)
-        print('create',mod+'.'+func)
+        #print('create',mod+'.'+func)
 
         # add to pyname
         f = open(pyname,'a+')

@@ -463,7 +463,7 @@ subroutine ttt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,temp_arg)
   character(1), intent(in) :: gtype
   !opt4py :: gtype = ''
 
-  call quad_x_tt('lensamp',lmax,rlmin,rlmax,fC,OCT,Ag,gtype)
+  call quad_xtt('lensamp',lmax,rlmin,rlmax,fC,OCT,Ag,gtype)
 
 end subroutine ttt
 
@@ -493,7 +493,7 @@ subroutine stt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,temp_arg)
   character(1), intent(in) :: gtype
   !opt4py :: gtype = ''
 
-  call quad_x_tt('lenssrc',lmax,rlmin,rlmax,fC,OCT,Ag,gtype)
+  call quad_xtt('lenssrc',lmax,rlmin,rlmax,fC,OCT,Ag,gtype)
 
 end subroutine stt
 

@@ -599,12 +599,12 @@ subroutine Kernels_Rot(rL,WA,WB,X,kernel)
         d00_sup = wigd_ini(0,0,mu)
         d00_inf = d00_mid
         d00_mid = d00_sup
-        d00_sup(1:2) = mu*d00_mid(1:2)*(al*(2d0*al-1d0))/al**2
+        d00_sup = mu*d00_mid*(al*(2d0*al-1d0))/al**2
       else
         c1_inv = (2d0*al-1d0)/al
         c3 = (al-1d0)**2/((al-1d0)*(2d0*al-1d0))
         d00_sup(1) = (mu*d00_mid(1) - c3*d00_inf(1))*c1_inv
-        d00_sup(2) = (mu*d00_mid(2) - c3*d00_inf(2))*c1_inv
+        !d00_sup(2) = (mu*d00_mid(2) - c3*d00_inf(2))*c1_inv
       end if
       X(l) = X(l) + 4d0*II*d00_sup(1)*GL%w(i)*pi
       d00_inf = d00_mid
@@ -679,12 +679,12 @@ subroutine Kernels_Tau(rL,WA,WB,X,kernel,gln,gle)
         d00_sup = wigd_ini(0,0,mu)
         d00_inf = d00_mid
         d00_mid = d00_sup
-        d00_sup(1:2) = mu*d00_mid(1:2)*(al*(2d0*al-1d0))/al**2
+        d00_sup = mu*d00_mid*(al*(2d0*al-1d0))/al**2
       else
         c1_inv = (2d0*al-1d0)/al
         c3 = (al-1d0)**2/((al-1d0)*(2d0*al-1d0))
         d00_sup(1) = (mu*d00_mid(1) - c3*d00_inf(1))*c1_inv
-        d00_sup(2) = (mu*d00_mid(2) - c3*d00_inf(2))*c1_inv
+        !d00_sup(2) = (mu*d00_mid(2) - c3*d00_inf(2))*c1_inv
       end if
       X(l) = X(l) + II*d00_sup(1)*GL%w(i)*pi
       d00_inf = d00_mid
@@ -704,7 +704,7 @@ subroutine Kernels_LensTau(rL,WA,WB,X,kernel)
   character(*), intent(in) :: kernel
   integer, intent(in) :: rL(2)
   double precision, intent(in), dimension(rL(1):rL(2)) :: WA, WB
-  double precision, intent(out) :: X(:,:)
+  double precision, intent(out) :: X(:)
   !internal
   type(gauss_legendre_params) :: GL
   integer :: i, l, lmax
@@ -715,7 +715,7 @@ subroutine Kernels_LensTau(rL,WA,WB,X,kernel)
   double precision, dimension(2) :: ZB10, ZB32, ZB21
 
   !* initialize
-  lmax = size(X,dim=2)
+  lmax = size(X)
 
   if (kernel=='Sp'.or.kernel=='Gp') pm = 1d0
   if (kernel=='Sm'.or.kernel=='Gm') pm = -1d0
@@ -752,14 +752,15 @@ subroutine Kernels_LensTau(rL,WA,WB,X,kernel)
       al = dble(l)
       if (l==1) then 
         d10_mid  = 0d0 !d^0_10(mu)
-        d10 = -dsqrt(1-mu**2)/dsqrt(2.d0) !d^1_10(mu)
+        d10 = -dsqrt(1-mu**2)/dsqrt(2d0) !d^1_10(mu)
       else
         c1_inv = al*(2d0*al-1d0)/(dsqrt((al**2-1d0))*al)
         c3 = dsqrt(((al-1d0)**2-1d0))*(al-1d0)/((al-1d0)*(2d0*al-1d0))
         d10(1) = (mu*d10_mid(1) - c3*d10_inf(1))*c1_inv
-        d10(2) = (mu*d10_mid(2) - c3*d10_inf(2))*c1_inv
+        !d10(2) = (mu*d10_mid(2) - c3*d10_inf(2))*c1_inv
       end if
-      X(1:2,l) = X(1:2,l) + II*d10(1)*dsqrt(l*(l+1d0))*GL%w(i)*pi
+      !X(1:2,l) = X(1:2,l) + II*d10(1)*dsqrt(l*(l+1d0))*GL%w(i)*pi
+      X(l) = X(l) + II*d10(1)*dsqrt(l*(l+1d0))*GL%w(i)*pi
       d10_inf = d10_mid
       d10_mid = d10
     end do
