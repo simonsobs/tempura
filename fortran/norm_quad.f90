@@ -1181,7 +1181,7 @@ subroutine quad_xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Rxy
   allocate(WL(2,rL(1):rL(2)),WG(2,rL(1):rL(2))); WL=0d0; WG=0d0
 
   select case(est)
-  case('lensamp','lenssrc','ampsrc','amplens')
+  case('lensamp','amplens')
     do l = glmin, glmax
       WG(1,l) = TT(l)**2 / OCTG(l)
       WG(2,l) = TT(l) / OCTG(l)
@@ -1190,12 +1190,23 @@ subroutine quad_xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Rxy
       WL(1,l) = 1d0 / OCTL(l)
       WL(2,l) = TT(l) / OCTL(l)
     end do
-  case('srclens','srcamp')
+  case('lenssrc','ampsrc')
     do l = glmin, glmax
-      WG(1,l) = 1d0 / OCTG(l)
+      WG(1,l) = TT(l) / OCTG(l)
+      WG(2,l) = TT(l) / OCTG(l)
     end do
     do l = llmin, llmax
       WL(1,l) = 1d0 / OCTL(l)
+      WL(2,l) = 1d0 / OCTL(l)
+    end do
+  case('srclens','srcamp')
+    do l = glmin, glmax
+      WG(1,l) = TT(l) / OCTG(l)
+      WG(2,l) = 1d0 / OCTG(l)
+    end do
+    do l = llmin, llmax
+      WL(1,l) = 1d0 / OCTL(l)
+      WL(2,l) = TT(l) / OCTL(l)
     end do
   end select
 
