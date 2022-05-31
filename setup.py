@@ -165,6 +165,8 @@ setup(
     zip_safe=False,
     cmdclass=cmdclass,
     # scripts=['scripts/test-tempura']
+    #//// force to use ifort (the fortran source is written for ifort) ////#
+    options={'build':{'build_lib':'.','fcompiler':'intelem'}}
 )
 
 print('\n[setup.py request was successful.]')
