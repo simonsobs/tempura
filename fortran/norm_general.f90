@@ -13,7 +13,7 @@ subroutine qtt(est,lmax,rlmin,rlmax,TT,OCT,Al,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator
 !*
 !*  Args:
-!*    :est (str)         : Estimator type
+!*    :est (str)         : Estimator type (lens,amp,src)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :TT [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
@@ -45,6 +45,7 @@ subroutine qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Al,gtype
 !*  Normalization of reconstructed fields from the temperature quadratic estimator (asymmetric case)
 !*
 !*  Args:
+!*    :est (str)         : Estimator type (lens,amp,src)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :glmin/glmax (int) : Minimum/Maximum multipole of gradient leg
 !*    :llmin/llmax (int) : Minimum/Maximum multipole of C-inverse leg
@@ -81,7 +82,7 @@ subroutine qte(est,lmax,rlmin,rlmax,TE,OCT,OCE,Al,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TE quadratic estimator
 !*
 !*  Args:
-!*    :est (str)        : Estimator type
+!*    :est (str)        : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :TE [l] (double)  : Theory TE spectrum, with bounds (0:rlmax)
@@ -115,7 +116,7 @@ subroutine qtb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Al,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TB quadratic estimator
 !*
 !*  Args:
-!*    :est (str)        : Estimator type
+!*    :est (str)        : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :TE [l] (double)  : Theory TE spectrum, with bounds (0:rlmax)
@@ -148,7 +149,7 @@ subroutine qee(est,lmax,rlmin,rlmax,EE,OCE,Al,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the E-mode quadratic estimator
 !*
 !*  Args:
-!*    :est (str)        : Estimator type
+!*    :est (str)        : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :EE [l] (double)  : Theory EE spectrum, with bounds (0:rlmax)
@@ -180,7 +181,7 @@ subroutine qeb(est,lmax,rlmin,rlmax,EE,OCE,OCB,Al,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 !*
 !*  Args:
-!*    :est (str)        : Estimator type
+!*    :est (str)        : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :fC [l] (double)  : Theory EE spectrum, with bounds (0:rlmax)
@@ -218,7 +219,7 @@ subroutine qbb(est,lmax,rlmin,rlmax,BB,OCB,Al,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the B-mode quadratic estimator
 !*
 !*  Args:
-!*    :est (str)        : Estimator type
+!*    :est (str)        : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :BB [l] (double)  : Theory BB spectrum, with bounds (0:rlmax)
@@ -250,7 +251,7 @@ subroutine qttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,temp_ar
 !*  Correlation between unnormalized TT and TE quadratic estimators
 !*
 !*  Args:
-!*    :est (str)        : Estimator type
+!*    :est (str)        : Estimator type (lens,amp,src)
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :fCTT [l] (double): Theory TT spectrum, with bounds (0:rlmax)
@@ -286,7 +287,7 @@ subroutine qttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,Ig,Ic,gtype,temp_ar
 !*  Correlation between unnormalized TT and EE quadratic estimators
 !*
 !*  Args:
-!*    :est (str)        : Estimator type
+!*    :est (str)        : Estimator type (lens,amp,src)
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :fCTT [l] (double): Theory TT spectrum, with bounds (0:rlmax)
@@ -322,7 +323,7 @@ subroutine qteee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,Ig,Ic,gtype,temp_ar
 !*  Correlation between unnormalized TE and EE quadratic estimators
 !*
 !*  Args:
-!*    :est (str)        : Estimator type
+!*    :est (str)        : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :fCEE [l] (double): Theory EE spectrum, with bounds (0:rlmax)
@@ -358,7 +359,7 @@ subroutine qtbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,gtyp
 !*  Correlation between unnormalized TB and EB quadratic estimators
 !*
 !*  Args:
-!*    :est (str)        : Estimator type
+!*    :est (str)        : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :fCEE [l] (double): Theory EE spectrum, with bounds (0:rlmax)
@@ -395,7 +396,7 @@ subroutine qall(est,QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype,temp_arg)
 !*  Compute MV estimator normalization. Currently BB is ignored. 
 !*
 !*  Args:
-!*    :est (str)         : Estimator type
+!*    :est (str)        : Estimator type
 !*    :QDO[6] (bool): Specifying which estimators to be combined for the minimum variance estimator, with size (6). The oder is TT, TE, EE, TB, EB and BB. 
 !*    :lmax (int):    Maximum multipole of the output power spectra
 !*    :rlmin/rlmax (int)   : Minimum/Maximum multipole of CMB for reconstruction
@@ -467,11 +468,11 @@ subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter
 end subroutine qeb_iter
 
 
-subroutine xtt(xest,lmax,rlmin,rlmax,fC,OCT,Ag,gtype,temp_arg)
-!*  Unnormalized response between two estimators from the temperature quadratic estimator
+subroutine xtt(est,lmax,rlmin,rlmax,fC,OCT,Rxy,gtype,temp_arg)
+!*  Unnormalized response for the symmetric temperature quadratic estimator
 !*
 !*  Args:
-!*    :xest (str)        : Combination of two estimator types
+!*    :est (str)         : Estimator combination (lensamp,lenssrc,ampsrc)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :fC [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
@@ -481,22 +482,59 @@ subroutine xtt(xest,lmax,rlmin,rlmax,fC,OCT,Ag,gtype,temp_arg)
 !*    :gtype (str)       : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 !*
 !*  Returns:
-!*    :Ag [l] (double)   : Unnormalized response, with bounds (0:lmax)
+!*    :Rxy [l] (double)   : Unnormalized response, with bounds (0:lmax)
 !*
   implicit none
   !I/O
-  character(*), intent(in) :: xest
+  character(*), intent(in) :: est
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   double precision, intent(in), dimension(0:temp_arg) :: fC, OCT
-  double precision, intent(out), dimension(0:lmax) :: Ag
+  double precision, intent(out), dimension(0:lmax) :: Rxy
   !optional
   character(1), intent(in) :: gtype
   !opt4py :: gtype = ''
 
-  call quad_x_tt(xest,lmax,rlmin,rlmax,fC,OCT,Ag,gtype)
+  call quad_xtt(est,lmax,rlmin,rlmax,fC,OCT,Rxy,gtype)
 
 end subroutine xtt
+
+
+subroutine xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Rxy,gtype,temp_argTT,temp_argG,temp_argL)
+!*  Unnormalized response for the asymmetric temperature quadratic estimator
+!*
+!*  Args:
+!*    :est (str)         : Estimator combination (lensamp,lenssrc,amplens,ampsrc,srclens,srcamp)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :glmin/glmax (int) : Minimum/Maximum multipole of gradient leg
+!*    :llmin/llmax (int) : Minimum/Maximum multipole of C-inverse leg
+!*    :rlmax (int)       : Minimum/Maximum multipole of TT
+!*    :TT[l] (double)    : Theory TT spectrum, with bounds (0:rlmax)
+!*    :OCTG[l] (double)  : Observed TT spectrum for gradient leg, with bounds (0:glmax)
+!*    :OCTL[l] (double)  : Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
+!*
+!*  Args(optional):
+!*    :gtype (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :Rxy [l] (double)   : Unnormalized response, with bounds (0:lmax)
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  integer :: temp_argTT, temp_argG, temp_argL ! this argument is removed by f2py since it appears in the size of an input array argument
+  integer, intent(in) :: lmax, rlmax, glmin, glmax, llmin, llmax
+  double precision, intent(in), dimension(0:temp_argTT) :: TT
+  double precision, intent(in), dimension(0:temp_argG) :: OCTG
+  double precision, intent(in), dimension(0:temp_argL) :: OCTL
+  double precision, intent(out), dimension(0:lmax) :: Rxy
+  !optional
+  character(1), intent(in) :: gtype
+  !opt4py :: gtype = ''
+
+  call quad_xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Rxy,gtype)
+
+end subroutine xtt_asym
 
 
 end module norm_general

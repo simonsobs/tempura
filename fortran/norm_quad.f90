@@ -15,6 +15,7 @@ subroutine quad_tt(est,lmax,rlmin,rlmax,TT,OCT,Al,lfac)
 !*  Normalization of reconstructed fields from the temperature quadratic estimator
 !*
 !*  Args:
+!*    :est (str)         : Estimator type (lens,amp,src)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :TT[l] (double)    : Theory TT spectrum, with bounds (0:rlmax)
@@ -79,6 +80,7 @@ subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Al,l
 !*  Normalization of reconstructed fields from the temperature quadratic estimator (asymmetric case)
 !*
 !*  Args:
+!*    :est (str)         : Estimator type (lens,amp,src)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :glmin/glmax (int) : Minimum/Maximum multipole of gradient leg
 !*    :llmin/llmax (int) : Minimum/Maximum multipole of C-inverse leg
@@ -123,15 +125,24 @@ subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Al,l
   !gradient-leg and C-inverse leg
   allocate(WL(2,rL(1):rL(2)),WG(2,rL(1):rL(2))); WL=0d0; WG=0d0
 
-  do l = glmin, glmax
-    WG(1,l) = TT(l)**2 / OCTG(l)
-    WG(2,l) = TT(l) / OCTG(l)
-  end do
-
-  do l = llmin, llmax
-    WL(1,l) = 1d0 / OCTL(l)
-    WL(2,l) = TT(l) / OCTL(l)
-  end do
+  select case(est)
+  case('lens','amp')
+    do l = glmin, glmax
+      WG(1,l) = TT(l)**2 / OCTG(l)
+      WG(2,l) = TT(l) / OCTG(l)
+    end do
+    do l = llmin, llmax
+      WL(1,l) = 1d0 / OCTL(l)
+      WL(2,l) = TT(l) / OCTL(l)
+    end do
+  case('src')
+    do l = glmin, glmax
+      WG(1,l) = 1d0 / OCTG(l)
+    end do
+    do l = llmin, llmax
+      WL(1,l) = 1d0 / OCTL(l)
+    end do
+  end select
 
   lk2 = 1d0
   SG = 0d0
@@ -140,6 +151,13 @@ subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Al,l
     call get_lfac(lmax,lfac,lk2)
     call Kernels_lens(rL,WL(1,:),WG(1,:),SG(1,:,:),'S0')
     call Kernels_lens(rL,WL(2,:),WG(2,:),SG(2,:,:),'G0')
+  case('amp')
+    call Kernels_tau(rL,WL(1,:),WG(1,:),SG(1,1,:),'S0')
+    call Kernels_tau(rL,WL(2,:),WG(2,:),SG(2,1,:),'G0')
+  case('src')
+    call Kernels_tau(rL,WL(1,:),WG(1,:),SG(1,1,:),'S0')
+    call Kernels_tau(rL,WL(1,:),WG(1,:),SG(2,1,:),'G0')
+    SG = SG/4d0
   end select
 
   Al = 0d0
@@ -156,11 +174,12 @@ subroutine quad_te(est,lmax,rlmin,rlmax,TE,OCT,OCE,Al,lfac)
 !*  Normalization of reconstructed fields from the TE quadratic estimator
 !*
 !*  Args:
-!*    :lmax (int)       : Maximum multipole of output normalization spectrum
-!*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
-!*    :TE [l] (double)  : Theory TE spectrum, with bounds (0:rlmax)
-!*    :OCT [l] (double) : Observed TT spectrum, with bounds (0:rlmax)
-!*    :OCE [l] (double) : Observed EE spectrum, with bounds (0:rlmax)
+!*    :est (str)         : Estimator type (lens,amp,rot,src)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :TE [l] (double)   : Theory TE spectrum, with bounds (0:rlmax)
+!*    :OCT [l] (double)  : Observed TT spectrum, with bounds (0:rlmax)
+!*    :OCE [l] (double)  : Observed EE spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
 !*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -238,11 +257,12 @@ subroutine quad_tb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Al,lfac)
 !*  Normalization of reconstructed fields from the TB quadratic estimator
 !*
 !*  Args:
-!*    :lmax (int)       : Maximum multipole of output normalization spectrum
-!*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
-!*    :TE [l] (double)  : Theory TE spectrum, with bounds (0:rlmax)
-!*    :OCT [l] (double) : Observed TT spectrum, with bounds (0:rlmax)
-!*    :OCB [l] (double) : Observed BB spectrum, with bounds (0:rlmax)
+!*    :est (str)         : Estimator type (lens,amp,rot,src)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :TE [l] (double)   : Theory TE spectrum, with bounds (0:rlmax)
+!*    :OCT [l] (double)  : Observed TT spectrum, with bounds (0:rlmax)
+!*    :OCB [l] (double)  : Observed BB spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
 !*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -305,6 +325,7 @@ subroutine quad_ee(est,lmax,rlmin,rlmax,EE,OCE,Al,lfac)
 !*  Normalization of reconstructed amplitude modulation from the EE quadratic estimator
 !*
 !*  Args:
+!*    :est (str)         : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :EE [l] (double)   : Theory EE spectrum, with bounds (0:rlmax)
@@ -378,6 +399,7 @@ subroutine quad_eb(est,lmax,rlmin,rlmax,EE,OCE,OCB,BB,Al,lfac)
 !*  Normalization of reconstructed fields from the EB quadratic estimator
 !*
 !*  Args:
+!*    :est (str)         : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :EE [l] (double)   : Theory EE spectrum, with bounds (0:rlmax)
@@ -466,6 +488,7 @@ subroutine quad_bb(est,lmax,rlmin,rlmax,BB,OCB,Al,lfac)
 !*  Normalization of reconstructed amplitude modulation from the BB quadratic estimator
 !*
 !*  Args:
+!*    :est (str)         : Estimator type (lens,amp,rot,src)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :BB [l] (double)   : Theory BB spectrum, with bounds (0:rlmax)
@@ -538,13 +561,14 @@ subroutine quad_ttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,Ig,Ic,lfac)
 !*  Correlation between unnormalized TT and TE quadratic estimators
 !*
 !*  Args:
-!*    :lmax (int)       : Maximum multipole of output normalization spectrum
-!*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
-!*    :fCTT [l] (double): Theory TT spectrum, with bounds (0:rlmax)
-!*    :fCTE [l] (double): Theory TE spectrum, with bounds (0:rlmax)
-!*    :OCT [l] (double) : Observed TT spectrum, with bounds (0:rlmax)
-!*    :OCE [l] (double) : Observed EE spectrum, with bounds (0:rlmax)
-!*    :OCTE [l] (double): Observed TE spectrum, with bounds (0:rlmax)
+!*    :est (str)         : Estimator type (lens,amp,src)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fCTT [l] (double) : Theory TT spectrum, with bounds (0:rlmax)
+!*    :fCTE [l] (double) : Theory TE spectrum, with bounds (0:rlmax)
+!*    :OCT [l] (double)  : Observed TT spectrum, with bounds (0:rlmax)
+!*    :OCE [l] (double)  : Observed EE spectrum, with bounds (0:rlmax)
+!*    :OCTE [l] (double) : Observed TE spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
 !*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -612,13 +636,14 @@ subroutine quad_ttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,Ig,Ic,lfac)
 !*  Correlation between unnormalized TT and EE quadratic estimators
 !*
 !*  Args:
-!*    :lmax (int)       : Maximum multipole of output normalization spectrum
-!*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
-!*    :fCTT [l] (double): Theory TT spectrum, with bounds (0:rlmax)
-!*    :fCEE [l] (double): Theory EE spectrum, with bounds (0:rlmax)
-!*    :OCT [l] (double) : Observed TT spectrum, with bounds (0:rlmax)
-!*    :OCE [l] (double) : Observed EE spectrum, with bounds (0:rlmax)
-!*    :OCTE [l] (double): Observed TE spectrum, with bounds (0:rlmax)
+!*    :est (str)         : Estimator type (lens,amp,src)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fCTT [l] (double) : Theory TT spectrum, with bounds (0:rlmax)
+!*    :fCEE [l] (double) : Theory EE spectrum, with bounds (0:rlmax)
+!*    :OCT [l] (double)  : Observed TT spectrum, with bounds (0:rlmax)
+!*    :OCE [l] (double)  : Observed EE spectrum, with bounds (0:rlmax)
+!*    :OCTE [l] (double) : Observed TE spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
 !*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -679,13 +704,14 @@ subroutine quad_teee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,Ig,Ic,lfac)
 !*  Correlation between unnormalized TE and EE quadratic estimators
 !*
 !*  Args:
-!*    :lmax (int)       : Maximum multipole of output normalization spectrum
-!*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
-!*    :fCEE [l] (double): Theory EE spectrum, with bounds (0:rlmax)
-!*    :fCTE [l] (double): Theory TE spectrum, with bounds (0:rlmax)
-!*    :OCT [l] (double) : Observed TT spectrum, with bounds (0:rlmax)
-!*    :OCE [l] (double) : Observed EE spectrum, with bounds (0:rlmax)
-!*    :OCTE [l] (double): Observed TE spectrum, with bounds (0:rlmax)
+!*    :est (str)         : Estimator type (lens,amp,rot,src)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fCEE [l] (double) : Theory EE spectrum, with bounds (0:rlmax)
+!*    :fCTE [l] (double) : Theory TE spectrum, with bounds (0:rlmax)
+!*    :OCT [l] (double)  : Observed TT spectrum, with bounds (0:rlmax)
+!*    :OCE [l] (double)  : Observed EE spectrum, with bounds (0:rlmax)
+!*    :OCTE [l] (double) : Observed TE spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
 !*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -752,14 +778,15 @@ subroutine quad_tbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,
 !*  Correlation between unnormalized TB and EB quadratic estimators
 !*
 !*  Args:
-!*    :lmax (int)       : Maximum multipole of output normalization spectrum
-!*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
-!*    :fCEE [l] (double): Theory EE spectrum, with bounds (0:rlmax)
-!*    :fCBB [l] (double): Theory BB spectrum, with bounds (0:rlmax)
-!*    :OCT [l] (double) : Observed TT spectrum, with bounds (0:rlmax)
-!*    :OCE [l] (double) : Observed EE spectrum, with bounds (0:rlmax)
-!*    :OCB [l] (double) : Observed BB spectrum, with bounds (0:rlmax)
-!*    :OCTE [l] (double): Observed TE spectrum, with bounds (0:rlmax)
+!*    :est (str)         : Estimator type (lens,amp,rot,src)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fCEE [l] (double) : Theory EE spectrum, with bounds (0:rlmax)
+!*    :fCBB [l] (double) : Theory BB spectrum, with bounds (0:rlmax)
+!*    :OCT [l] (double)  : Observed TT spectrum, with bounds (0:rlmax)
+!*    :OCE [l] (double)  : Observed EE spectrum, with bounds (0:rlmax)
+!*    :OCB [l] (double)  : Observed BB spectrum, with bounds (0:rlmax)
+!*    :OCTE [l] (double) : Observed TE spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
 !*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -906,10 +933,11 @@ subroutine quad_all(est,QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,lfac)
 !*  Compute MV estimator normalization. Currently BB is ignored. 
 !*
 !*  Args:
-!*    :QDO[6] (bool): Specifying which estimators to be combined for the minimum variance estimator, with size (6). The oder is TT, TE, EE, TB, EB and BB. 
-!*    :lmax (int):    Maximum multipole of the output power spectra
-!*    :rlmin/rlmax (int)   : Minimum/Maximum multipole of CMB for reconstruction
-!*    :fC/OC [l] (double): Theory/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax) 
+!*    :est (str)          : Estimator type (lens,amp,rot,src)
+!*    :QDO[6] (bool)      : Specifying which estimators to be combined for the minimum variance estimator, with size (6). The oder is TT, TE, EE, TB, EB and BB. 
+!*    :lmax (int)         : Maximum multipole of the output power spectra
+!*    :rlmin/rlmax (int)  : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fC/OC [l] (double) : Theory/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax) 
 !*
 !*  Args(optional):
 !*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
@@ -1031,20 +1059,25 @@ subroutine quad_eb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,
 end subroutine quad_eb_iter
 
 
-subroutine quad_x_tt(est,lmax,rlmin,rlmax,fC,OCT,Ag,lfac)
-!*  Unnormalized response between lensing potential and amplitude modulation from the temperature quadratic estimator
+! //////////////////// !
+! Response Function !
+! //////////////////// !
+
+subroutine quad_xtt(est,lmax,rlmin,rlmax,fC,OCT,Rxy,lfac)
+!*  Unnormalized response for the symmetric temperature quadratic estimator
 !*
 !*  Args:
+!*    :est (str)         : Estimator combination (lensamp,lenssrc,ampsrc)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :fC [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
 !*    :OCT [l] (double)  : Observed TT spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
-!*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*    :lfac (str)        : Convergence (lfac='k') or lensing potential (lfac='', default)
 !*
 !*  Returns:
-!*    :Ag [l] (double)   : Cross normalization, with bounds (0:lmax)
+!*    :Rxy [l] (double)   : Unnormalized response with bounds (0:lmax)
 !*
   implicit none
   !I/O
@@ -1052,14 +1085,14 @@ subroutine quad_x_tt(est,lmax,rlmin,rlmax,fC,OCT,Ag,lfac)
   character(1), intent(in) :: lfac
   integer, intent(in) :: lmax, rlmin, rlmax
   double precision, intent(in), dimension(0:rlmax) :: fC, OCT
-  double precision, intent(out), dimension(0:lmax) :: Ag
+  double precision, intent(out), dimension(0:lmax) :: Rxy
   !internal
   integer :: l, rL(2)
   double precision, dimension(lmax) :: lk2
   double precision, dimension(rlmin:rlmax) :: W1, W2, W3
-  double precision, dimension(2,lmax) :: S0, G0
+  double precision, dimension(2,lmax) :: SG
 
-  write(*,*) 'cross norm TT'
+  write(*,*) 'Response (TT)'
   rL = (/rlmin,rlmax/)
 
   do l = rlmin, rlmax
@@ -1071,32 +1104,150 @@ subroutine quad_x_tt(est,lmax,rlmin,rlmax,fC,OCT,Ag,lfac)
   W3 = fC(rlmin:rlmax) / OCT(rlmin:rlmax)
 
   lk2 = 1d0
-  S0 = 0d0
-  G0 = 0d0
+  SG  = 0d0
   select case(est)
   case('lensamp')
     call get_lfac(lmax,lfac,lk2)
-    call kernels_lenstau(rL,W1,W2,S0,'S0')
-    call kernels_lenstau(rL,W3,W3,G0,'G0')
+    call kernels_lenstau(rL,W1,W2,SG(1,:),'S0')
+    call kernels_lenstau(rL,W3,W3,SG(2,:),'G0')
   case('lenssrc')
     call get_lfac(lmax,lfac,lk2)
-    call kernels_lenstau(rL,W1,W3,S0,'S0')
-    call kernels_lenstau(rL,W1,W3,G0,'G0')
-    S0 = S0*0.5d0
-    G0 = G0*0.5d0
+    call kernels_lenstau(rL,W1,W3,SG(1,:),'S0')
+    call kernels_lenstau(rL,W1,W3,SG(2,:),'G0')
+    SG = SG*0.5d0
   case('ampsrc')
-    call Kernels_tau(rL,W1,W3,S0(1,:),'S0')
-    call Kernels_tau(rL,W1,W3,G0(1,:),'G0')
-    S0 = S0*0.5d0
-    G0 = G0*0.5d0
+    call Kernels_tau(rL,W1,W3,SG(1,:),'S0')
+    call Kernels_tau(rL,W1,W3,SG(2,:),'G0')
+    SG = SG*0.5d0
   end select
 
-  Ag = 0d0
+  Rxy = 0d0
   do l = 1, lmax
-    Ag(l) = (S0(1,l)+G0(1,l))/dsqrt(lk2(l))
+    Rxy(l) = sum(SG(:,l))/dsqrt(lk2(l))
   end do
 
-end subroutine quad_x_tt
+end subroutine quad_xtt
+
+
+subroutine quad_xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Rxy,lfac)
+!*  Unnormalized response for the asymmetric temperature quadratic estimator
+!*
+!*  Args:
+!*    :est (str)         : Estimator combination (lensamp,lenssrc,amplens,ampsrc,srclens,srcamp)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :glmin/glmax (int) : Minimum/Maximum multipole of gradient leg
+!*    :llmin/llmax (int) : Minimum/Maximum multipole of C-inverse leg
+!*    :rlmax (int)       : Minimum/Maximum multipole of TT
+!*    :TT [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
+!*    :OCTG [l] (double) : Observed TT spectrum for gradient leg, with bounds (0:glmax)
+!*    :OCTL [l] (double) : Observed TT spectrum for C-inverse leg, with bounds (0:llmax)
+!*
+!*  Args(optional):
+!*    :lfac (str)        : Convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :Rl [l] (double)   : Unnormalized response with bounds (0:lmax)
+!*
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  character(1), intent(in) :: lfac
+  integer, intent(in) :: lmax, rlmax, glmin, glmax, llmin, llmax
+  double precision, intent(in), dimension(0:rlmax) :: TT
+  double precision, intent(in), dimension(0:glmax) :: OCTG
+  double precision, intent(in), dimension(0:llmax) :: OCTL
+  double precision, intent(out), dimension(0:lmax) :: Rxy
+  !internal
+  integer :: rL(2), l
+  double precision, dimension(lmax) :: lk2
+  double precision, dimension(:,:), allocatable :: WL, WG
+  double precision, dimension(2,lmax) :: SG
+
+  write(*,*) 'Response (TT,asym)'
+
+  if (max(llmax,glmax)/=rlmax)  stop 'error (qtt): max(glmax,llmax) should be lmax of TT'
+
+  do l = glmin, glmax
+    if (OCTG(l)==0d0) stop 'error (qtt): observed cltt is zero for gradient leg'
+  end do
+
+  do l = llmin, llmax
+    if (OCTL(l)==0d0) stop 'error (qtt): observed cltt is zero for C-inverse leg'
+  end do
+
+  rL = (/min(glmin,llmin),rlmax/)
+
+  !gradient-leg and C-inverse leg
+  allocate(WL(2,rL(1):rL(2)),WG(2,rL(1):rL(2))); WL=0d0; WG=0d0
+
+  select case(est)
+  case('lensamp','amplens')
+    do l = glmin, glmax
+      WG(1,l) = TT(l)**2 / OCTG(l)
+      WG(2,l) = TT(l) / OCTG(l)
+    end do
+    do l = llmin, llmax
+      WL(1,l) = 1d0 / OCTL(l)
+      WL(2,l) = TT(l) / OCTL(l)
+    end do
+  case('lenssrc','ampsrc')
+    do l = glmin, glmax
+      WG(1,l) = TT(l) / OCTG(l)
+      WG(2,l) = TT(l) / OCTG(l)
+    end do
+    do l = llmin, llmax
+      WL(1,l) = 1d0 / OCTL(l)
+      WL(2,l) = 1d0 / OCTL(l)
+    end do
+  case('srclens','srcamp')
+    do l = glmin, glmax
+      WG(1,l) = TT(l) / OCTG(l)
+      WG(2,l) = 1d0 / OCTG(l)
+    end do
+    do l = llmin, llmax
+      WL(1,l) = 1d0 / OCTL(l)
+      WL(2,l) = TT(l) / OCTL(l)
+    end do
+  end select
+
+  lk2 = 1d0
+  SG = 0d0
+  select case(est)
+  case('lensamp')
+    call get_lfac(lmax,lfac,lk2)
+    call kernels_lenstau(rL,WL(1,:),WG(1,:),SG(1,:),'S0')
+    call kernels_lenstau(rL,WL(2,:),WG(2,:),SG(2,:),'G0')
+  case('amplens')
+    call get_lfac(lmax,lfac,lk2)
+    call kernels_lenstau(rL,WL(1,:),WG(1,:),SG(1,:),'S0')
+    call kernels_lenstau(rL,WG(2,:),WL(2,:),SG(2,:),'G0')
+  case('lenssrc')
+    call get_lfac(lmax,lfac,lk2)
+    call kernels_lenstau(rL,WL(1,:),WG(1,:),SG(1,:),'S0')
+    call kernels_lenstau(rL,WL(2,:),WG(2,:),SG(2,:),'G0')
+    SG = SG*0.5d0
+  case('srclens')
+    call get_lfac(lmax,lfac,lk2)
+    call kernels_lenstau(rL,WL(1,:),WG(1,:),SG(1,:),'S0')
+    call kernels_lenstau(rL,WG(2,:),WL(2,:),SG(2,:),'G0')
+    SG = SG*0.5d0
+  case('ampsrc')
+    call Kernels_tau(rL,WL(1,:),WG(1,:),SG(1,:),'S0')
+    call Kernels_tau(rL,WL(2,:),WG(2,:),SG(2,:),'G0')
+    SG = SG*0.5d0
+  case('srcamp')
+    call Kernels_tau(rL,WL(1,:),WG(1,:),SG(1,:),'S0')
+    call Kernels_tau(rL,WG(2,:),WL(2,:),SG(2,:),'G0')
+    SG = SG*0.5d0
+  end select
+
+  Rxy = 0d0
+  do l = 1, lmax
+    Rxy(l) = sum(SG(:,l))/dsqrt(lk2(l))
+  end do
+
+end subroutine quad_xtt_asym
 
 
 end module norm_quad
