@@ -95,8 +95,8 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,BB,At,N)
   SG = 0d0
 
   do l = rlmin, rlmax
-    if (OCE(l)==0d0) stop 'error (norm_rot.qeb): observed clee is zero'
-    if (OCB(l)==0d0) stop 'error (norm_rot.qeb): observed clbb is zero'
+    if (OCE(l)==0d0) stop 'error (norm_tau.qeb): observed clee is zero'
+    if (OCB(l)==0d0) stop 'error (norm_tau.qeb): observed clbb is zero'
   end do
 
   if (present(BB).and.sum(BB)/=0d0) then
@@ -153,8 +153,8 @@ subroutine oeb(lmax,rlmin,rlmax,EB,OCE,OCB,At,N)
   SG = 0d0
 
   do l = rlmin, rlmax
-    if (OCE(l)==0d0) stop 'error (norm_rot.qeb): observed clee is zero'
-    if (OCB(l)==0d0) stop 'error (norm_rot.qeb): observed clbb is zero'
+    if (OCE(l)==0d0) stop 'error (norm_tau.qeb): observed clee is zero'
+    if (OCB(l)==0d0) stop 'error (norm_tau.qeb): observed clbb is zero'
   end do
 
   W1 = 1d0/OCE(rlmin:rlmax)
@@ -224,6 +224,11 @@ subroutine stt(lmax,rlmin,rlmax,fC,OCT,At,N)
 
 end subroutine stt
 
+subroutine qtteb(lmax,rlmin,rlmax,fC,OCT,At,N)
+
+end subroutine qtteb
+
+! add qttte, qttee, qteee? qtteb only?...
 
 end module norm_tau
 

@@ -6,7 +6,7 @@ from . import norm_rot
 
 est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','ROT']
 
-coup_list = ['LENS', 'TAU']
+coup_list = ['LENS', 'TAU', 'ALPHA']
 
 def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_bb_mv=False,no_corr=True,coupling=["lens"]):
     
@@ -33,7 +33,8 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
         k_ellmax (optional,int): The maximum multipole in the output noise curve.
     Defaults to lmax.
     
-        coupling (list of strings): A list of string(s) belonging to ['lens','tau]. 
+        Coupling (list of strings): A list of string(s) belonging to ['lens','tau', 'alpha'], 
+        corresponding to lensing, patchy tau, and cosmic birefringence angle alpha.
     Defaults to ['lens'].
     
     """
@@ -43,7 +44,7 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
     assert [est in est_list for est in ests], 'Unrecognized estimator.'
     assert [c in coup_list for c in coup], 'Unrecognized field.'
     
-    assert len(coup) == 1 , 'Can only calculate norms for one field at a time. Please run separately for different fields.'
+    assert len(coup) == 1 , 'Can only calculate norms for one field at a time. Run separately for different fields.'
     
     if k_ellmax is None: k_ellmax = lmax
     ucl = response_cls
@@ -114,7 +115,17 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
             res[_gk('EB')] = r_eb
         
        # Have not implemented oeb or stt, and have not written a method for tau MV yet
-
+    
+    if 'ALPHA' in coup:
+        
+        if 'TB' in ests:
+            r_tb = np.asarray(norm_rot.qtb(k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['BB']))
+            res[_gk('TB')] = r_tb
+        
+        if 'EB' in ests:
+            r_eb = np.asarray(norm_rot.qeb(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB'],ucl['BB']))
+            res[_gk('EB')] = r_eb
+        
     return res
 
 def get_cross(est1,est2,response_cls,total_cls,lmin,lmax,k_ellmax=None):
@@ -148,18 +159,28 @@ def get_cross(est1,est2,response_cls,total_cls,lmin,lmax,k_ellmax=None):
     ucl = response_cls
     tcl = total_cls
     if k_ellmax is None: k_ellmax = lmax
-    if set((est1,est2))==set(('SRC','TT')):
-        return norm_lens.stt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
-    elif set((est1,est2))==set(('TT','TE')):
-        return norm_lens.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
-    elif set((est1,est2))==set(('TT','EE')):
-        return norm_lens.qttee(k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
-    elif set((est1,est2))==set(('TE','EE')):
-        return norm_lens.qteee(k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
-    elif set((est1,est2))==set(('TB','EB')):
-        return norm_lens.qtbeb(k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
-    else:
-        return np.zeros((2,k_ellmax+1))
+        
+    if 'LENS' in coup:
+        if set((est1,est2))==set(('SRC','TT')):
+            return norm_lens.stt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
+        elif set((est1,est2))==set(('TT','TE')):
+            return norm_lens.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+        elif set((est1,est2))==set(('TT','EE')):
+            return norm_lens.qttee(k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+        elif set((est1,est2))==set(('TE','EE')):
+            return norm_lens.qteee(k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+        elif set((est1,est2))==set(('TB','EB')):
+            return norm_lens.qtbeb(k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
+        else:
+            return np.zeros((2,k_ellmax+1))
+        
+#     if 'TAU' in coup:
+#         if set((est1,est2))==set(('TT','TE')):
+#             return norm_tau.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'])
+#         elif set((est1,est2))==set(('TT','EE')):
+#             return norm_tau.qttee(k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'])
+#         elif set((est1,est2))==set(('TE','EE')):
+#             return norm_tau.qteee(k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'])
 
     
 
