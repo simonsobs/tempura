@@ -1,6 +1,6 @@
 from . import _libtempura 
 
-def qtt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
+def qtt(lmax,rlmin,rlmax,fC,fCw,OCT,gtype= ''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator
 
@@ -20,9 +20,31 @@ def qtt(lmax,rlmin,rlmax,fC,OCT,gtype= ''):
   Usage:
     :Ag,Ac = pytempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype):
   """
-  return _libtempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype)
+  return _libtempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,fCw,OCT,gtype)
 
-def qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype= ''):
+def qtt_generic(lmax,rlmin,rlmax,fC,fCw,OCT,gtype= ''):
+  """
+  Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator
+
+  Args:
+    :lmax (*int*): Maximum multipole of output normalization spectrum
+    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
+    :fC [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
+    :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)
+
+  Args(optional):
+    :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
+
+  Returns:
+    :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)
+    :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+
+  Usage:
+    :Ag,Ac = pytempura.norm_lens.qtt(lmax,rlmin,rlmax,fC,OCT,gtype):
+  """
+  return _libtempura.norm_lens.qtt_generic(lmax,rlmin,rlmax,fC,OCT,gtype)
+
+def qte(lmax,rlmin,rlmax,fC,fCw,OCT,OCE,gtype= ''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the TE quadratic estimator
 
@@ -43,9 +65,9 @@ def qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype= ''):
   Usage:
     :Ag,Ac = pytempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype):
   """
-  return _libtempura.norm_lens.qte(lmax,rlmin,rlmax,fC,OCT,OCE,gtype)
+  return _libtempura.norm_lens.qte(lmax,rlmin,rlmax,fC,fCw,OCT,OCE,gtype)
 
-def qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype= ''):
+def qtb(lmax,rlmin,rlmax,fC,fCw,OCT,OCB,gtype= ''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the TB quadratic estimator
 
@@ -66,9 +88,9 @@ def qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype= ''):
   Usage:
     :Ag,Ac = pytempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype):
   """
-  return _libtempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,OCT,OCB,gtype)
+  return _libtempura.norm_lens.qtb(lmax,rlmin,rlmax,fC,fCw,OCT,OCB,gtype)
 
-def qee(lmax,rlmin,rlmax,fC,OCE,gtype= ''):
+def qee(lmax,rlmin,rlmax,fC,fCw,OCE,gtype= ''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the E-mode quadratic estimator
 
@@ -88,9 +110,9 @@ def qee(lmax,rlmin,rlmax,fC,OCE,gtype= ''):
   Usage:
     :Ag,Ac = pytempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype):
   """
-  return _libtempura.norm_lens.qee(lmax,rlmin,rlmax,fC,OCE,gtype)
+  return _libtempura.norm_lens.qee(lmax,rlmin,rlmax,fC,fCw,OCE,gtype)
 
-def qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype= ''):
+def qeb(lmax,rlmin,rlmax,fC,fCw,OCE,OCB,gtype= ''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 
@@ -111,9 +133,9 @@ def qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype= ''):
   Usage:
     :Ag,Ac = pytempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype):
   """
-  return _libtempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,OCE,OCB,gtype)
+  return _libtempura.norm_lens.qeb(lmax,rlmin,rlmax,fC,fCw,OCE,OCB,gtype)
 
-def qbb(lmax,rlmin,rlmax,fC,OCB,gtype= ''):
+def qbb(lmax,rlmin,rlmax,fC,fCw,OCB,gtype= ''):
   """
   Normalization of reconstructed CMB lensing potential and its curl mode from the B-mode quadratic estimator
 
@@ -133,7 +155,7 @@ def qbb(lmax,rlmin,rlmax,fC,OCB,gtype= ''):
   Usage:
     :Ag,Ac = pytempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype):
   """
-  return _libtempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,OCB,gtype)
+  return _libtempura.norm_lens.qbb(lmax,rlmin,rlmax,fC,fCw,OCB,gtype)
 
 def qttte(lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype= ''):
   """
@@ -255,7 +277,7 @@ def qmv(lmax,QDO,Al,Il):
   """
   return _libtempura.norm_lens.qmv(lmax,QDO,Al,Il)
 
-def qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype= ''):
+def qall(QDO,lmax,rlmin,rlmax,fC,fC1,OC,gtype= ''):
   """
   Compute MV estimator normalization. Currently BB is ignored. 
 
@@ -277,7 +299,7 @@ def qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype= ''):
   Usage:
     :Ag,Ac,Nlg,Nlc = pytempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype):
   """
-  return _libtempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype)
+  return _libtempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,fC1,OC,gtype)
 
 def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,iter= 1,conv= 1e-6):
   """

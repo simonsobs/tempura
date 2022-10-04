@@ -5,11 +5,11 @@ from . import norm_tau
 from . import norm_rot
 
 
-est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','TAU','ROT']
+est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC','SHEAR'] #,'MASK','TAU','ROT']
 
 
 
-def get_norms(estimators, response_cls, total_cls, lmin, lmax,
+def get_norms(estimators, response_cls,response_cls1, total_cls, lmin, lmax,
               k_ellmax=None, include_bb_mv=False, no_corr=True,
               profile=None):
     """
@@ -44,6 +44,7 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
     assert [est in est_list for est in ests], 'Unrecognized estimator.'
     if k_ellmax is None: k_ellmax = lmax
     ucl = response_cls
+    ucl1 = response_cls1 #fixed to the filter
     tcl = total_cls
     Tcmb  = 2.726e6 # CMB temperature assumed in tempura
 
@@ -52,22 +53,23 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
     
     res = {}
     if ('TT' in ests) or (('MV' in ests) and no_corr):
-        r_tt = np.asarray(norm_lens.qtt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype='')) 
+        print('use new TT')
+        r_tt = np.asarray(norm_lens.qtt(k_ellmax,lmin,lmax,ucl['TT'],ucl1['TT'],tcl['TT'],gtype='')) 
         if ('TT' in ests): res[_gk('TT')] = r_tt
     if ('EE' in ests) or ('MVPOL' in ests) or (('MV' in ests) and no_corr):
-        r_ee = np.asarray(norm_lens.qee(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],gtype= ''))
+        r_ee = np.asarray(norm_lens.qee(k_ellmax,lmin,lmax,ucl['EE'],ucl1['EE'],tcl['EE'],gtype= ''))
         if ('EE' in ests): res[_gk('EE')] = r_ee
     if ('EB' in ests) or ('MVPOL' in ests) or (('MV' in ests) and no_corr):
-        r_eb = np.asarray(norm_lens.qeb(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB'],gtype= ''))
+        r_eb = np.asarray(norm_lens.qeb(k_ellmax,lmin,lmax,ucl['EE'],ucl1['EE'],tcl['EE'],tcl['BB'],gtype= ''))
         if ('EB' in ests): res[_gk('EB')] = r_eb
     if ('TE' in ests)  or (('MV' in ests) and no_corr):
-        r_te = np.asarray(norm_lens.qte(k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['EE'],gtype= ''))
+        r_te = np.asarray(norm_lens.qte(k_ellmax,lmin,lmax,ucl['TE'],ucl1['TE'],tcl['TT'],tcl['EE'],gtype= ''))
         if ('TE' in ests): res[_gk('TE')] = r_te
     if ('TB' in ests) or  (('MV' in ests) and no_corr):
-        r_tb = np.asarray(norm_lens.qtb(k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['BB'],gtype= ''))
+        r_tb = np.asarray(norm_lens.qtb(k_ellmax,lmin,lmax,ucl['TE'],ucl1['TE'],tcl['TT'],tcl['BB'],gtype= ''))
         if ('TB' in ests): res[_gk('TB')] = r_tb
     if ('BB' in ests):
-        r_bb = np.asarray(norm_lens.qbb(k_ellmax,lmin,lmax,ucl['BB'],tcl['BB'],gtype= ''))
+        r_bb = np.asarray(norm_lens.qbb(k_ellmax,lmin,lmax,ucl['BB'],ucl1['BB'],tcl['BB'],gtype= ''))
         res[_gk('BB')] = r_bb
     if 'MV' in ests:
         if no_corr:
@@ -81,7 +83,7 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
         else:
             fC = np.asarray((ucl['TT'],ucl['EE'],ucl['BB'],ucl['TE']))
             OC = np.asarray((tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE']))
-            Ag,Ac,Wg,Wc = norm_lens.qall([True,True,True,True,True,include_bb_mv],k_ellmax,lmin,lmax,fC,OC,gtype= '')
+            Ag,Ac,Wg,Wc = norm_lens.qall([True,True,True,True,True,include_bb_mv],k_ellmax,lmin,lmax,fC,fC,OC,gtype= '')
             res[_gk('MV')] = np.asarray((Ag[-1,:],Ac[-1,:]))
     if 'MVPOL' in ests:
         r_mvpol = r_ee * 0
@@ -106,6 +108,8 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
         else:
             cl_tt = tcl['TT']
             prefactor = 1.
+        
+
         res[_gk('SRC')] = prefactor * norm_src.qtt(k_ellmax,lmin,lmax,cl_tt)
         
     if 'ROT' in ests:
@@ -152,12 +156,17 @@ def get_cross(est1, est2, response_cls, total_cls,
     if k_ellmax is None: k_ellmax = lmax
     if set((est1,est2))==set(('SRC','TT')):
         if profile is not None:
+            print('hello using profile')
             profile = profile[:k_ellmax+1]
             cl_tt_total = tcl['TT'][:k_ellmax+1] / profile
+            ct=np.zeros(len(tcl['TT']))
+            ct[:k_ellmax+1]=cl_tt_total
+            cl_tt_total=ct
             prefactor = 1./profile
         else:
             cl_tt_total = tcl['TT']
             prefactor = 1.
+
         return prefactor * norm_lens.stt(k_ellmax, lmin, lmax, ucl['TT'],
                                          cl_tt_total, gtype= '')
     elif set((est1,est2))==set(('TT','TE')):

@@ -9,7 +9,73 @@ module norm_lens
 contains
 
 
-subroutine qtt(lmax,rlmin,rlmax,fC,OCT,Ag,Ac,gtype,N)
+subroutine qtt(lmax,rlmin,rlmax,fC,fCw,OCT,Ag,Ac,gtype,N)
+!*  Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator
+!*
+!*  Args:
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fC [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
+!*    :fCw [l] (double)   : Theory TT spectrum fixed for the weights, with bounds (0:rlmax)
+!*    :OCT [l] (double)  : Observed TT spectrum, with bounds (0:rlmax)
+!*
+!*  Args(optional):
+!*    :gtype (str)       : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
+!*
+!*  Returns:
+!*    :Ag [l] (double)   : CMB lensing potential normalization, with bounds (0:lmax)
+!*    :Ac [l] (double)   : Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
+!*
+  implicit none
+  !I/O
+  integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
+  integer, intent(in) :: lmax, rlmin, rlmax
+  double precision, intent(in), dimension(0:N) :: fC, OCT,fCw
+  double precision, intent(out), dimension(0:lmax) :: Ag, Ac
+  !optional
+  character(1), intent(in), optional :: gtype
+  !f2py character(1) :: gtype = ''
+  !internal
+  integer :: l, rL(2)
+  double precision, dimension(lmax) :: lk2
+  double precision, dimension(rlmin:rlmax) :: W1, W2, W3
+  double precision, dimension(2,lmax) :: S0, G0
+
+  rL = (/rlmin,rlmax/)
+
+  lk2 = 1d0
+  if (present(gtype).and.gtype=='k') then
+    do l = 1, lmax
+      lk2(l) = (dble(l*(l+1))/2d0)**2
+    end do
+  end if
+
+  do l = rlmin, rlmax
+    if (OCT(l)==0d0) stop 'error (norm_lens.qtt): observed cltt is zero'
+  end do
+
+  W1 = 1d0 / OCT(rlmin:rlmax)
+  W2 = W1 * fC(rlmin:rlmax)*fCw(rlmin:rlmax)
+  S0 = 0d0
+  call kernels_lens(rL,W1,W2,S0,'S0')
+
+  W2 = W1 * fC(rlmin:rlmax)
+  W3 = W1 * fCw(rlmin:rlmax)
+  G0 = 0d0
+  call kernels_lens(rL,W2,W3,G0,'G0')
+
+  Ag = 0d0
+  Ac = 0d0
+  do l = 1, lmax
+    if (S0(1,l)+G0(1,l)/=0d0)  Ag(l) = lk2(l)/(S0(1,l)+G0(1,l))
+    if (S0(2,l)+G0(2,l)/=0d0)  Ac(l) = lk2(l)/(S0(2,l)+G0(2,l))
+  end do
+  Ac(1) = 0d0
+
+end subroutine qtt
+
+
+subroutine qtt_generic(lmax,rlmin,rlmax,fC,OCT,Ag,Ac,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator
 !*
 !*  Args:
@@ -70,10 +136,9 @@ subroutine qtt(lmax,rlmin,rlmax,fC,OCT,Ag,Ac,gtype,N)
   end do
   Ac(1) = 0d0
 
-end subroutine qtt
+end subroutine qtt_generic
 
-
-subroutine qte(lmax,rlmin,rlmax,fC,OCT,OCE,Ag,Ac,gtype,N)
+subroutine qte(lmax,rlmin,rlmax,fC,fCw,OCT,OCE,Ag,Ac,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TE quadratic estimator
 !*
 !*  Args:
@@ -95,7 +160,7 @@ subroutine qte(lmax,rlmin,rlmax,fC,OCT,OCE,Ag,Ac,gtype,N)
   !I/O
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in) , dimension(0:N) :: fC, OCT, OCE
+  double precision, intent(in) , dimension(0:N) :: fC, OCT, OCE,fCw
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in), optional :: gtype
@@ -122,17 +187,17 @@ subroutine qte(lmax,rlmin,rlmax,fC,OCT,OCE,Ag,Ac,gtype,N)
 
 
   W1 = 1d0/OCT(rlmin:rlmax)
-  W2 = fC(rlmin:rlmax)**2/OCE(rlmin:rlmax)
+  W2 = fC(rlmin:rlmax)*fCw(rlmin:rlmax)/OCE(rlmin:rlmax)
   S0 = 0d0
   call kernels_lens(rL,W1,W2,S0,'S0')
 
   W1 = 1d0/OCE(rlmin:rlmax)
-  W2 = fC(rlmin:rlmax)**2/OCT(rlmin:rlmax)
+  W2 = fC(rlmin:rlmax)*fCw(rlmin:rlmax)/OCT(rlmin:rlmax)
   Sp = 0d0
   call kernels_lens(rL,W1,W2,Sp,'Sp')
 
   W1 = fC(rlmin:rlmax)/OCT(rlmin:rlmax)
-  W2 = fC(rlmin:rlmax)/OCE(rlmin:rlmax)
+  W2 = fCw(rlmin:rlmax)/OCE(rlmin:rlmax)
   Gc = 0d0
   call kernels_lens(rL,W1,W2,Gc,'Gc')
 
@@ -147,7 +212,7 @@ subroutine qte(lmax,rlmin,rlmax,fC,OCT,OCE,Ag,Ac,gtype,N)
 end subroutine qte
 
 
-subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Ag,Ac,gtype,N)
+subroutine qtb(lmax,rlmin,rlmax,fC,fCw,OCT,OCB,Ag,Ac,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TB quadratic estimator
 !*
 !*  Args:
@@ -168,7 +233,7 @@ subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Ag,Ac,gtype,N)
   !I/O
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in) , dimension(0:N) :: fC, OCT, OCB
+  double precision, intent(in) , dimension(0:N) :: fC, OCT, OCB,fCw
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in), optional :: gtype
@@ -195,7 +260,7 @@ subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Ag,Ac,gtype,N)
   end do
 
   W1 = 1d0/OCB(rlmin:rlmax)
-  W2 = fC(rlmin:rlmax)**2/OCT(rlmin:rlmax)
+  W2 = fC(rlmin:rlmax)*fCw(rlmin:rlmax)/OCT(rlmin:rlmax)
   Sm = 0d0
   call kernels_lens(rL,W1,W2,Sm,'Sm')
 
@@ -210,7 +275,7 @@ subroutine qtb(lmax,rlmin,rlmax,fC,OCT,OCB,Ag,Ac,gtype,N)
 end subroutine qtb
 
 
-subroutine qee(lmax,rlmin,rlmax,fC,OCE,Ag,Ac,gtype,N)
+subroutine qee(lmax,rlmin,rlmax,fC,fCw,OCE,Ag,Ac,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the E-mode quadratic estimator
 !*
 !*  Args:
@@ -230,7 +295,7 @@ subroutine qee(lmax,rlmin,rlmax,fC,OCE,Ag,Ac,gtype,N)
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in) , dimension(0:N) :: fC, OCE
+  double precision, intent(in) , dimension(0:N) :: fC, OCE,fCw
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in), optional :: gtype
@@ -239,7 +304,7 @@ subroutine qee(lmax,rlmin,rlmax,fC,OCE,Ag,Ac,gtype,N)
   !internal
   integer :: l, rL(2)
   double precision, dimension(lmax) :: lk2
-  double precision, dimension(rlmin:rlmax) :: W1, W2
+  double precision, dimension(rlmin:rlmax) :: W1, W2, W3
   double precision, dimension(2,lmax) :: Sp, Gp
 
   rL = (/rlmin,rlmax/)
@@ -256,13 +321,14 @@ subroutine qee(lmax,rlmin,rlmax,fC,OCE,Ag,Ac,gtype,N)
   end do
 
   W1 = 1d0/OCE(rlmin:rlmax)
-  W2 = W1 * fC(rlmin:rlmax)**2
+  W2 = W1 * fC(rlmin:rlmax)*fCw(rlmin:rlmax)
   Sp = 0d0
   call kernels_lens(rL,W1,W2,Sp,'Sp')
 
   W2 = W1 * fC(rlmin:rlmax)
+  W3 = W1 * fCw(rlmin:rlmax)
   Gp = 0d0
-  call kernels_lens(rL,W2,W2,Gp,'Gp')
+  call kernels_lens(rL,W2,W3,Gp,'Gp')
 
   Ag = 0d0
   Ac = 0d0
@@ -275,7 +341,7 @@ subroutine qee(lmax,rlmin,rlmax,fC,OCE,Ag,Ac,gtype,N)
 end subroutine qee
 
 
-subroutine qeb(lmax,rlmin,rlmax,fC,OCE,OCB,Ag,Ac,gtype,N)
+subroutine qeb(lmax,rlmin,rlmax,fC,fCw,OCE,OCB,Ag,Ac,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 !*
 !*  Args:
@@ -296,7 +362,7 @@ subroutine qeb(lmax,rlmin,rlmax,fC,OCE,OCB,Ag,Ac,gtype,N)
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in) , dimension(0:N) :: fC, OCE, OCB
+  double precision, intent(in) , dimension(0:N) :: fC, OCE, OCB,fCw
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in), optional :: gtype
@@ -323,7 +389,7 @@ subroutine qeb(lmax,rlmin,rlmax,fC,OCE,OCB,Ag,Ac,gtype,N)
   end do
 
   W1 = 1d0/OCB(rlmin:rlmax)
-  W2 = fC(rlmin:rlmax)**2 / OCE(rlmin:rlmax)
+  W2 = fC(rlmin:rlmax)*fCw(rlmin:rlmax)/ OCE(rlmin:rlmax)
   Sm = 0d0
   call kernels_lens(rL,W1,W2,Sm,'Sm')
 
@@ -338,7 +404,7 @@ subroutine qeb(lmax,rlmin,rlmax,fC,OCE,OCB,Ag,Ac,gtype,N)
 end subroutine qeb
 
 
-subroutine qbb(lmax,rlmin,rlmax,fC,OCB,Ag,Ac,gtype,N)
+subroutine qbb(lmax,rlmin,rlmax,fC,fCw,OCB,Ag,Ac,gtype,N)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the B-mode quadratic estimator
 !*
 !*  Args:
@@ -358,7 +424,7 @@ subroutine qbb(lmax,rlmin,rlmax,fC,OCB,Ag,Ac,gtype,N)
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:N) :: fC, OCB
+  double precision, intent(in), dimension(0:N) :: fC, OCB,fCw
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in), optional :: gtype
@@ -367,7 +433,7 @@ subroutine qbb(lmax,rlmin,rlmax,fC,OCB,Ag,Ac,gtype,N)
   !internal
   integer :: l, rL(2)
   double precision, dimension(lmax) :: lk2
-  double precision, dimension(rlmin:rlmax) :: W1, W2
+  double precision, dimension(rlmin:rlmax) :: W1, W2,W3
   double precision, dimension(2,lmax) :: Sp, Gp
 
   rL = (/rlmin,rlmax/)
@@ -384,11 +450,12 @@ subroutine qbb(lmax,rlmin,rlmax,fC,OCB,Ag,Ac,gtype,N)
   end do
 
   W1 = 1d0/OCB(rlmin:rlmax)
-  W2 = W1 * fC(rlmin:rlmax)**2
+  W2 = W1 * fC(rlmin:rlmax)*fCw(rlmin:rlmax)
   call kernels_lens(rL,W1,W2,Sp,'Sp')
 
   W2 = W1 * fC(rlmin:rlmax)
-  call kernels_lens(rL,W2,W2,Gp,'Gp')
+  W3 = W1 * fCw(rlmin:rlmax)
+  call kernels_lens(rL,W2,W3,Gp,'Gp')
 
   Ag = 0d0
   Ac = 0d0
@@ -817,7 +884,7 @@ subroutine qmv(lmax,QDO,Al,Il,MV,Nl,N)
 end subroutine qmv
 
 
-subroutine qall(QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype,N)
+subroutine qall(QDO,lmax,rlmin,rlmax,fC,fCw,OC,Ag,Ac,Nlg,Nlc,gtype,N)
 !*  Compute MV estimator normalization. Currently BB is ignored. 
 !*
 !*  Args:
@@ -840,7 +907,7 @@ subroutine qall(QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype,N)
   integer :: N ! this argument is removed by f2py since it appears in the size of an input array argument
   logical, intent(in), dimension(6) :: QDO
   integer, intent(in) :: rlmin, rlmax, lmax
-  double precision, intent(in), dimension(4,0:N) :: fC, OC
+  double precision, intent(in), dimension(4,0:N) :: fC, OC ,fCw
   double precision, intent(out), dimension(6,0:lmax) :: Ag, Ac, Nlg, Nlc
   !optional
   character(1), intent(in), optional :: gtype
@@ -858,11 +925,11 @@ subroutine qall(QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype,N)
   Ac  = 0d0
   Nlg = 0d0
   Nlc = 0d0
-  if (QDO(1))  call qtt(lmax,rlmin,rlmax,fC(TT,:),OC(TT,:),Ag(1,:),Ac(1,:),gtype=gt,N=N)
-  if (QDO(2))  call qte(lmax,rlmin,rlmax,fC(TE,:),OC(TT,:),OC(EE,:),Ag(2,:),Ac(2,:),gtype=gt,N=N)
-  if (QDO(3))  call qee(lmax,rlmin,rlmax,fC(EE,:),OC(EE,:),Ag(3,:),Ac(3,:),gtype=gt,N=N)
-  if (QDO(4))  call qtb(lmax,rlmin,rlmax,fC(TE,:),OC(TT,:),OC(BB,:),Ag(4,:),Ac(4,:),gtype=gt,N=N)
-  if (QDO(5))  call qeb(lmax,rlmin,rlmax,fC(EE,:),OC(EE,:),OC(BB,:),Ag(5,:),Ac(5,:),gtype=gt,N=N)
+  if (QDO(1))  call qtt(lmax,rlmin,rlmax,fC(TT,:),fCw(TT,:),OC(TT,:),Ag(1,:),Ac(1,:),gtype=gt,N=N)
+  if (QDO(2))  call qte(lmax,rlmin,rlmax,fC(TE,:),fCw(TE,:),OC(TT,:),OC(EE,:),Ag(2,:),Ac(2,:),gtype=gt,N=N)
+  if (QDO(3))  call qee(lmax,rlmin,rlmax,fC(EE,:),fCw(EE,:),OC(EE,:),Ag(3,:),Ac(3,:),gtype=gt,N=N)
+  if (QDO(4))  call qtb(lmax,rlmin,rlmax,fC(TE,:),fCw(TE,:),OC(TT,:),OC(BB,:),Ag(4,:),Ac(4,:),gtype=gt,N=N)
+  if (QDO(5))  call qeb(lmax,rlmin,rlmax,fC(EE,:),fCw(EE,:),OC(EE,:),OC(BB,:),Ag(5,:),Ac(5,:),gtype=gt,N=N)
 
   allocate(Ilg(4,0:lmax),Ilc(4,0:lmax))
   if (QDO(1).and.QDO(2))  call qttte(lmax,rlmin,rlmax,fC(TT,:),fC(TE,:),OC(TT,:),OC(EE,:),OC(TE,:),Ilg(1,:),Ilc(1,:),gtype=gt,N=N)
@@ -932,7 +999,7 @@ subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter
   do n = 1, it !loop for iteration 
 
     !lensing reconstruction with EB
-    call qeb(dlmax,rlmin,rlmax,CE(0:rlmax),OCE(0:rlmax),rCBB,AgEB,Ac,gtype='',N=Nr)
+    call qeb(dlmax,rlmin,rlmax,CE(0:rlmax),CE(0:rlmax),OCE(0:rlmax),rCBB,AgEB,Ac,gtype='',N=Nr)
 
     !convergence check using gradient mode
     if (n>=2) then
