@@ -224,11 +224,5 @@ subroutine stt(lmax,rlmin,rlmax,fC,OCT,At,N)
 
 end subroutine stt
 
-subroutine qtteb(lmax,rlmin,rlmax,fC,OCT,At,N)
-
-end subroutine qtteb
-
-! add qttte, qttee, qteee? qtteb only?...
-
 end module norm_tau
 

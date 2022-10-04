@@ -100,7 +100,9 @@ else:
 compile_opts['extra_f90_compile_args'].extend(fcflags)
 compile_opts['extra_f77_compile_args'] = compile_opts['extra_f90_compile_args']
 
-snames = ['norm_lens','norm_src','norm_rot','norm_tau']
+#snames = ['norm_lens']
+#snames = ['norm_lens','norm_src','norm_rot','norm_tau']
+snames = ['norm_lens','norm_src','norm_general','noise_spec']
 
 class CustomBuild(build_ext):
     def run(self):
@@ -142,10 +144,13 @@ setup(
         Extension('_libtempura',
                   sources=[f'fortran/{sname}.f90' for sname in snames],
                   libraries = ['alkernel'],
+                  #libraries = ['alkernel','norm_quad'],
                   **compile_opts),
     ],
-    libraries = [('alkernel', dict(sources=['fortran/alkernel.f90'],
-                                   **compile_opts))],
+    #libraries = [('alkernel', dict(sources=['fortran/alkernel.f90'],**compile_opts)),
+    #    ('norm_quad', dict(sources=['fortran/norm_quad.f90'],**compile_opts))],
+    #libraries = [('alkernel', dict(sources=['fortran/alkernel.f90'],**compile_opts))],
+    libraries = [('alkernel', dict(sources=['fortran/alkernel.f90','fortran/norm_quad.f90'],**compile_opts))],
     install_requires=requirements,
     license="BSD license",
     # long_description=readme + '\n\n' + history,
@@ -160,7 +165,13 @@ setup(
     zip_safe=False,
     cmdclass=cmdclass,
     # scripts=['scripts/test-tempura']
+    #//// force to use ifort (the fortran source is written for ifort) ////#
+    options={'build':{'build_lib':'.','fcompiler':'intelem'}}
 )
 
 print('\n[setup.py request was successful.]')
+
+os.system('./scripts/generate_interface.sh')
+
+print('\n[python interface files are created under pytempura/]')
 

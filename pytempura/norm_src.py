@@ -14,7 +14,7 @@ def qtt(lmax,rlmin,rlmax,OCT):
     :As [*l*] (*double*): src field normalization, with bounds (0:lmax)
 
   Usage:
-    :As = pytempura.norm_src.qtt(lmax,rlmin,rlmax,OCT):
+    :As = _libtempura.norm_src.qtt(lmax,rlmin,rlmax,OCT):
   """
   return _libtempura.norm_src.qtt(lmax,rlmin,rlmax,OCT)
 

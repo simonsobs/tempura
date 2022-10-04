@@ -3,13 +3,14 @@ from . import norm_lens
 from . import norm_src
 from . import norm_tau
 from . import norm_rot
+from . import norm_general
 
 est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','ROT']
 
-coup_list = ['LENS', 'TAU', 'ALPHA']
+coup_list = ['LENS', 'TAU', 'ROT']
 
 def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_bb_mv=False,no_corr=True,coupling=["lens"]):
-    
+
     """
     Get norms for estimators such that A_est = N_est. In the case of lensing,
     this corresponds to the normalizations of the lensing potential.
@@ -33,10 +34,10 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
         k_ellmax (optional,int): The maximum multipole in the output noise curve.
     Defaults to lmax.
     
-        Coupling (list of strings): A list of string(s) belonging to ['lens','tau', 'alpha'], 
-        corresponding to lensing, patchy tau, and cosmic birefringence angle alpha.
+        Coupling (list of strings): A list of string(s) belonging to ['lens','tau', 'rot'], 
+        corresponding to lensing, patchy tau, and cosmic birefringence rotation angle.
     Defaults to ['lens'].
-    
+
     """
     ests = [e.upper() for e in estimators]
     coup = [c.upper() for c in coupling]
@@ -44,7 +45,7 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
     assert [est in est_list for est in ests], 'Unrecognized estimator.'
     assert [c in coup_list for c in coup], 'Unrecognized field.'
     
-    assert len(coup) == 1 , 'Can only calculate norms for one field at a time. Run separately for different fields.'
+    assert len(coup) == 1 , 'Can only calculate norms for one coupling (i.e. tau or lensing) at a time. Run separately for different couplings.'
     
     if k_ellmax is None: k_ellmax = lmax
     ucl = response_cls
@@ -101,8 +102,6 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
             raise NotImplementedError
         if 'SRC' in ests:
             res[_gk('SRC')] = norm_src.qtt(k_ellmax,lmin,lmax,tcl['TT'])
-        if 'ROT' in ests:
-            raise NotImplementedError # Just haven't gotten around to interfacing this
 
     if 'TAU' in coup:
         
@@ -113,11 +112,17 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
         if 'EB' in ests:
             r_eb = np.asarray(norm_tau.qeb(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB']))
             res[_gk('EB')] = r_eb
-        
-       # Have not implemented oeb or stt, and have not written a method for tau MV yet
     
-    if 'ALPHA' in coup:
+    if 'ROT' in coup:
         
+#         if 'TB' in ests:
+#             r_tb = np.asarray(norm_general.qtb('rot',k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['BB']))
+#             res[_gk('TB')] = r_tb
+        
+#         if 'EB' in ests:
+#             r_eb = np.asarray(norm_general.qeb('rot',k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB'],ucl['BB']))
+#             res[_gk('EB')] = r_eb
+
         if 'TB' in ests:
             r_tb = np.asarray(norm_rot.qtb(k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['BB']))
             res[_gk('TB')] = r_tb
@@ -125,10 +130,12 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
         if 'EB' in ests:
             r_eb = np.asarray(norm_rot.qeb(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB'],ucl['BB']))
             res[_gk('EB')] = r_eb
-        
     return res
 
-def get_cross(est1,est2,response_cls,total_cls,lmin,lmax,k_ellmax=None):
+    # Have not implemented oeb or stt, and have not written a method for tau MV yet
+
+def get_cross(est1, est2, response_cls, total_cls,
+              lmin, lmax, k_ellmax=None, profile=None):
     """
     Get the un-normalized cross-response between two estimators est1
     and est2.
@@ -153,34 +160,36 @@ def get_cross(est1,est2,response_cls,total_cls,lmin,lmax,k_ellmax=None):
         lmax (int): The maximum multipole to be used.
         k_ellmax (optional,int): The maximum multipole in the output noise curve.
     Defaults to lmax.
+        profile (numpy array): A numpy array of length at least k_ellmax+1, used
+    for profile hardening for the source estimator. Default is None in which case
+    the source estimator will correspond to the point source case.
     """
     est1 = est1.upper()
     est2 = est2.upper()
     ucl = response_cls
     tcl = total_cls
     if k_ellmax is None: k_ellmax = lmax
-        
+
     if 'LENS' in coup:
         if set((est1,est2))==set(('SRC','TT')):
-            return norm_lens.stt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
+            return norm_lens.stt('lens',k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
         elif set((est1,est2))==set(('TT','TE')):
-            return norm_lens.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+            return norm_lens.qttte('lens',k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
         elif set((est1,est2))==set(('TT','EE')):
-            return norm_lens.qttee(k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+            return norm_lens.qttee('lens',k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
         elif set((est1,est2))==set(('TE','EE')):
-            return norm_lens.qteee(k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+            return norm_lens.qteee('lens',k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
         elif set((est1,est2))==set(('TB','EB')):
-            return norm_lens.qtbeb(k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
+            return norm_lens.qtbeb('lens',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
         else:
             return np.zeros((2,k_ellmax+1))
         
 #     if 'TAU' in coup:
-#         if set((est1,est2))==set(('TT','TE')):
-#             return norm_tau.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'])
-#         elif set((est1,est2))==set(('TT','EE')):
-#             return norm_tau.qttee(k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'])
-#         elif set((est1,est2))==set(('TE','EE')):
-#             return norm_tau.qteee(k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'])
-
+#         if set((est1,est2))==set(('TT','EB')):
+#             return norm_general.qtteb('tau',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'])
+        
+    if 'ROT' in coup:
+        if set((est1,est2))==set(('TB','EB')):
+            return norm_general.qtbeb('rot',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'])
     
 
