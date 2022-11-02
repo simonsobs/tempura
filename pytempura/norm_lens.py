@@ -7,7 +7,9 @@ def qtt(lmax,rlmin,rlmax,fC,fCw,OCT,gtype= ''):
   Args:
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
-    :fC [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
+    :fC [*l*] (*double*): Theory TT spectrum used for the estimator response, with bounds (0:rlmax)
+    :fCw [*l*] (*double*): Theory TT spectrum used for the estimator weights , with bounds (0:rlmax)
+
     :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)
 
   Args(optional):
@@ -29,7 +31,7 @@ def qtt_generic(lmax,rlmin,rlmax,fC,fCw,OCT,gtype= ''):
   Args:
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
-    :fC [*l*] (*double*): Theory TT spectrum, with bounds (0:rlmax)
+    :fC [*l*] (*double*): Theory TT spectrum , with bounds (0:rlmax)
     :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)
 
   Args(optional):
@@ -51,7 +53,7 @@ def qte(lmax,rlmin,rlmax,fC,fCw,OCT,OCE,gtype= ''):
   Args:
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
-    :fC [*l*] (*double*): Theory TE spectrum, with bounds (0:rlmax)
+    :fC [*l*] (*double*): Theory TE spectrum used for the estimator response, with bounds (0:rlmax)
     :OCT [*l*] (*double*): Observed TT spectrum, with bounds (0:rlmax)
     :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)
 
@@ -98,6 +100,8 @@ def qee(lmax,rlmin,rlmax,fC,fCw,OCE,gtype= ''):
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fC [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)
+    :fCw [*l*] (*double*): Theory EE spectrum used for the estimator weights , with bounds (0:rlmax)
+
     :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)
 
   Args(optional):
@@ -120,6 +124,7 @@ def qeb(lmax,rlmin,rlmax,fC,fCw,OCE,OCB,gtype= ''):
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fC [*l*] (*double*): Theory EE spectrum, with bounds (0:rlmax)
+    :fCw [*l*] (*double*): Theory EE spectrum used for the estimator weights , with bounds (0:rlmax)
     :OCE [*l*] (*double*): Observed EE spectrum, with bounds (0:rlmax)
     :OCB [*l*] (*double*): Observed BB spectrum, with bounds (0:rlmax)
 
@@ -143,6 +148,7 @@ def qbb(lmax,rlmin,rlmax,fC,fCw,OCB,gtype= ''):
     :lmax (*int*): Maximum multipole of output normalization spectrum
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fC [*l*] (*double*): Theory BB spectrum, with bounds (0:rlmax)
+    :fCw [*l*] (*double*): Theory BB spectrum used for the estimator weights , with bounds (0:rlmax)
     :OCB [*l*] (*double*): Observed BB spectrum, with bounds (0:rlmax)
 
   Args(optional):
@@ -286,7 +292,7 @@ def qall(QDO,lmax,rlmin,rlmax,fC,fC1,OC,gtype= ''):
     :lmax (*int*): Maximum multipole of the output power spectra
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fC/OC [*l*] (*double*): Theory/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax)
-
+    :fCw [*l*] (*double*): Theory CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax) used for the normalization weights
   Args(optional):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
 
@@ -297,7 +303,7 @@ def qall(QDO,lmax,rlmin,rlmax,fC,fC1,OC,gtype= ''):
     :Nlc [*6,l*] (*double*): Same as Nlg but for curl mode
 
   Usage:
-    :Ag,Ac,Nlg,Nlc = pytempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,OC,gtype):
+    :Ag,Ac,Nlg,Nlc = pytempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,fCw,OC,gtype):
   """
   return _libtempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,fC1,OC,gtype)
 

@@ -9,7 +9,7 @@ est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC','SHEAR'] #,'MASK','TAU',
 
 
 
-def get_norms(estimators, response_cls,response_cls1, total_cls, lmin, lmax,
+def get_norms(estimators, response_cls,response_cls_weights, total_cls, lmin, lmax,
               k_ellmax=None, include_bb_mv=False, no_corr=True,
               profile=None):
     """
@@ -25,6 +25,12 @@ def get_norms(estimators, response_cls,response_cls1, total_cls, lmin, lmax,
     For unbiased results, lensed spectra are recommended for EE and TE, and
     the gradient cross-spectrum for TT. The array elements should correspond to 
     multipoles 0,1,2,...,lmax.
+
+        response_cls_weights (dict): A dictionary mapping strings TT,EE,TE to 1d numpy 
+    arrays containing the noiseless power spectra used in the lensing response.
+    For unbiased results, lensed spectra are recommended for EE and TE, and
+    the gradient cross-spectrum for TT. The array elements should correspond to 
+    multipoles 0,1,2,...,lmax. These are the response_cls for the weights and remains fixed to theory if varying the normalization with respect to input theory.
 
         total_cls (dict): A dictionary mapping strings TT,EE,TE,BB to 1d numpy 
     arrays containing the total power spectra assumed in the filters.
@@ -44,7 +50,7 @@ def get_norms(estimators, response_cls,response_cls1, total_cls, lmin, lmax,
     assert [est in est_list for est in ests], 'Unrecognized estimator.'
     if k_ellmax is None: k_ellmax = lmax
     ucl = response_cls
-    ucl1 = response_cls1 #fixed to the filter
+    ucl1 = response_cls_weights #fixed to the filter
     tcl = total_cls
     Tcmb  = 2.726e6 # CMB temperature assumed in tempura
 
