@@ -32,7 +32,7 @@ subroutine qtt(lmax,rlmin,rlmax,OCT,As,temp_arg)
   double precision, dimension(0:rlmax) :: TT
 
   TT = 0.5d0
-  call quad_tt('src',lmax,rlmin,rlmax,TT,OCT,Al,'')
+  call quad_tt('src',lmax,rlmin,rlmax,TT,TT,OCT,Al,'')
   As = Al(1,:)
 
 end subroutine qtt

@@ -7,7 +7,7 @@ est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','TAU','ROT']
 
 
 
-def get_norms(estimators, response_cls, total_cls, lmin, lmax,
+def get_norms(estimators, response_cls,response_cls_weights, total_cls, lmin, lmax,
               k_ellmax=None, include_bb_mv=False, no_corr=True,
               profile=None):
     """
@@ -23,6 +23,12 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
     For unbiased results, lensed spectra are recommended for EE and TE, and
     the gradient cross-spectrum for TT. The array elements should correspond to 
     multipoles 0,1,2,...,lmax.
+
+        response_cls_weights (dict): A dictionary mapping strings TT,EE,TE to 1d numpy 
+    arrays containing the noiseless power spectra used in the lensing response.
+    For unbiased results, lensed spectra are recommended for EE and TE, and
+    the gradient cross-spectrum for TT. The array elements should correspond to 
+    multipoles 0,1,2,...,lmax. These are the response_cls for the weights and remains fixed to theory if varying the normalization with respect to input theory.
 
         total_cls (dict): A dictionary mapping strings TT,EE,TE,BB to 1d numpy 
     arrays containing the total power spectra assumed in the filters.
@@ -42,6 +48,8 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
     assert [est in est_list for est in ests], 'Unrecognized estimator.'
     if k_ellmax is None: k_ellmax = lmax
     ucl = response_cls
+    ucl1 = response_cls_weights #fixed to the filter
+
     tcl = total_cls
     Tcmb  = 2.726e6 # CMB temperature assumed in tempura
 
@@ -50,22 +58,23 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
     
     res = {}
     if ('TT' in ests) or (('MV' in ests) and no_corr):
-        r_tt = np.asarray(norm_lens.qtt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype='')) 
+        print('use new TT')
+        r_tt = np.asarray(norm_lens.qtt(k_ellmax,lmin,lmax,ucl['TT'],ucl1['TT'],tcl['TT'],gtype='')) 
         if ('TT' in ests): res[_gk('TT')] = r_tt
     if ('EE' in ests) or ('MVPOL' in ests) or (('MV' in ests) and no_corr):
-        r_ee = np.asarray(norm_lens.qee(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],gtype= ''))
+        r_ee = np.asarray(norm_lens.qee(k_ellmax,lmin,lmax,ucl['EE'],ucl1['EE'],tcl['EE'],gtype= ''))
         if ('EE' in ests): res[_gk('EE')] = r_ee
     if ('EB' in ests) or ('MVPOL' in ests) or (('MV' in ests) and no_corr):
-        r_eb = np.asarray(norm_lens.qeb(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB'],gtype= ''))
+        r_eb = np.asarray(norm_lens.qeb(k_ellmax,lmin,lmax,ucl['EE'],ucl1['EE'],tcl['EE'],tcl['BB'],gtype= ''))
         if ('EB' in ests): res[_gk('EB')] = r_eb
     if ('TE' in ests)  or (('MV' in ests) and no_corr):
-        r_te = np.asarray(norm_lens.qte(k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['EE'],gtype= ''))
+        r_te = np.asarray(norm_lens.qte(k_ellmax,lmin,lmax,ucl['TE'],ucl1['TE'],tcl['TT'],tcl['EE'],gtype= ''))
         if ('TE' in ests): res[_gk('TE')] = r_te
     if ('TB' in ests) or  (('MV' in ests) and no_corr):
-        r_tb = np.asarray(norm_lens.qtb(k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['BB'],gtype= ''))
+        r_tb = np.asarray(norm_lens.qtb(k_ellmax,lmin,lmax,ucl['TE'],ucl1['TE'],tcl['TT'],tcl['BB'],gtype= ''))
         if ('TB' in ests): res[_gk('TB')] = r_tb
     if ('BB' in ests):
-        r_bb = np.asarray(norm_lens.qbb(k_ellmax,lmin,lmax,ucl['BB'],tcl['BB'],gtype= ''))
+        r_bb = np.asarray(norm_lens.qbb(k_ellmax,lmin,lmax,ucl['BB'],ucl1['BB'],tcl['BB'],gtype= ''))
         res[_gk('BB')] = r_bb
     if 'MV' in ests:
         if no_corr:
@@ -78,8 +87,10 @@ def get_norms(estimators, response_cls, total_cls, lmin, lmax,
             res[_gk('MV')] = r_mv
         else:
             fC = np.asarray((ucl['TT'],ucl['EE'],ucl['BB'],ucl['TE']))
+            fC1 = np.asarray((ucl1['TT'],ucl1['EE'],ucl1['BB'],ucl1['TE']))
+
             OC = np.asarray((tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE']))
-            Ag,Ac,Wg,Wc = norm_lens.qall([True,True,True,True,True,include_bb_mv],k_ellmax,lmin,lmax,fC,OC,gtype= '')
+            Ag,Ac,Wg,Wc = norm_lens.qall([True,True,True,True,True,include_bb_mv],k_ellmax,lmin,lmax,fC,fC1,OC,gtype= '')
             res[_gk('MV')] = np.asarray((Ag[-1,:],Ac[-1,:]))
     if 'MVPOL' in ests:
         r_mvpol = r_ee * 0

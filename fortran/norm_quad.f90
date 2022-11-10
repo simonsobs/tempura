@@ -11,7 +11,7 @@ module norm_quad
 contains
 
 
-subroutine quad_tt(est,lmax,rlmin,rlmax,TT,OCT,Al,lfac)
+subroutine quad_tt(est,lmax,rlmin,rlmax,TT,fTT,OCT,Al,lfac)
 !*  Normalization of reconstructed fields from the temperature quadratic estimator
 !*
 !*  Args:
@@ -19,6 +19,8 @@ subroutine quad_tt(est,lmax,rlmin,rlmax,TT,OCT,Al,lfac)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :TT[l] (double)    : Theory TT spectrum, with bounds (0:rlmax)
+!*    :gTT[l] (double)    : Theory TT spectrum for weights, with bounds (0:rlmax)
+
 !*    :OCT[l] (double)   : Observed TT spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
@@ -32,12 +34,12 @@ subroutine quad_tt(est,lmax,rlmin,rlmax,TT,OCT,Al,lfac)
   character(*), intent(in) :: est
   character(1), intent(in) :: lfac
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: TT, OCT
+  double precision, intent(in), dimension(0:rlmax) :: TT,fTT, OCT
   double precision, intent(out), dimension(2,0:lmax) :: Al
   !internal
   integer :: rL(2), l
   double precision, dimension(lmax) :: lk2
-  double precision, dimension(3,rlmin:rlmax) :: W
+  double precision, dimension(4,rlmin:rlmax) :: W
   double precision, dimension(2,2,lmax) :: SG
 
   rL = (/rlmin,rlmax/)
@@ -47,8 +49,9 @@ subroutine quad_tt(est,lmax,rlmin,rlmax,TT,OCT,Al,lfac)
   end do
 
   W(1,:) = 1d0 / OCT(rlmin:rlmax)
-  W(2,:) = TT(rlmin:rlmax)**2 / OCT(rlmin:rlmax)
+  W(2,:) = TT(rlmin:rlmax)* fTT(rlmin:rlmax)/ OCT(rlmin:rlmax)
   W(3,:) = TT(rlmin:rlmax) / OCT(rlmin:rlmax)
+  W(4,:) = fTT(rlmin:rlmax) / OCT(rlmin:rlmax)
 
   lk2 = 1d0
   SG  = 0d0
@@ -56,7 +59,7 @@ subroutine quad_tt(est,lmax,rlmin,rlmax,TT,OCT,Al,lfac)
   case('lens')
     call get_lfac(lmax,lfac,lk2)
     call Kernels_lens(rL,W(1,:),W(2,:),SG(1,:,:),'S0')
-    call Kernels_lens(rL,W(3,:),W(3,:),SG(2,:,:),'G0')
+    call Kernels_lens(rL,W(3,:),W(4,:),SG(2,:,:),'G0')
   case('amp')
     call Kernels_tau(rL,W(1,:),W(2,:),SG(1,1,:),'S0')
     call Kernels_tau(rL,W(3,:),W(3,:),SG(2,1,:),'G0')
@@ -170,7 +173,7 @@ subroutine quad_tt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,Al,l
 end subroutine quad_tt_asym
 
 
-subroutine quad_te(est,lmax,rlmin,rlmax,TE,OCT,OCE,Al,lfac)
+subroutine quad_te(est,lmax,rlmin,rlmax,TE,fTE,OCT,OCE,Al,lfac)
 !*  Normalization of reconstructed fields from the TE quadratic estimator
 !*
 !*  Args:
@@ -192,7 +195,7 @@ subroutine quad_te(est,lmax,rlmin,rlmax,TE,OCT,OCE,Al,lfac)
   character(*), intent(in) :: est
   character(1), intent(in) :: lfac
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: TE, OCT, OCE
+  double precision, intent(in), dimension(0:rlmax) :: TE,fTE, OCT, OCE
   double precision, intent(out), dimension(2,0:lmax) :: Al
   !internal
   integer :: l, rL(2)
@@ -208,13 +211,13 @@ subroutine quad_te(est,lmax,rlmin,rlmax,TE,OCT,OCE,Al,lfac)
   end do
 
   W(1,:) = 1d0/OCT(rlmin:rlmax)
-  W(2,:) = TE(rlmin:rlmax)**2/OCE(rlmin:rlmax)
+  W(2,:) = TE(rlmin:rlmax)*fTE(rlmin:rlmax)/OCE(rlmin:rlmax)
   
   W(3,:) = TE(rlmin:rlmax)/OCT(rlmin:rlmax)
-  W(4,:) = TE(rlmin:rlmax)/OCE(rlmin:rlmax)
+  W(4,:) = fTE(rlmin:rlmax)/OCE(rlmin:rlmax)
   
   W(5,:) = 1d0/OCE(rlmin:rlmax)
-  W(6,:) = TE(rlmin:rlmax)**2/OCT(rlmin:rlmax)
+  W(6,:) = TE(rlmin:rlmax)*fTE(rlmin:rlmax)/OCT(rlmin:rlmax)
 
   lk2 = 1d0
   SG = 0d0
@@ -253,7 +256,7 @@ subroutine quad_te(est,lmax,rlmin,rlmax,TE,OCT,OCE,Al,lfac)
 end subroutine quad_te
 
 
-subroutine quad_tb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Al,lfac)
+subroutine quad_tb(est,lmax,rlmin,rlmax,TE,fTE,OCT,OCB,Al,lfac)
 !*  Normalization of reconstructed fields from the TB quadratic estimator
 !*
 !*  Args:
@@ -275,7 +278,7 @@ subroutine quad_tb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Al,lfac)
   character(*), intent(in) :: est
   character(1), intent(in) :: lfac
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: TE, OCT, OCB
+  double precision, intent(in), dimension(0:rlmax) :: TE,fTE, OCT, OCB
   double precision, intent(out), dimension(2,0:lmax) :: Al
   !internal
   integer :: l, rL(2)
@@ -291,7 +294,7 @@ subroutine quad_tb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Al,lfac)
   end do
 
   W(1,:) = 1d0/OCB(rlmin:rlmax)
-  W(2,:) = TE(rlmin:rlmax)**2 / OCT(rlmin:rlmax)
+  W(2,:) = TE(rlmin:rlmax)*fTE(rlmin:rlmax) / OCT(rlmin:rlmax)
 
   lk2 = 1d0
   SG = 0d0
@@ -321,7 +324,7 @@ subroutine quad_tb(est,lmax,rlmin,rlmax,TE,OCT,OCB,Al,lfac)
 end subroutine quad_tb
 
 
-subroutine quad_ee(est,lmax,rlmin,rlmax,EE,OCE,Al,lfac)
+subroutine quad_ee(est,lmax,rlmin,rlmax,EE,fEE,OCE,Al,lfac)
 !*  Normalization of reconstructed amplitude modulation from the EE quadratic estimator
 !*
 !*  Args:
@@ -342,12 +345,12 @@ subroutine quad_ee(est,lmax,rlmin,rlmax,EE,OCE,Al,lfac)
   character(*), intent(in) :: est
   character(1), intent(in) :: lfac
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: EE, OCE
+  double precision, intent(in), dimension(0:rlmax) :: EE,fEE, OCE
   double precision, intent(out), dimension(2,0:lmax) :: Al
   !internal
   integer :: l, rL(2)
   double precision, dimension(lmax) :: lk2
-  double precision, dimension(3,rlmin:rlmax) :: W
+  double precision, dimension(4,rlmin:rlmax) :: W
   double precision, dimension(2,2,lmax) :: SG
 
   rL = (/rlmin,rlmax/)
@@ -357,8 +360,9 @@ subroutine quad_ee(est,lmax,rlmin,rlmax,EE,OCE,Al,lfac)
   end do
 
   W(1,:) = 1d0/OCE(rlmin:rlmax)
-  W(2,:) = EE(rlmin:rlmax)**2 / OCE(rlmin:rlmax)
+  W(2,:) = EE(rlmin:rlmax)*fEE(rlmin:rlmax) / OCE(rlmin:rlmax)
   W(3,:) = EE(rlmin:rlmax) / OCE(rlmin:rlmax)
+  W(4,:) = fEE(rlmin:rlmax) / OCE(rlmin:rlmax)
 
   lk2 = 1d0
   SG = 0d0
@@ -366,7 +370,7 @@ subroutine quad_ee(est,lmax,rlmin,rlmax,EE,OCE,Al,lfac)
   case('lens')
     call get_lfac(lmax,lfac,lk2)
     call kernels_lens(rL,W(1,:),W(2,:),SG(1,:,:),'Sp')
-    call kernels_lens(rL,W(3,:),W(3,:),SG(2,:,:),'Gp')
+    call kernels_lens(rL,W(3,:),W(4,:),SG(2,:,:),'Gp')
   case('amp')
     call kernels_tau(rL,W(1,:),W(2,:),SG(1,1,:),'Sp')
     call kernels_tau(rL,W(3,:),W(3,:),SG(2,1,:),'Gp')
@@ -395,7 +399,7 @@ subroutine quad_ee(est,lmax,rlmin,rlmax,EE,OCE,Al,lfac)
 end subroutine quad_ee
 
 
-subroutine quad_eb(est,lmax,rlmin,rlmax,EE,OCE,OCB,BB,Al,lfac)
+subroutine quad_eb(est,lmax,rlmin,rlmax,EE,fEE,OCE,OCB,BB,fBB,Al,lfac)
 !*  Normalization of reconstructed fields from the EB quadratic estimator
 !*
 !*  Args:
@@ -418,7 +422,7 @@ subroutine quad_eb(est,lmax,rlmin,rlmax,EE,OCE,OCB,BB,Al,lfac)
   character(*), intent(in) :: est
   character(1), intent(in) :: lfac
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: EE, BB, OCE, OCB
+  double precision, intent(in), dimension(0:rlmax) :: EE,fEE, BB,fBB, OCE, OCB
   double precision, intent(out), dimension(2,0:lmax) :: Al
   !internal
   integer :: l, rL(2)
@@ -434,11 +438,11 @@ subroutine quad_eb(est,lmax,rlmin,rlmax,EE,OCE,OCB,BB,Al,lfac)
   end do
 
   W(1,:) = 1d0/OCE(rlmin:rlmax)
-  W(2,:) = BB(rlmin:rlmax)**2 / OCB(rlmin:rlmax)
+  W(2,:) = BB(rlmin:rlmax)*fBB(rlmin:rlmax)/ OCB(rlmin:rlmax)
   W(3,:) = EE(rlmin:rlmax)/OCE(rlmin:rlmax)
   W(4,:) = BB(rlmin:rlmax)/OCB(rlmin:rlmax)
   W(5,:) = 1d0/OCB(rlmin:rlmax)
-  W(6,:) = EE(rlmin:rlmax)**2 / OCE(rlmin:rlmax)
+  W(6,:) = EE(rlmin:rlmax)*fEE(rlmin:rlmax) / OCE(rlmin:rlmax)
   
   lk2 = 1d0
   SG = 0d0
@@ -484,7 +488,7 @@ subroutine quad_eb(est,lmax,rlmin,rlmax,EE,OCE,OCB,BB,Al,lfac)
 end subroutine quad_eb
 
 
-subroutine quad_bb(est,lmax,rlmin,rlmax,BB,OCB,Al,lfac)
+subroutine quad_bb(est,lmax,rlmin,rlmax,BB,fBB,OCB,Al,lfac)
 !*  Normalization of reconstructed amplitude modulation from the BB quadratic estimator
 !*
 !*  Args:
@@ -505,12 +509,12 @@ subroutine quad_bb(est,lmax,rlmin,rlmax,BB,OCB,Al,lfac)
   character(*), intent(in) :: est
   character(1), intent(in) :: lfac
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: BB, OCB
+  double precision, intent(in), dimension(0:rlmax) :: BB,fBB, OCB
   double precision, intent(out), dimension(2,0:lmax) :: Al
   !internal
   integer :: l, rL(2)
   double precision, dimension(lmax) :: lk2
-  double precision, dimension(3,rlmin:rlmax) :: W
+  double precision, dimension(4,rlmin:rlmax) :: W
   double precision, dimension(2,2,lmax) :: SG
 
   rL = (/rlmin,rlmax/)
@@ -520,8 +524,9 @@ subroutine quad_bb(est,lmax,rlmin,rlmax,BB,OCB,Al,lfac)
   end do
 
   W(1,:) = 1d0/OCB(rlmin:rlmax)
-  W(2,:) = BB(rlmin:rlmax)**2 / OCB(rlmin:rlmax)
+  W(2,:) = BB(rlmin:rlmax)*fBB(rlmin:rlmax) / OCB(rlmin:rlmax)
   W(3,:) = BB(rlmin:rlmax) / OCB(rlmin:rlmax)
+  W(4,:) = fBB(rlmin:rlmax) / OCB(rlmin:rlmax)
 
   lk2 = 1d0
   SG = 0d0
@@ -529,7 +534,7 @@ subroutine quad_bb(est,lmax,rlmin,rlmax,BB,OCB,Al,lfac)
   case('lens')
     call get_lfac(lmax,lfac,lk2)
     call kernels_lens(rL,W(1,:),W(2,:),SG(1,:,:),'Sp')
-    call kernels_lens(rL,W(3,:),W(3,:),SG(2,:,:),'Gp')
+    call kernels_lens(rL,W(3,:),W(4,:),SG(2,:,:),'Gp')
   case('amp')
     call kernels_tau(rL,W(1,:),W(2,:),SG(1,1,:),'Sp')
     call kernels_tau(rL,W(3,:),W(3,:),SG(2,1,:),'Gp')
@@ -929,7 +934,7 @@ subroutine quad_mv(lmax,QDO,Al,Il,MV,Nl)
 end subroutine quad_mv
 
 
-subroutine quad_all(est,QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,lfac)
+subroutine quad_all(est,QDO,lmax,rlmin,rlmax,fC,fwC,OC,Ag,Ac,Nlg,Nlc,lfac)
 !*  Compute MV estimator normalization. Currently BB is ignored. 
 !*
 !*  Args:
@@ -954,7 +959,7 @@ subroutine quad_all(est,QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,lfac)
   character(1), intent(in) :: lfac
   logical, intent(in), dimension(6) :: QDO
   integer, intent(in) :: rlmin, rlmax, lmax
-  double precision, intent(in), dimension(4,0:rlmax) :: fC, OC
+  double precision, intent(in), dimension(4,0:rlmax) :: fC, fwC,OC
   double precision, intent(out), dimension(6,0:lmax) :: Ag, Ac, Nlg, Nlc
   !internal
   character(1) :: gt
@@ -967,11 +972,11 @@ subroutine quad_all(est,QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,lfac)
   Ac  = 0d0
   Nlg = 0d0
   Nlc = 0d0
-  if (QDO(1))  call quad_tt(est,lmax,rlmin,rlmax,fC(TT,:),OC(TT,:),Al(1,:,:),lfac)
-  if (QDO(2))  call quad_te(est,lmax,rlmin,rlmax,fC(TE,:),OC(TT,:),OC(EE,:),Al(2,:,:),lfac)
-  if (QDO(3))  call quad_ee(est,lmax,rlmin,rlmax,fC(EE,:),OC(EE,:),Al(3,:,:),lfac)
-  if (QDO(4))  call quad_tb(est,lmax,rlmin,rlmax,fC(TE,:),OC(TT,:),OC(BB,:),Al(4,:,:),lfac)
-  if (QDO(5))  call quad_eb(est,lmax,rlmin,rlmax,fC(EE,:),OC(EE,:),OC(BB,:),fC(BB,:),Al(5,:,:),lfac)
+  if (QDO(1))  call quad_tt(est,lmax,rlmin,rlmax,fC(TT,:),fwC(TT,:),OC(TT,:),Al(1,:,:),lfac)
+  if (QDO(2))  call quad_te(est,lmax,rlmin,rlmax,fC(TE,:),fwC(TE,:),OC(TT,:),OC(EE,:),Al(2,:,:),lfac)
+  if (QDO(3))  call quad_ee(est,lmax,rlmin,rlmax,fC(EE,:),fwC(EE,:),OC(EE,:),Al(3,:,:),lfac)
+  if (QDO(4))  call quad_tb(est,lmax,rlmin,rlmax,fC(TE,:),fwC(TE,:),OC(TT,:),OC(BB,:),Al(4,:,:),lfac)
+  if (QDO(5))  call quad_eb(est,lmax,rlmin,rlmax,fC(EE,:),fwC(EE,:),OC(EE,:),OC(BB,:),fC(BB,:),fwC(BB,:),Al(5,:,:),lfac)
   Ag = Al(:,1,:)
   Ac = Al(:,2,:)
 
@@ -988,7 +993,7 @@ subroutine quad_all(est,QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,lfac)
 end subroutine quad_all
 
 
-subroutine quad_eb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter,conv)
+subroutine quad_eb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,fCE,OCE,OCB,Cpp,Ag,Ac,iter,conv)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 !*
 !*  Args:
@@ -1012,7 +1017,7 @@ subroutine quad_eb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,
   implicit none
   !I/O
   integer, intent(in) :: lmax, elmax, rlmin, rlmax, dlmin, dlmax
-  double precision, intent(in), dimension(0:elmax) :: CE, OCE
+  double precision, intent(in), dimension(0:elmax) :: CE,fCE, OCE
   double precision, intent(in), dimension(0:rlmax) :: OCB
   double precision, intent(in), dimension(0:dlmax) :: Cpp
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
@@ -1036,7 +1041,7 @@ subroutine quad_eb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,
   do n = 1, iter !loop for iteration 
 
     !lensing reconstruction with EB
-    call quad_eb('lens',dlmax,rlmin,rlmax,CE(0:rlmax),OCE(0:rlmax),rCBB,BB(0:rlmax),Al(:,0:dlmax),'')
+    call quad_eb('lens',dlmax,rlmin,rlmax,CE(0:rlmax),fCE(0:rlmax),OCE(0:rlmax),rCBB,BB(0:rlmax),BB(0:rlmax),Al(:,0:dlmax),'')
 
     !convergence check using gradient mode
     if (n>=2) then

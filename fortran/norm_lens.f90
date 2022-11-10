@@ -9,13 +9,15 @@ module norm_lens
 contains
 
 
-subroutine qtt(lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,temp_arg)
+subroutine qtt(lmax,rlmin,rlmax,TT,fTT,OCT,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the temperature quadratic estimator
 !*
 !*  Args:
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :TT [l] (double)   : Theory TT spectrum, with bounds (0:rlmax)
+!*    :fTT [l] (double)   : Theory TT spectrum used for the weights, with bounds (0:rlmax)
+
 !*    :OCT [l] (double)  : Observed TT spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
@@ -29,7 +31,7 @@ subroutine qtt(lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,temp_arg)
   !I/O
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:temp_arg) :: TT, OCT
+  double precision, intent(in), dimension(0:temp_arg) :: TT,fTT, OCT
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in) :: gtype
@@ -37,14 +39,14 @@ subroutine qtt(lmax,rlmin,rlmax,TT,OCT,Ag,Ac,gtype,temp_arg)
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
-  call quad_tt('lens',lmax,rlmin,rlmax,TT,OCT,Al,gtype)
+  call quad_tt('lens',lmax,rlmin,rlmax,TT,fTT,OCT,Al,gtype)
   Ag = Al(1,:)
   Ac = Al(2,:)
 
 end subroutine qtt
 
 
-subroutine qte(lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,temp_arg)
+subroutine qte(lmax,rlmin,rlmax,TE,fTE,OCT,OCE,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TE quadratic estimator
 !*
 !*  Args:
@@ -66,7 +68,7 @@ subroutine qte(lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,temp_arg)
   !I/O
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in) , dimension(0:temp_arg) :: TE, OCT, OCE
+  double precision, intent(in) , dimension(0:temp_arg) :: TE,fTE, OCT, OCE
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in) :: gtype
@@ -74,20 +76,21 @@ subroutine qte(lmax,rlmin,rlmax,TE,OCT,OCE,Ag,Ac,gtype,temp_arg)
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
-  call quad_te('lens',lmax,rlmin,rlmax,TE,OCT,OCE,Al,gtype)
+  call quad_te('lens',lmax,rlmin,rlmax,TE,fTE,OCT,OCE,Al,gtype)
   Ag = Al(1,:)
   Ac = Al(2,:)
 
 end subroutine qte
 
-
-subroutine qtb(lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,temp_arg)
+subroutine qtb(lmax,rlmin,rlmax,TE,fTE,OCT,OCB,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the TB quadratic estimator
 !*
 !*  Args:
 !*    :lmax (int)       : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int): Minimum/Maximum multipole of CMB for reconstruction
 !*    :TE [l] (double)  : Theory TE spectrum, with bounds (0:rlmax)
+!*    :fTE [l] (double)  : Theory TE spectrum for weogjts, with bounds (0:rlmax)
+
 !*    :OCT [l] (double) : Observed TT spectrum, with bounds (0:rlmax)
 !*    :OCB [l] (double) : Observed BB spectrum, with bounds (0:rlmax)
 !*
@@ -102,7 +105,7 @@ subroutine qtb(lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,temp_arg)
   !I/O
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in) , dimension(0:temp_arg) :: TE, OCT, OCB
+  double precision, intent(in) , dimension(0:temp_arg) :: TE,fTE, OCT, OCB
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in) :: gtype
@@ -110,14 +113,14 @@ subroutine qtb(lmax,rlmin,rlmax,TE,OCT,OCB,Ag,Ac,gtype,temp_arg)
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
-  call quad_tb('lens',lmax,rlmin,rlmax,TE,OCT,OCB,Al,gtype)
+  call quad_tb('lens',lmax,rlmin,rlmax,TE,fTE,OCT,OCB,Al,gtype)
   Ag = Al(1,:)
   Ac = Al(2,:)
 
 end subroutine qtb
 
 
-subroutine qee(lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,temp_arg)
+subroutine qee(lmax,rlmin,rlmax,EE,fEE,OCE,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the E-mode quadratic estimator
 !*
 !*  Args:
@@ -137,7 +140,7 @@ subroutine qee(lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,temp_arg)
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in) , dimension(0:temp_arg) :: EE, OCE
+  double precision, intent(in) , dimension(0:temp_arg) :: EE,fEE, OCE
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in) :: gtype
@@ -145,14 +148,14 @@ subroutine qee(lmax,rlmin,rlmax,EE,OCE,Ag,Ac,gtype,temp_arg)
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
-  call quad_ee('lens',lmax,rlmin,rlmax,EE,OCE,Al,gtype)
+  call quad_ee('lens',lmax,rlmin,rlmax,EE,fEE,OCE,Al,gtype)
   Ag = Al(1,:)
   Ac = Al(2,:)
 
 end subroutine qee
 
 
-subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,temp_arg)
+subroutine qeb(lmax,rlmin,rlmax,EE,fEE,OCE,OCB,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 !*
 !*  Args:
@@ -173,7 +176,7 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,temp_arg)
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in) , dimension(0:temp_arg) :: EE, OCE, OCB
+  double precision, intent(in) , dimension(0:temp_arg) :: EE,fEE, OCE, OCB
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in) :: gtype
@@ -184,7 +187,7 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,temp_arg)
 
   allocate(BB(0:rlmax))
   BB = 0d0
-  call quad_eb('lens',lmax,rlmin,rlmax,EE,OCE,OCB,BB,Al,gtype)
+  call quad_eb('lens',lmax,rlmin,rlmax,EE,fEE,OCE,OCB,BB,BB,Al,gtype)
   Ag = Al(1,:)
   Ac = Al(2,:)
   deallocate(BB)
@@ -192,7 +195,7 @@ subroutine qeb(lmax,rlmin,rlmax,EE,OCE,OCB,Ag,Ac,gtype,temp_arg)
 end subroutine qeb
 
 
-subroutine qbb(lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,temp_arg)
+subroutine qbb(lmax,rlmin,rlmax,BB,fBB,OCB,Ag,Ac,gtype,temp_arg)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the B-mode quadratic estimator
 !*
 !*  Args:
@@ -212,7 +215,7 @@ subroutine qbb(lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,temp_arg)
   !I/O
   integer, intent(in) :: lmax, rlmin, rlmax
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:temp_arg) :: BB, OCB
+  double precision, intent(in), dimension(0:temp_arg) :: BB,fBB, OCB
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in) :: gtype
@@ -220,7 +223,7 @@ subroutine qbb(lmax,rlmin,rlmax,BB,OCB,Ag,Ac,gtype,temp_arg)
   !internal
   double precision, dimension(2,0:lmax) :: Al
 
-  call quad_bb('lens',lmax,rlmin,rlmax,BB,OCB,Al,gtype)
+  call quad_bb('lens',lmax,rlmin,rlmax,BB,fBB,OCB,Al,gtype)
   Ag = Al(1,:)
   Ac = Al(2,:)
 
@@ -364,7 +367,7 @@ subroutine qtbeb(lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,gtype,te
 end subroutine qtbeb
 
 
-subroutine qall(QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype,temp_arg)
+subroutine qall(QDO,lmax,rlmin,rlmax,fC,fwC,OC,Ag,Ac,Nlg,Nlc,gtype,temp_arg)
 !*  Compute MV estimator normalization. Currently BB is ignored. 
 !*
 !*  Args:
@@ -387,18 +390,18 @@ subroutine qall(QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype,temp_arg)
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   logical, intent(in), dimension(6) :: QDO
   integer, intent(in) :: rlmin, rlmax, lmax
-  double precision, intent(in), dimension(4,0:temp_arg) :: fC, OC
+  double precision, intent(in), dimension(4,0:temp_arg) :: fC, fwC,OC
   double precision, intent(out), dimension(6,0:lmax) :: Ag, Ac, Nlg, Nlc
   !optional
   character(1), intent(in) :: gtype
   !opt4py :: gtype = ''
 
-  call quad_all('lens',QDO,lmax,rlmin,rlmax,fC,OC,Ag,Ac,Nlg,Nlc,gtype)
+  call quad_all('lens',QDO,lmax,rlmin,rlmax,fC,fwC,OC,Ag,Ac,Nlg,Nlc,gtype)
 
 end subroutine qall
 
 
-subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter,conv,temp_arg_E,temp_arg_B,temp_arg_p)
+subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,fCE,OCE,OCB,Cpp,Ag,Ac,iter,conv,temp_arg_E,temp_arg_B,temp_arg_p)
 !*  Normalization of reconstructed CMB lensing potential and its curl mode from the EB quadratic estimator
 !*
 !*  Args:
@@ -423,7 +426,7 @@ subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter
   !I/O
   integer, intent(in) :: lmax, elmax, rlmin, rlmax, dlmin, dlmax
   integer :: temp_arg_E, temp_arg_B, temp_arg_p ! these are removed by f2py since it appears in the size of an input array argument
-  double precision, intent(in), dimension(0:temp_arg_E) :: CE, OCE
+  double precision, intent(in), dimension(0:temp_arg_E) :: CE,fCE, OCE
   double precision, intent(in), dimension(0:temp_arg_B) :: OCB
   double precision, intent(in), dimension(0:temp_arg_p) :: Cpp
   double precision, intent(out), dimension(0:lmax) :: Ag, Ac
@@ -433,7 +436,7 @@ subroutine qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter
   !opt4py :: iter = 1
   !opt4py :: conv = 1e-6
 
-  call quad_eb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,OCE,OCB,Cpp,Ag,Ac,iter,conv)
+  call quad_eb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,fCE,OCE,OCB,Cpp,Ag,Ac,iter,conv)
 
 end subroutine qeb_iter
 
@@ -496,6 +499,7 @@ subroutine stt(lmax,rlmin,rlmax,fC,OCT,Ag,gtype,temp_arg)
   call quad_xtt('lenssrc',lmax,rlmin,rlmax,fC,OCT,Ag,gtype)
 
 end subroutine stt
+
 
 
 end module norm_lens
