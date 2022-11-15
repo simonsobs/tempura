@@ -9,7 +9,7 @@ est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','TAU','ROT']
 
 def get_norms(estimators, response_cls,response_cls_weights, total_cls, lmin, lmax,
               k_ellmax=None, include_bb_mv=False, no_corr=True,
-              profile=None):
+              profile=None,iterations=1,convergence=1e-6,lmin_pol=None,lmax_pol=None):
     """
     Get norms for estimators such that A_est = N_est. In the case of lensing,
     this corresponds to the normalizations of the lensing potential.
@@ -57,15 +57,36 @@ def get_norms(estimators, response_cls,response_cls_weights, total_cls, lmin, lm
         return estimators[ests.index(e)]
     
     res = {}
+    sep_pol = False
+    if lmax_pol is None: 
+        lmax_pol = lmax
+    else:
+        sep_pol = True
+    if lmin_pol is None: 
+        lmin_pol = lmin
+    else:
+        sep_pol = True
+    if sep_pol and not(no_corr):
+        raise ValueError("Separate pol ellmin/ellmax not supported with no_corr=False")
     if ('TT' in ests) or (('MV' in ests) and no_corr):
         print('use new TT')
         r_tt = np.asarray(norm_lens.qtt(k_ellmax,lmin,lmax,ucl['TT'],ucl1['TT'],tcl['TT'],gtype='')) 
         if ('TT' in ests): res[_gk('TT')] = r_tt
     if ('EE' in ests) or ('MVPOL' in ests) or (('MV' in ests) and no_corr):
-        r_ee = np.asarray(norm_lens.qee(k_ellmax,lmin,lmax,ucl['EE'],ucl1['EE'],tcl['EE'],gtype= ''))
+        r_ee = np.asarray(norm_lens.qee(k_ellmax,lmin_pol,lmax_pol,ucl['EE'],ucl1['EE'],tcl['EE'],gtype= ''))
         if ('EE' in ests): res[_gk('EE')] = r_ee
     if ('EB' in ests) or ('MVPOL' in ests) or (('MV' in ests) and no_corr):
-        r_eb = np.asarray(norm_lens.qeb(k_ellmax,lmin,lmax,ucl['EE'],ucl1['EE'],tcl['EE'],tcl['BB'],gtype= ''))
+        if iterations>1:
+            ls = np.arange(ucl['kk'].size)
+            clpp = ls*0.
+            clpp[2:] = ucl['kk'][2:]/(ls[2:]*(ls[2:]+1))**2. * 4.        
+            dlmin = lmin_pol
+            dlmax = k_ellmax
+            #TODO: check that ucl1 is implemented here
+            r_eb = norm_lens.qeb_iter(k_ellmax,lmax_pol,lmin_pol,lmax_pol,dlmin,dlmax,ucl['EE'],ucl1['EE'],tcl['EE'],tcl['BB'],clpp,iter=iterations,conv=convergence)
+        else:
+            r_eb = norm_lens.qeb(k_ellmax,lmin_pol,lmax_pol,ucl['EE'],ucl1['EE'],tcl['EE'],tcl['BB'],gtype= '')
+        r_eb = np.asarray(r_eb)
         if ('EB' in ests): res[_gk('EB')] = r_eb
     if ('TE' in ests)  or (('MV' in ests) and no_corr):
         r_te = np.asarray(norm_lens.qte(k_ellmax,lmin,lmax,ucl['TE'],ucl1['TE'],tcl['TT'],tcl['EE'],gtype= ''))
@@ -74,7 +95,7 @@ def get_norms(estimators, response_cls,response_cls_weights, total_cls, lmin, lm
         r_tb = np.asarray(norm_lens.qtb(k_ellmax,lmin,lmax,ucl['TE'],ucl1['TE'],tcl['TT'],tcl['BB'],gtype= ''))
         if ('TB' in ests): res[_gk('TB')] = r_tb
     if ('BB' in ests):
-        r_bb = np.asarray(norm_lens.qbb(k_ellmax,lmin,lmax,ucl['BB'],ucl1['BB'],tcl['BB'],gtype= ''))
+        r_bb = np.asarray(norm_lens.qbb(k_ellmax,lmin_pol,lmax_pol,ucl['BB'],ucl1['BB'],tcl['BB'],gtype= ''))
         res[_gk('BB')] = r_bb
     if 'MV' in ests:
         if no_corr:
