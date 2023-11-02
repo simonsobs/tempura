@@ -9,7 +9,7 @@ est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','ROT']
 
 coup_list = ['LENS', 'TAU', 'ROT']
 
-def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_bb_mv=False,no_corr=True,coupling=["lens"]):
+def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_bb_mv=False,no_corr=True,coupling=["lens"], profile=None):
 
     """
     Get norms for estimators such that A_est = N_est. In the case of lensing,
@@ -101,7 +101,19 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
         if 'MASK' in ests:
             raise NotImplementedError
         if 'SRC' in ests:
-            res[_gk('SRC')] = norm_src.qtt(k_ellmax,lmin,lmax,tcl['TT'])
+            if profile is not None:
+                try:
+                    assert len(profile) > k_ellmax
+                except AssertionError as e:
+                    print("profile must have length at least k_ellmax+1")
+                    raise(e)
+                profile = profile[:k_ellmax+1]
+                cl_tt = tcl['TT'][:k_ellmax+1]/profile**2
+                prefactor = profile**2
+            else:
+                cl_tt = tcl['TT']
+                prefactor = 1.
+            res[_gk('SRC')] = prefactor * norm_src.qtt(k_ellmax,lmin,lmax,cl_tt)
 
     if 'TAU' in coup:
         
@@ -135,7 +147,7 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
     # Have not implemented oeb or stt, and have not written a method for tau MV yet
 
 def get_cross(est1, est2, response_cls, total_cls,
-              lmin, lmax, k_ellmax=None, profile=None):
+              lmin, lmax, k_ellmax=None,coupling=["lens"],profile=None):
     """
     Get the un-normalized cross-response between two estimators est1
     and est2.
@@ -164,6 +176,8 @@ def get_cross(est1, est2, response_cls, total_cls,
     for profile hardening for the source estimator. Default is None in which case
     the source estimator will correspond to the point source case.
     """
+    coup = [c.upper() for c in coupling]
+    
     est1 = est1.upper()
     est2 = est2.upper()
     ucl = response_cls
@@ -172,15 +186,15 @@ def get_cross(est1, est2, response_cls, total_cls,
 
     if 'LENS' in coup:
         if set((est1,est2))==set(('SRC','TT')):
-            return norm_lens.stt('lens',k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
+            return norm_lens.stt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
         elif set((est1,est2))==set(('TT','TE')):
-            return norm_lens.qttte('lens',k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+            return norm_lens.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
         elif set((est1,est2))==set(('TT','EE')):
-            return norm_lens.qttee('lens',k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+            return norm_lens.qttee(k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
         elif set((est1,est2))==set(('TE','EE')):
-            return norm_lens.qteee('lens',k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+            return norm_lens.qteee(k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
         elif set((est1,est2))==set(('TB','EB')):
-            return norm_lens.qtbeb('lens',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
+            return norm_lens.qtbeb(k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
         else:
             return np.zeros((2,k_ellmax+1))
         
