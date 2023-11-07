@@ -72,7 +72,7 @@ requirements =  ['numpy>=1.16',
 
 
 test_requirements = ['pip>=9.0',
-                     'bumpversion>=0.5.',
+                     'bumpversion>=0.5',
                      'matplotlib>=2.0',
                      'wheel>=0.30',
                      'watchdog>=0.8',
