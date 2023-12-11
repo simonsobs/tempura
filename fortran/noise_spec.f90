@@ -60,10 +60,15 @@ subroutine qtt_asym(est,lmax,rlmin,rlmax,wx0,wxy0,wx1,wxy1,a0a1,b0b1,a0b1,a1b0,N
     call get_lfac(lmax,gtype,lk2)
     call Kernels_lens(rL,W1(1,:),W2(1,:),SG(1,:,:),'S0')
     call Kernels_lens(rL,W1(2,:),W2(2,:),SG(2,:,:),'G0')
-  case('amp','src')
+  case('amp')
     call get_lfac(lmax,gtype,lk2)
     call Kernels_tau(rL,W1(1,:),W2(1,:),SG(1,1,:),'S0')
     call Kernels_tau(rL,W1(2,:),W2(2,:),SG(2,1,:),'G0')
+  case('src')
+    call get_lfac(lmax,gtype,lk2)
+    call Kernels_tau(rL,W1(1,:),W2(1,:),SG(1,1,:),'S0')
+    call Kernels_tau(rL,W1(2,:),W2(2,:),SG(2,1,:),'G0')
+    SG = SG/4d0
   end select
 
   Nl = 0d0
