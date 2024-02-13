@@ -204,6 +204,5 @@ def get_cross(est1, est2, response_cls, total_cls,
         
     if 'ROT' in coup:
         if set((est1,est2))==set(('TB','EB')):
-            return norm_general.qtbeb('rot',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'])
+            return norm_general.qtbeb('rot',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE']) # need to add coupling option to norm_general
     
-
