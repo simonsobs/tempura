@@ -102,7 +102,7 @@ compile_opts['extra_f77_compile_args'] = compile_opts['extra_f90_compile_args']
 
 #snames = ['norm_lens']
 #snames = ['norm_lens','norm_src','norm_rot','norm_tau']
-snames = ['norm_lens','norm_src','norm_general','noise_spec']
+snames = ['norm_lens','norm_src','norm_general','noise_spec','norm_tau','norm_rot']
 
 class CustomBuild(build_ext):
     def run(self):
