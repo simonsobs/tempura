@@ -41,7 +41,7 @@ Run
 
 .. code-block:: console
 		
-   $ python setup.py build
+   $ python setup.py build_ext -i
 
   
 You can then 'import pytempura' if this repository is in your PYTHONPATH.
