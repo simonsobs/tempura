@@ -3,7 +3,6 @@
 project(
   'pytempura',                       # project name
   ['c', 'fortran'],                  # languages we are going to compile
-  version : '0.2.0',                 # bump as you wish
   default_options : [
     'warning_level=1',
     'buildtype=release'
