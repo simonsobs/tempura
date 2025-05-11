@@ -243,7 +243,7 @@ def qall(QDO,lmax,rlmin,rlmax,fC,fwC,OC,gtype=''):
   Compute MV estimator normalization. Currently BB is ignored. 
 
   Args:
-    :QDO[*6*] (*bool*): Specifying which estimators to be combined for the minimum variance estimator, with size (6). The oder is TT, TE, EE, TB, EB and BB.
+    :QDO[*6*] (*bool*): Specifying which estimators to be combined for the minimum variance estimator, with size (6). The order is TT, TE, EE, TB, EB and BB.
     :lmax (*int*): Maximum multipole of the output power spectra
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
     :fC/OC [*l*] (*double*): Theory/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax)

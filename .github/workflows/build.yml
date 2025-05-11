@@ -162,7 +162,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   environment:
   #     name: testpypi
-  #     url: https://test.pypi.org/p/pixell
+  #     url: https://test.pypi.org/p/pytempura
     
   #   # Upload to pypi testing on every successful test run and build generation
   #   steps:

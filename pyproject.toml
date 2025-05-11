@@ -30,7 +30,8 @@ dependencies = [
     "scipy>=1.0",
     "pytest-cov>=2.6",
     "coveralls>=1.5",
-    "pytest>=4.6"
+    "pytest>=4.6",
+    "matplotlib"
     ]
  
 
