@@ -13,7 +13,7 @@ name = "pytempura"
 version = "0.2.0"
 description = "A full-sky quadratic estimator analytic normalization calculator."
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {file = "LICENSE"}
 
 authors = [
