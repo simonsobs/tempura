@@ -5,7 +5,6 @@ python_sources = [
     'noise_spec.py',
     'norm_general.py',
     'norm_src.py',
-    '_version.py'
     ]
 
 
