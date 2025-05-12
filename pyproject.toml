@@ -1,0 +1,56 @@
+[build-system]
+build-backend = "mesonpy"
+requires = [
+    "meson>=1.0",          # Meson executable
+    "meson-python>=0.14",  # PEP‑517 backend
+    "numpy",               # f2py needs this at build time
+    "versioneer[toml]",    # still used for the version string
+    "build"                # only if you run `python -m build`
+]
+
+[project]
+name = "pytempura"
+version = "0.2.0"
+description = "A full-sky quadratic estimator analytic normalization calculator."
+readme = "README.rst"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+
+authors = [
+    {name = "Toshiya Namikawa"},
+    {name = "Mathew Madhavacheril"},
+]
+maintainers = [
+    {name = "Toshiya Namikawa", email = "namikawa.toshiya9@gmail.com"},
+    {name = "Mathew Madhavacheril", email = "mathewsyriac@gmail.com"}
+]
+
+dependencies = [
+    "numpy",
+    "scipy>=1.0",
+    "pytest-cov>=2.6",
+    "coveralls>=1.5",
+    "pytest>=4.6",
+    "matplotlib"
+    ]
+ 
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+[tool.cibuildwheel]
+test-requires = "pytest"
+test-command = "pytest {project}/tests"
+build = "cp39-* cp310-* cp311-* cp312-* cp313-*"
+skip = "*i686* *musllinux*"
+
+[tool.coverage.run]
+source = [
+    "pytempura"
+]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover"]
+exclude_also = ["if TYPE_CHECKING:"]
