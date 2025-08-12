@@ -5,11 +5,11 @@ from . import norm_tau
 from . import norm_rot
 from . import norm_general
 
-est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','ROT']
+est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC','MASK']
 
 coup_list = ['LENS', 'TAU', 'ROT']
 
-def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_bb_mv=False,no_corr=True,coupling=["lens"]):
+def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_bb_mv=False,no_corr=True,coupling=["lens"],profile=None):
 
     """
     Get norms for estimators such that A_est = N_est. In the case of lensing,
@@ -101,7 +101,19 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
         if 'MASK' in ests:
             raise NotImplementedError
         if 'SRC' in ests:
-            res[_gk('SRC')] = norm_src.qtt(k_ellmax,lmin,lmax,tcl['TT'])
+            if profile is not None:
+                try:
+                    assert len(profile) > k_ellmax
+                except AssertionError as e:
+                    print("profile must have length at least k_ellmax+1")
+                    raise(e)
+                profile = profile[:k_ellmax+1]
+                cl_tt = tcl['TT'][:k_ellmax+1]/profile**2
+                prefactor = profile**2
+            else:
+                cl_tt = tcl['TT']
+                prefactor = 1.
+            res[_gk('SRC')] = prefactor * norm_src.qtt(k_ellmax,lmin,lmax,cl_tt)
 
     if 'TAU' in coup:
         
@@ -115,20 +127,12 @@ def get_norms(estimators,response_cls,total_cls,lmin,lmax,k_ellmax=None,include_
     
     if 'ROT' in coup:
         
-#         if 'TB' in ests:
-#             r_tb = np.asarray(norm_general.qtb('rot',k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['BB']))
-#             res[_gk('TB')] = r_tb
-        
-#         if 'EB' in ests:
-#             r_eb = np.asarray(norm_general.qeb('rot',k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB'],ucl['BB']))
-#             res[_gk('EB')] = r_eb
-
-        if 'TB' in ests:
+        if 'TB' in ests:#                     
             r_tb = np.asarray(norm_rot.qtb(k_ellmax,lmin,lmax,ucl['TE'],tcl['TT'],tcl['BB']))
             res[_gk('TB')] = r_tb
         
-        if 'EB' in ests:
-            r_eb = np.asarray(norm_rot.qeb(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB'],ucl['BB']))
+        if 'EB' in ests:#                   lmax,rlmin,rlmax,EE,OCE,OCB,BB=None
+            r_eb = np.asarray(norm_rot.qeb(k_ellmax,lmin,lmax,ucl['EE'],tcl['EE'],tcl['BB'],BB=ucl['BB']))
             res[_gk('EB')] = r_eb
     return res
 
@@ -169,27 +173,66 @@ def get_cross(est1, est2, response_cls, total_cls,
     ucl = response_cls
     tcl = total_cls
     if k_ellmax is None: k_ellmax = lmax
-
-    if 'LENS' in coup:
-        if set((est1,est2))==set(('SRC','TT')):
-            return norm_lens.stt('lens',k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
-        elif set((est1,est2))==set(('TT','TE')):
-            return norm_lens.qttte('lens',k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
-        elif set((est1,est2))==set(('TT','EE')):
-            return norm_lens.qttee('lens',k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
-        elif set((est1,est2))==set(('TE','EE')):
-            return norm_lens.qteee('lens',k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
-        elif set((est1,est2))==set(('TB','EB')):
-            return norm_lens.qtbeb('lens',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
+    if set((est1,est2))==set(('SRC','TT')):
+        if profile is not None:
+            profile = profile[:k_ellmax+1]
+            cl_tt_total = tcl['TT'][:k_ellmax+1] / profile
+            prefactor = 1./profile
         else:
-            return np.zeros((2,k_ellmax+1))
+            cl_tt_total = tcl['TT']
+            prefactor = 1.
+        return prefactor * norm_lens.stt(k_ellmax, lmin, lmax, ucl['TT'],
+                                         cl_tt_total, gtype= '')
+    #elif set((est1,est2))==set(('TT', 'MASK')):
+        #
+
+    elif set((est1,est2))==set(('TT','TE')):
+        return norm_lens.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+    elif set((est1,est2))==set(('TT','EE')):
+        return norm_lens.qttee(k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+    elif set((est1,est2))==set(('TE','EE')):
+        return norm_lens.qteee(k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+    elif set((est1,est2))==set(('TB','EB')):
+        return norm_lens.qtbeb(k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
+    else:
+        return np.zeros((2,k_ellmax+1))
+
+
+    # est1 = est1.upper()
+    # est2 = est2.upper()
+    # ucl = response_cls
+    # tcl = total_cls
+    # if k_ellmax is None: k_ellmax = lmax
+    # if set((est1,est2))==set(('SRC','TT')):
+    #     return norm_lens.stt(k_ellmax,lmin,lmax,ucl['TT'],tcl['TT'],gtype= '')
+    # elif set((est1,est2))==set(('TT','TE')):
+    #     return norm_lens.qttte(k_ellmax,lmin,lmax,ucl['TT'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+    # elif set((est1,est2))==set(('TT','EE')):
+    #     return norm_lens.qttee(k_ellmax,lmin,lmax,ucl['TT'],ucl['EE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+    # elif set((est1,est2))==set(('TE','EE')):
+    #     return norm_lens.qteee(k_ellmax,lmin,lmax,ucl['EE'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['TE'],gtype= '')
+    # elif set((est1,est2))==set(('TB','EB')):
+    #     return norm_lens.qtbeb(k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],ucl['TE'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'],gtype= '')
+    # else:
+    #     return np.zeros((2,k_ellmax+1))
         
-#     if 'TAU' in coup:
-#         if set((est1,est2))==set(('TT','EB')):
-#             return norm_general.qtteb('tau',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'])
+    if 'TAU' in coup:
+        if set((est1,est2))==set(('SRC','TT')):
+            if profile is not None:
+                profile = profile[:k_ellmax+1]
+                cl_tt_total = tcl['TT'][:k_ellmax+1] / profile
+                prefactor = 1./profile
+            else:
+                cl_tt_total = tcl['TT']
+                prefactor = 1.
+            return prefactor * norm_tau.stt(k_ellmax, lmin, lmax, ucl['TT'], cl_tt_total)
+
+
+#         if set((est1,est2))==set(('TT',TT')):
+#             return norm_tau.qtttt('tau',k_ellmax,lmin,lmax,ucl['TT'],ucl['TT'],tcl['TT'],tcl['TT'],tcl['TT'],tcl['TE'])
         
-    if 'ROT' in coup:
-        if set((est1,est2))==set(('TB','EB')):
-            return norm_general.qtbeb('rot',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'])
+    # if 'ROT' in coup:
+    #     if set((est1,est2))==set(('TB','EB')):
+    #         return norm_general.qtbeb('rot',k_ellmax,lmin,lmax,ucl['EE'],ucl['BB'],tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE'])
     
 
