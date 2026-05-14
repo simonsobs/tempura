@@ -15,6 +15,8 @@ import glob,shutil
 build_ext = build_ext.build_ext
 build_src = build_src.build_src
 
+os.environ['F90'] = 'ifort'
+os.environ['F77'] = 'ifort'
 
 compile_opts = {
     'extra_f90_compile_args': ['-fopenmp', '-Wno-conversion', '-Wno-tabs', '-fPIC'],
@@ -72,7 +74,7 @@ requirements =  ['numpy>=1.16',
 
 
 test_requirements = ['pip>=9.0',
-                     'bumpversion>=0.5.',
+                     'bumpversion>=0.5',
                      'matplotlib>=2.0',
                      'wheel>=0.30',
                      'watchdog>=0.8',
