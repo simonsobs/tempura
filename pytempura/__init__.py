@@ -2,11 +2,15 @@
 
 """Top-level package for pytempura."""
 
+from importlib.metadata import version, PackageNotFoundError
+
+try:
+    __version__ = version("pytempura")
+except PackageNotFoundError:
+    __version__ = "unknown"
+    
 __author__ = """Toshiya Namikawa"""
 __email__ = ''
-from ._version import get_versions
-__version__ = get_versions()['version']
-del get_versions
 
 
 from . import norm_lens
