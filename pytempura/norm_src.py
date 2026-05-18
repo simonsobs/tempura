@@ -13,8 +13,6 @@ def qtt(lmax,rlmin,rlmax,OCT):
   Returns:
     :As [*l*] (*double*): src field normalization, with bounds (0:lmax)
 
-  Usage:
-    :As = _libtempura.norm_src.qtt(lmax,rlmin,rlmax,OCT):
   """
   return _libtempura.norm_src.qtt(lmax,rlmin,rlmax,OCT)
 

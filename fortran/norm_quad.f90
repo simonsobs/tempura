@@ -19,8 +19,7 @@ subroutine quad_tt(est,lmax,rlmin,rlmax,TT,fTT,OCT,Al,lfac)
 !*    :lmax (int)        : Maximum multipole of output normalization spectrum
 !*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
 !*    :TT[l] (double)    : Theory TT spectrum, with bounds (0:rlmax)
-!*    :gTT[l] (double)    : Theory TT spectrum for weights, with bounds (0:rlmax)
-
+!*    :fTT[l] (double)   : Theory TT spectrum for the weight for the gradient leg (for the standard case, fTT=TT), with bounds (0:rlmax)
 !*    :OCT[l] (double)   : Observed TT spectrum, with bounds (0:rlmax)
 !*
 !*  Args(optional):
@@ -34,7 +33,7 @@ subroutine quad_tt(est,lmax,rlmin,rlmax,TT,fTT,OCT,Al,lfac)
   character(*), intent(in) :: est
   character(1), intent(in) :: lfac
   integer, intent(in) :: lmax, rlmin, rlmax
-  double precision, intent(in), dimension(0:rlmax) :: TT,fTT, OCT
+  double precision, intent(in), dimension(0:rlmax) :: TT, fTT, OCT
   double precision, intent(out), dimension(2,0:lmax) :: Al
   !internal
   integer :: rL(2), l
@@ -562,6 +561,343 @@ subroutine quad_bb(est,lmax,rlmin,rlmax,BB,fBB,OCB,Al,lfac)
 end subroutine quad_bb
 
 
+subroutine rfunc_ttte(est,lmax,rlmin,rlmax,fCTT,fCTE,A,B,R_p,R_m,lfac)
+!*  Correlation between TT and TE weights, R_L^{TT,TE}[A,B]
+!*
+!*  Args:
+!*    :est (str)          : Estimator type (lens,amp)
+!*    :lmax (int)         : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int)  : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fCTT [l] (double)  : Theory TT spectrum, with bounds (0:rlmax)
+!*    :fCTE [l] (double)  : Theory TE spectrum, with bounds (0:rlmax)
+!*    :A/B [l] (double)   : Any power spectra, with bounds (0:rlmax)
+!*
+!*  Args(optional):
+!*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :R_p [l] (double) : R_L for even-type estimators (e.g. phi), with bounds (0:lmax)
+!*    :R_m [l] (double) : R_L for odd-type estimators (e.g. curl), with bounds (0:lmax)
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  character(1), intent(in) :: lfac
+  integer, intent(in) :: lmax, rlmin, rlmax
+  double precision, intent(in), dimension(0:rlmax) :: fCTT, fCTE, A, B
+  double precision, intent(out), dimension(0:lmax) :: R_p, R_m
+  !internal
+  integer :: i, l, rL(2)
+  character(2) :: SG_type(4)
+  double precision, dimension(lmax) :: lk2
+  double precision, dimension(4,rlmin:rlmax) :: W0, W1
+  double precision, dimension(4,2,lmax) :: SG
+
+  rL  = (/rlmin,rlmax/)
+
+  do l = rlmin, rlmax
+    W0(1,l) = A(l)
+    W1(1,l) = B(l)*fCTT(l)*fCTE(l)
+    W0(2,l) = A(l)*fCTE(l)
+    W1(2,l) = B(l)*fCTT(l)
+    W0(3,l) = B(l)*fCTE(l)
+    W1(3,l) = A(l)*fCTT(l)
+    W0(4,l) = B(l)
+    W1(4,l) = A(l)*fCTT(l)*fCTE(l)
+  end do
+
+  lk2 = 1d0
+  SG_type = (/'S0','Gc','G0','Sc'/)
+  select case(est)
+  case('lens')
+    call get_lfac(lmax,lfac,lk2)
+    do i = 1, 4
+      call kernels_lens(rL,W0(i,:),W1(i,:),SG(i,:,:),SG_type(i))
+    end do
+  case('amp')
+    do i = 1, 4
+      call kernels_tau(rL,W0(i,:),W1(i,:),SG(i,1,:),SG_type(i))
+    end do
+  end select
+
+  R_p = 0d0
+  R_m = 0d0
+  do l = 1, lmax
+    R_p(l) = sum(SG(:,1,l))/lk2(l)
+    R_m(l) = sum(SG(:,2,l))/lk2(l)
+  end do
+
+end subroutine rfunc_ttte
+
+
+subroutine rfunc_ttee(est,lmax,rlmin,rlmax,fCTT,fCEE,A,B,R_p,R_m,lfac)
+!*  Correlation between TT and EE weights, R_L^{TT,EE}[A,B]
+!*
+!*  Args:
+!*    :est (str)         : Estimator type (lens,amp)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fCTT [l] (double) : Theory TT spectrum, with bounds (0:rlmax)
+!*    :fCEE [l] (double) : Theory EE spectrum, with bounds (0:rlmax)
+!*    :A/B [l] (double)   : Any power spectra, with bounds (0:rlmax)
+!*
+!*  Args(optional):
+!*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :R_p [l] (double) : R_L for even-type estimators (e.g. phi), with bounds (0:lmax)
+!*    :R_m [l] (double) : R_L for odd-type estimators (e.g. curl), with bounds (0:lmax)
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  character(1), intent(in) :: lfac
+  integer, intent(in) :: lmax, rlmin, rlmax
+  double precision, intent(in), dimension(0:rlmax) :: fCTT, fCEE, A, B
+  double precision, intent(out), dimension(0:lmax) :: R_p, R_m
+  !internal
+  integer :: i, l, rL(2)
+  character(2) :: SG_type(4)
+  double precision, dimension(lmax) :: lk2
+  double precision, dimension(4,rlmin:rlmax) :: W0, W1
+  double precision, dimension(4,2,lmax) :: SG
+
+  do l = rlmin, rlmax
+    W0(1,l) = A(l)
+    W1(1,l) = B(l)*fCTT(l)*fCEE(l)
+    W0(2,l) = A(l)*fCEE(l)
+    W1(2,l) = B(l)*fCTT(l)
+    W0(3,l) = B(l)*fCEE(l)
+    W1(3,l) = A(l)*fCTT(l)
+    W0(4,l) = B(l)
+    W1(4,l) = A(l)*fCTT(l)*fCEE(l)
+  end do
+
+  lk2 = 1d0
+  rL  = (/rlmin,rlmax/)
+  SG_type = (/'Sc','Gc','Gc','Sc'/)
+  select case(est)
+  case('lens')
+    call get_lfac(lmax,lfac,lk2)
+    do i = 1, 4
+      call kernels_lens(rL,W0(i,:),W1(i,:),SG(i,:,:),SG_type(i))
+    end do
+  case('amp')
+    do i = 1, 4
+      call kernels_tau(rL,W0(i,:),W1(i,:),SG(i,1,:),SG_type(i))
+    end do
+  end select
+
+  R_p = 0d0
+  R_m = 0d0
+  do l = 1, lmax
+    R_p(l) = sum(SG(:,1,l))/lk2(l)
+    R_m(l) = sum(SG(:,2,l))/lk2(l)
+  end do
+
+end subroutine rfunc_ttee
+
+
+subroutine rfunc_teet(est,lmax,rlmin,rlmax,fCTE,A,B,R_p,R_m,lfac)
+!*  Correlation between TE and ET weights, R_L^{TE,ET}[A,B]
+!*
+!*  Args:
+!*    :est (str)         : Estimator type (lens,amp)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fCTE [l] (double) : Theory TE spectrum, with bounds (0:rlmax)
+!*    :A/B [l] (double)  : Any power spectra, with bounds (0:rlmax)
+!*
+!*  Args(optional):
+!*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :R_p [l] (double) : R_L for even-type estimators (e.g. phi), with bounds (0:lmax)
+!*    :R_m [l] (double) : R_L for odd-type estimators (e.g. curl), with bounds (0:lmax)
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  character(1), intent(in) :: lfac
+  integer, intent(in) :: lmax, rlmin, rlmax
+  double precision, intent(in), dimension(0:rlmax) :: fCTE, A, B
+  double precision, intent(out), dimension(0:lmax) :: R_p, R_m
+  !internal
+  integer :: i, l, rL(2)
+  character(2) :: SG_type(4)
+  double precision, dimension(lmax) :: lk2
+  double precision, dimension(4,rlmin:rlmax) :: W0, W1
+  double precision, dimension(4,2,lmax) :: SG
+
+  do l = rlmin, rlmax
+    W0(1,l) = A(l)
+    W1(1,l) = B(l)*fCTE(l)**2
+    W0(2,l) = A(l)*fCTE(l)
+    W1(2,l) = B(l)*fCTE(l)
+    W0(3,l) = B(l)*fCTE(l)
+    W1(3,l) = A(l)*fCTE(l)
+    W0(4,l) = B(l)
+    W1(4,l) = A(l)*fCTE(l)**2
+  end do
+
+  lk2 = 1d0
+  rL  = (/rlmin,rlmax/)
+  SG_type = (/'Sc','G0','Gp','Sc'/)
+  select case(est)
+  case('lens')
+    call get_lfac(lmax,lfac,lk2)
+    do i = 1, 4
+      call kernels_lens(rL,W0(i,:),W1(i,:),SG(i,:,:),SG_type(i))
+    end do
+  case('amp')
+    do i = 1, 4
+      call kernels_tau(rL,W0(i,:),W1(i,:),SG(i,1,:),SG_type(i))
+    end do
+  end select
+
+  R_p = 0d0
+  R_m = 0d0
+  do l = 1, lmax
+    R_p(l) = sum(SG(:,1,l))/lk2(l)
+    R_m(l) = sum(SG(:,2,l))/lk2(l)
+  end do
+
+end subroutine rfunc_teet
+
+
+subroutine rfunc_teee(est,lmax,rlmin,rlmax,fCTE,fCEE,A,B,R_p,R_m,lfac)
+!*  Correlation between TE and EE weights, R_L^{TE,EE}[A,B]
+!*
+!*  Args:
+!*    :est (str)         : Estimator type (lens,amp)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fCTE [l] (double) : Theory TE spectrum, with bounds (0:rlmax)
+!*    :fCEE [l] (double) : Theory EE spectrum, with bounds (0:rlmax)
+!*    :A/B [l] (double)  : Any power spectra, with bounds (0:rlmax)
+!*
+!*  Args(optional):
+!*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :R_p [l] (double) : R_L for even-type estimators (e.g. phi), with bounds (0:lmax)
+!*    :R_m [l] (double) : R_L for odd-type estimators (e.g. curl), with bounds (0:lmax)
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  character(1), intent(in) :: lfac
+  integer, intent(in) :: lmax, rlmin, rlmax
+  double precision, intent(in), dimension(0:rlmax) :: fCTE, fCEE, A, B
+  double precision, intent(out), dimension(0:lmax) :: R_p, R_m
+  !internal
+  integer :: i, l, rL(2)
+  character(2) :: SG_type(4)
+  double precision, dimension(lmax) :: lk2
+  double precision, dimension(4,rlmin:rlmax) :: W0, W1
+  double precision, dimension(4,2,lmax) :: SG
+
+  do l = rlmin, rlmax
+    W0(1,l) = A(l)
+    W1(1,l) = B(l)*fCTE(l)*fCEE(l)
+    W0(2,l) = A(l)*fCEE(l)
+    W1(2,l) = B(l)*fCTE(l)
+    W0(3,l) = B(l)*fCEE(l)
+    W1(3,l) = A(l)*fCTE(l)
+    W0(4,l) = B(l)
+    W1(4,l) = A(l)*fCTE(l)*fCEE(l)
+  end do
+
+  lk2 = 1d0
+  rL  = (/rlmin,rlmax/)
+  SG_type = (/'Sc','Gc','Gp','Sp'/)
+  select case(est)
+  case('lens')
+    call get_lfac(lmax,lfac,lk2)
+    do i = 1, 4
+      call kernels_lens(rL,W0(i,:),W1(i,:),SG(i,:,:),SG_type(i))
+    end do
+  case('amp')
+    do i = 1, 4
+      call kernels_tau(rL,W0(i,:),W1(i,:),SG(i,1,:),SG_type(i))
+    end do
+  end select
+
+  R_p = 0d0
+  R_m = 0d0
+  do l = 1, lmax
+    R_p(l) = sum(SG(:,1,l))/lk2(l)
+    R_m(l) = sum(SG(:,2,l))/lk2(l)
+  end do
+
+end subroutine rfunc_teee
+
+
+subroutine rfunc_tbeb(est,lmax,rlmin,rlmax,fCTE,fCEE,fCBB,A,B,R_p,R_m,lfac)
+!*  Correlation between TB and EB weights, R_L^{TE,EE}[A,B]
+!*
+!*  Args:
+!*    :est (str)         : Estimator type (lens,amp)
+!*    :lmax (int)        : Maximum multipole of output normalization spectrum
+!*    :rlmin/rlmax (int) : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fCTE [l] (double) : Theory TE spectrum, with bounds (0:rlmax)
+!*    :fCEE [l] (double) : Theory EE spectrum, with bounds (0:rlmax)
+!*    :fCEB [l] (double) : Theory BB spectrum, with bounds (0:rlmax)
+!*    :A/B [l] (double)  : Any power spectra, with bounds (0:rlmax)
+!*
+!*  Args(optional):
+!*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :R_p [l] (double) : R_L for even-type estimators (e.g. phi), with bounds (0:lmax)
+!*    :R_m [l] (double) : R_L for odd-type estimators (e.g. curl), with bounds (0:lmax)
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  character(1), intent(in) :: lfac
+  integer, intent(in) :: lmax, rlmin, rlmax
+  double precision, intent(in), dimension(0:rlmax) :: fCTE, fCEE, fCBB, A, B
+  double precision, intent(out), dimension(0:lmax) :: R_p, R_m
+  !internal
+  integer :: i, l, rL(2)
+  character(2) :: SG_type(2)
+  double precision, dimension(lmax) :: lk2
+  double precision, dimension(2,rlmin:rlmax) :: W0, W1
+  double precision, dimension(2,2,lmax) :: SG
+
+  do l = rlmin, rlmax
+    W0(1,l) = B(l)*fCBB(l)
+    W1(1,l) = A(l)*fCTE(l)
+    W0(2,l) = B(l)
+    W1(2,l) = A(l)*fCTE(l)*fCEE(l)
+  end do
+
+  lk2 = 1d0
+  rL  = (/rlmin,rlmax/)
+  SG_type = (/'Gm','Sm'/)
+  select case(est)
+  case('lens')
+    call get_lfac(lmax,lfac,lk2)
+    do i = 1, 2
+      call kernels_lens(rL,W0(i,:),W1(i,:),SG(i,:,:),SG_type(i))
+    end do
+  case('amp')
+    do i = 1, 2
+      call kernels_tau(rL,W0(i,:),W1(i,:),SG(i,1,:),SG_type(i))
+    end do
+  end select
+
+  R_p = 0d0
+  R_m = 0d0
+  do l = 1, lmax
+    R_p(l) = sum(SG(:,1,l))/lk2(l)
+    R_m(l) = sum(SG(:,2,l))/lk2(l)
+  end do
+
+end subroutine rfunc_tbeb
+
+
 subroutine quad_ttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,Ig,Ic,lfac)
 !*  Correlation between unnormalized TT and TE quadratic estimators
 !*
@@ -590,49 +926,22 @@ subroutine quad_ttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,Ig,Ic,lfac)
   double precision, intent(in), dimension(0:rlmax) :: fCTT, fCTE, OCT, OCE, OCTE
   double precision, intent(out), dimension(0:lmax) :: Ig, Ic
   !internal
-  integer :: l, rL(2)
-  double precision, dimension(lmax) :: lk2
-  double precision, dimension(rlmin:rlmax) :: W1, W2, W3, W4, W5, W6, W7, W8
-  double precision, dimension(2,lmax) :: S0, Gc, G0, Sc
-
-  write(*,*) 'norm qTTTE'
-
-  rL = (/rlmin,rlmax/)
-  Ig = 0d0
-  Ic = 0d0
+  integer :: l
+  double precision, dimension(0:rlmax) :: A, B
 
   do l = rlmin, rlmax
     if (OCT(l)==0d0) stop 'error (norm_qttte): observed cltt is zero'
     if (OCE(l)==0d0) stop 'error (norm_qttte): observed clee is zero'
   end do
 
+  A = 0d0
+  B = 0d0
   do l = rlmin, rlmax
-    W1(l) = 1d0/OCT(l)
-    W2(l) = fCTT(l)*fCTE(l)*OCTE(l)/(OCT(l)*OCE(l))
-    W3(l) = fCTE(l)/OCT(l)
-    W4(l) = fCTT(l)*OCTE(l)/(OCT(l)*OCE(l))
-    W5(l) = fCTE(l)*OCTE(l)/(OCT(l)*OCE(l))
-    W6(l) = fCTT(l)/OCT(l)
-    W7(l) = OCTE(l)/(OCT(l)*OCE(l))
-    W8(l) = fCTT(l)*fCTE(l)/OCT(l)
+    A(l) = 1d0/OCT(l)
+    B(l) = OCTE(l)/(OCT(l)*OCE(l))
   end do
 
-  lk2 = 1d0
-  select case(est)
-  case('lens')
-    call get_lfac(lmax,lfac,lk2)
-    call kernels_lens(rL,W1,W2,S0,'S0')
-    call kernels_lens(rL,W3,W4,Gc,'Gc')
-    call kernels_lens(rL,W5,W6,G0,'G0')
-    call kernels_lens(rL,W7,W8,Sc,'Sc')
-  end select
-
-  do l = 1, lmax
-    Ig(l) = S0(1,l)+Gc(1,l)+G0(1,l)+Sc(1,l)
-    Ic(l) = S0(2,l)+Gc(2,l)+G0(2,l)+Sc(2,l)
-    Ig(l) = Ig(l)/lk2(l)
-    Ic(l) = Ic(l)/lk2(l)
-  end do
+  call rfunc_ttte(est,lmax,rlmin,rlmax,fCTT,fCTE,A,B,Ig,Ic,lfac)
 
 end subroutine quad_ttte
 
@@ -665,17 +974,8 @@ subroutine quad_ttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,Ig,Ic,lfac)
   double precision, intent(in), dimension(0:rlmax) :: fCTT, fCEE, OCT, OCE, OCTE
   double precision, intent(out), dimension(0:lmax) :: Ig, Ic
   !internal
-  integer :: l, rL(2)
-  double precision, dimension(lmax) :: lk2
-  double precision, dimension(rlmin:rlmax) :: W1, W2, W3, W4
-  double precision, dimension(2,lmax) :: Sc, Gc
-
-  write(*,*) 'norm qTTEE'
-  rL = (/rlmin,rlmax/)
-  Ig = 0d0
-  Ic = 0d0
-  W1 = 0d0
-  W2 = 0d0
+  integer :: l
+  double precision, dimension(0:rlmax) :: A, B
 
   do l = rlmin, rlmax
     if (OCT(l)==0d0) stop 'error (qttee): observed cltt is zero'
@@ -683,24 +983,11 @@ subroutine quad_ttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,Ig,Ic,lfac)
   end do
 
   do l = rlmin, rlmax
-    W1(l) = OCTE(l)/(OCT(l)*OCE(l))
-    W2(l) = fCTT(l)*fCEE(l)*OCTE(l)/(OCT(l)*OCE(l))
-    W3(l) = fCEE(l)*OCTE(l)/(OCT(l)*OCE(l))
-    W4(l) = fCTT(l)*OCTE(l)/(OCT(l)*OCE(l))
+    A(l) = OCTE(l)/(OCT(l)*OCE(l))
+    B(l) = OCTE(l)/(OCT(l)*OCE(l))
   end do
 
-  lk2 = 1d0
-  select case(est)
-  case('lens')
-    call get_lfac(lmax,lfac,lk2)
-    call kernels_lens(rL,W1,W2,Sc,'Sc')
-    call kernels_lens(rL,W3,W4,Gc,'Gc')
-  end select
-
-  do l = 1, lmax
-    Ig(l) = Sc(1,l) + Gc(1,l)
-    Ig(l) = Ig(l)/lk2(l)
-  end do
+  call rfunc_ttee(est,lmax,rlmin,rlmax,fCTT,fCEE,A,B,Ig,Ic,lfac)
 
 end subroutine quad_ttee
 
@@ -733,15 +1020,8 @@ subroutine quad_teee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,Ig,Ic,lfac)
   double precision, intent(in), dimension(0:rlmax) :: fCEE,fCTE,OCT,OCE,OCTE
   double precision, intent(out), dimension(0:lmax) :: Ig, Ic
   !internal
-  integer :: l, rL(2)
-  double precision, dimension(lmax) :: lk2
-  double precision, dimension(rlmin:rlmax) :: W1, W2, W3, W4, W5, W6, W7, W8
-  double precision, dimension(2,lmax) :: Sc,Gp,Gc,Sp
-
-  write(*,*) 'norm qTEEE'
-  rL = (/rlmin,rlmax/)
-  Ig = 0d0
-  Ic = 0d0
+  integer :: l
+  double precision, dimension(0:rlmax) :: A, B
 
   do l = rlmin, rlmax
     if (OCT(l)==0d0) stop 'error (qteee): observed cltt is zero'
@@ -749,32 +1029,11 @@ subroutine quad_teee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,Ig,Ic,lfac)
   end do
 
   do l = rlmin, rlmax
-    W1(l) = OCTE(l)/(OCT(l)*OCE(l))
-    W2(l) = fCTE(l)*fCEE(l)/OCE(l)
-    W3(l) = fCTE(l)*OCTE(l)/(OCT(l)*OCE(l))
-    W4(l) = fCEE(l)/OCE(l)
-    W5(l) = fCEE(l)*OCTE(l)/(OCT(l)*OCE(l))
-    W6(l) = fCTE(l)/OCE(l)
-    W7(l) = 1d0/OCE(l)
-    W8(l) = fCTE(l)*fCEE(l)*OCTE(l)/(OCT(l)*OCE(l))
+    A(l) = OCTE(l)/(OCT(l)*OCE(l))
+    B(l) = 1d0/OCE(l)
   end do
-
-  lk2 = 1d0
-  select case(est)
-  case('lens')
-    call get_lfac(lmax,lfac,lk2)
-    call kernels_lens(rL,W1,W2,Sc,'Sc')
-    call kernels_lens(rL,W3,W4,Gp,'Gp')
-    call kernels_lens(rL,W5,W6,Gc,'Gc')
-    call kernels_lens(rL,W7,W8,Sp,'Sp')
-  end select
-
-  do l = 1, lmax
-    Ig(l) = (Sc(1,l)+Gp(1,l)+Gc(1,l)+Sp(1,l))
-    Ic(l) = (Sc(2,l)+Gp(2,l)+Gc(2,l)+Sp(2,l))
-    Ig(l) = Ig(l)/lk2(l)
-    Ic(l) = Ic(l)/lk2(l)
-  end do
+  
+  call rfunc_teee(est,lmax,rlmin,rlmax,fCTE,fCEE,A,B,Ig,Ic,lfac)
 
 end subroutine quad_teee
 
@@ -808,15 +1067,8 @@ subroutine quad_tbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,
   double precision, intent(in), dimension(0:rlmax) :: fCEE,fCBB,fCTE,OCT,OCE,OCTE,OCB
   double precision, intent(out), dimension(0:lmax) :: Ig, Ic
   !internal
-  integer :: l, rL(2)
-  double precision, dimension(lmax) :: lk2
-  double precision, dimension(2,lmax) :: Gm, Sm
-  double precision, dimension(rlmin:rlmax) :: W1, W2, W3, W4
-
-  write(*,*) 'norm qTBEB'
-  rL = (/rlmin,rlmax/)
-  Ig = 0d0
-  Ic = 0d0
+  integer :: l
+  double precision, dimension(0:rlmax) :: A, B
 
   do l = rlmin, rlmax
     if (OCT(l)==0d0) stop 'error (qtbeb): observed cltt is zero'
@@ -825,26 +1077,11 @@ subroutine quad_tbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,Ig,Ic,
   end do
 
   do l = rlmin, rlmax
-    W1(l) = fCTE(l)*OCTE(l)/(OCT(l)*OCE(l))
-    W2(l) = fCBB(l)/OCB(l)
-    W3(l) = 1d0/OCB(l)
-    W4(l) = fCTE(l)*fCEE(l)*OCTE(l)/(OCT(l)*OCE(l))
+    A(l) = OCTE(l)/(OCT(l)*OCE(l))
+    B(l) = 1d0/OCB(l)
   end do
 
-  lk2 = 1d0
-  select case(est)
-  case('lens')
-    call get_lfac(lmax,lfac,lk2)
-    call kernels_lens(rL,W1,W2,Gm,'Gm')
-    call kernels_lens(rL,W3,W4,Sm,'Sm')
-  end select
-
-  do l = 1, lmax
-    Ig(l) = Sm(1,l) + Gm(1,l)
-    Ic(l) = Sm(2,l) + Gm(2,l)
-    Ig(l) = Ig(l)/lk2(l)
-    Ic(l) = Ic(l)/lk2(l)
-  end do
+  call rfunc_tbeb(est,lmax,rlmin,rlmax,fCTE,fCEE,fCBB,A,B,Ig,Ic,lfac)
 
 end subroutine quad_tbeb
 
@@ -876,7 +1113,6 @@ subroutine quad_mv(lmax,QDO,Al,Il,MV,Nl)
   double precision :: d1, d2, M1(5,5)
   double precision, allocatable :: M(:,:)
 
-  write(*,*) 'norm qMV'
   id = 0
 
   qmax = qn
@@ -932,6 +1168,130 @@ subroutine quad_mv(lmax,QDO,Al,Il,MV,Nl)
   end do
 
 end subroutine quad_mv
+
+
+subroutine quad_gmv(est,lmax,rlmin,rlmax,fC,OC,Ag,Ac,lfac)
+!*  Compute MV estimator normalization. Currently BB is ignored. 
+!*
+!*  Args:
+!*    :est (str)          : Estimator type (lens,amp,rot,src)
+!*    :lmax (int)         : Maximum multipole of the output power spectra
+!*    :rlmin/rlmax (int)  : Minimum/Maximum multipole of CMB for reconstruction
+!*    :fC/OC [l] (double) : Theory/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax) 
+!*
+!*  Args(optional):
+!*    :lfac (str)       : Multiplying square of L(L+1)/2, i.e., convergence (lfac='k') or lensing potential (lfac='', default)
+!*
+!*  Returns:
+!*    :Ag [6,l] (double)  : Normalization of the TT, TE, EE, TB, EB, and GMV estimators for lensing potential, with bounds (6,0:lmax)
+!*    :Ac [6,l] (double)  : Same as Ag but for curl mode
+!*
+  implicit none
+  !I/O
+  character(*), intent(in) :: est
+  character(1), intent(in) :: lfac
+  integer, intent(in) :: rlmin, rlmax, lmax
+  double precision, intent(in), dimension(4,0:rlmax) :: fC, OC
+  double precision, intent(out), dimension(6,0:lmax) :: Ag, Ac
+  !internal
+  integer :: l, TT = 1, EE = 2, BB = 3, TE = 4
+  double precision :: rho_sq
+  double precision, dimension(0:rlmax) :: A, B
+  double precision, dimension(4,0:rlmax) :: tOC
+  double precision, dimension(6,2,0:lmax) :: Al
+  double precision, dimension(5,2,0:lmax) :: Rl
+
+  write(*,*) 'norm qGMV'
+
+  ! Modified CMB power spectra
+  tOC = 0d0
+  do l = rlmin, rlmax
+    rho_sq    = OC(TE,l)**2 / (OC(TT,l)*OC(EE,l))
+    tOC(TT,l) = OC(TT,l) * ( 1d0 - rho_sq )
+    tOC(TE,l) = OC(TE,l) * ( 1d0 - 1d0/rho_sq )
+    tOC(EE,l) = OC(EE,l) * ( 1d0 - rho_sq )
+    tOC(BB,l) = OC(BB,l)
+  end do
+
+  ! Each estimator normalization
+  Al = 0d0
+  call quad_tt(est,lmax,rlmin,rlmax,fC(TT,:),fC(TT,:),tOC(TT,:),Al(1,:,:),lfac)
+  call quad_te(est,lmax,rlmin,rlmax,fC(TE,:),fC(TE,:),tOC(TT,:),tOC(EE,:),Al(2,:,:),lfac)
+  call quad_ee(est,lmax,rlmin,rlmax,fC(EE,:),fC(EE,:),tOC(EE,:),Al(3,:,:),lfac)
+  call quad_tb(est,lmax,rlmin,rlmax,fC(TE,:),fC(TE,:),tOC(TT,:),tOC(BB,:),Al(4,:,:),lfac)
+  call quad_eb(est,lmax,rlmin,rlmax,fC(EE,:),fC(EE,:),tOC(EE,:),tOC(BB,:),fC(BB,:),fC(BB,:),Al(5,:,:),lfac)
+  Ag = Al(:,1,:)
+  Ac = Al(:,2,:)
+
+  ! Correlations
+  A = 0d0
+  B = 0d0
+  do l = rlmin, rlmax
+    A(l) = 1d0/tOC(TT,l)
+    B(l) = 1d0/tOC(TE,l)
+  end do
+  call rfunc_ttte(est,lmax,rlmin,rlmax,fC(TT,:),fC(TE,:),A,B,Rl(1,1,:),Rl(1,2,:),lfac)
+  
+  do l = rlmin, rlmax
+    A(l) = 1d0/tOC(TE,l)
+    B(l) = 1d0/tOC(TE,l)
+  end do
+  call rfunc_ttee(est,lmax,rlmin,rlmax,fC(TT,:),fC(EE,:),A,B,Rl(2,1,:),Rl(2,2,:),lfac)
+
+  do l = rlmin, rlmax
+    A(l) = 1d0/tOC(TE,l)
+    B(l) = 1d0/tOC(TE,l)
+  end do
+  call rfunc_teet(est,lmax,rlmin,rlmax,fC(TE,:),A,B,Rl(3,1,:),Rl(3,2,:),lfac)
+
+  do l = rlmin, rlmax
+    A(l) = 1d0/tOC(TE,l)
+    B(l) = 1d0/tOC(EE,l)
+  end do
+  call rfunc_teee(est,lmax,rlmin,rlmax,fC(TE,:),fC(EE,:),A,B,Rl(4,1,:),Rl(4,2,:),lfac)
+
+  do l = rlmin, rlmax
+    A(l) = 1d0/tOC(TE,l)
+    B(l) = 1d0/tOC(BB,l)
+  end do
+  call rfunc_tbeb(est,lmax,rlmin,rlmax,fC(TE,:),fC(EE,:),fC(BB,:),A,B,Rl(5,1,:),Rl(5,2,:),lfac)
+
+  call quad_gmv_sum(lmax,1d0,Al(1:5,1,:),Rl(:,1,:),Ag(6,0:lmax))
+  call quad_gmv_sum(lmax,-1d0,Al(1:5,2,:),Rl(:,2,:),Ac(6,0:lmax))
+  
+
+end subroutine quad_gmv
+
+
+subroutine quad_gmv_sum(lmax,p,Al,Rl,MV)
+!*  Compute GMV estimator normalization. Currently BB is ignored. 
+!*
+!*  Args:
+!*    :lmax (int):        Maximum multipole of the output power spectra
+!*    :Al [5,l] (double): Normalizations of each estimator (TT, TE, EE, TB, EB). 
+!*    :Rl [5,l] (double): Correlations, R_L^{TT,TE}, R_L^{TT,EE}, R_L^{TE,ET}, R_L^{TE,EE}, and R_L^{TB,EB}.
+!*    :p (double)       : parity of the estimator, e.g. phi for 1, curl for -1
+!*
+!*  Returns:
+!*    :MV [l] (double):   Normalization of the MV estimator, with bounds (0:lmax)
+!*
+  implicit none
+  ![input]
+  integer, intent(in) :: lmax
+  double precision, intent(in) :: p
+  double precision, intent(in), dimension(5,0:lmax) :: Al
+  double precision, intent(in), dimension(5,0:lmax) :: Rl
+  double precision, intent(out), dimension(0:lmax) :: MV
+  !internal
+  integer :: l
+
+  MV = 0d0
+  do l = 2, lmax
+    MV(l) = sum(1d0/Al(:,l)) + 2*Rl(1,l) + Rl(2,l) + p*Rl(3,l) + 2*Rl(4,l) + 2*Rl(5,l)
+    MV(l) = 1d0/MV(l)
+  end do
+
+end subroutine quad_gmv_sum
 
 
 subroutine quad_all(est,QDO,lmax,rlmin,rlmax,fC,fwC,OC,Ag,Ac,Nlg,Nlc,lfac)

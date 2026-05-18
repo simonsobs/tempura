@@ -16,8 +16,6 @@ def qtt_asym(est,lmax,rlmin,rlmax,wx0,wxy0,wx1,wxy1,a0a1,b0b1,a0b1,a1b0,gtype=''
   Returns:
     :Nl [*2,l*] (*double*): Noise spectrum (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
-  Usage:
-    :Nl = _libtempura.noise_spec.qtt_asym(est,lmax,rlmin,rlmax,wx0,wxy0,wx1,wxy1,a0a1,b0b1,a0b1,a1b0,gtype):
   """
   return _libtempura.noise_spec.qtt_asym(est,lmax,rlmin,rlmax,wx0,wxy0,wx1,wxy1,a0a1,b0b1,a0b1,a1b0,gtype)
 
@@ -38,8 +36,6 @@ def xtt_asym(est,lmax,rlmin,rlmax,wx0,wxy0,wx1,wxy1,a0a1,b0b1,a0b1,a1b0,gtype=''
   Returns:
     :Nl [*l*] (*double*): Noise cross spectrum with bounds (0:lmax)
 
-  Usage:
-    :Nl = _libtempura.noise_spec.xtt_asym(est,lmax,rlmin,rlmax,wx0,wxy0,wx1,wxy1,a0a1,b0b1,a0b1,a1b0,gtype):
   """
   return _libtempura.noise_spec.xtt_asym(est,lmax,rlmin,rlmax,wx0,wxy0,wx1,wxy1,a0a1,b0b1,a0b1,a1b0,gtype)
 
