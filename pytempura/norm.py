@@ -9,7 +9,8 @@ est_list = ['TT','TE','EE','EB','TB','MV','MVPOL','SRC'] #,'MASK','TAU','ROT']
 
 def get_norms(estimators, response_cls,response_cls_weights, total_cls, lmin, lmax,
               k_ellmax=None, include_bb_mv=False, no_corr=True,
-              profile=None,iterations=1,convergence=1e-6,lmin_pol=None,lmax_pol=None):
+              profile=None,iterations=1,convergence=1e-6,lmin_pol=None,lmax_pol=None,
+              gmv=False):
     """
     Get norms for estimators such that A_est = N_est. In the case of lensing,
     this corresponds to the normalizations of the lensing potential.
@@ -42,6 +43,9 @@ def get_norms(estimators, response_cls,response_cls_weights, total_cls, lmin, lm
         profile (numpy array): A numpy array of length at least k_ellmax+1, used
     for profile hardening for the source estimator. Default is None in which case
     the source estimator will correspond to the point source case.
+
+        gmv (bool): Whether or not the MV estimator uses the Global Minimum Variance
+    approach, i.e. whether temperature and maps have been jointly filtered. 
 
     """
     ests = [e.upper() for e in estimators]
@@ -111,7 +115,11 @@ def get_norms(estimators, response_cls,response_cls_weights, total_cls, lmin, lm
             fC1 = np.asarray((ucl1['TT'],ucl1['EE'],ucl1['BB'],ucl1['TE']))
 
             OC = np.asarray((tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE']))
-            Ag,Ac,Wg,Wc = norm_lens.qall([True,True,True,True,True,include_bb_mv],k_ellmax,lmin,lmax,fC,fC1,OC,gtype= '')
+            if gmv:
+                # TODO: Distinguish between fC and fC1
+                Ag, Ac = norm_lens.qgmv(k_ellmax,lmin,lmax,fC,OC,gtype= '')
+            else:
+                Ag,Ac,Wg,Wc = norm_lens.qall([True,True,True,True,True,include_bb_mv],k_ellmax,lmin,lmax,fC,fC1,OC,gtype= '')
             res[_gk('MV')] = np.asarray((Ag[-1,:],Ac[-1,:]))
     if 'MVPOL' in ests:
         r_mvpol = r_ee * 0
