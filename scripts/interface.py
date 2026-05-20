@@ -263,9 +263,6 @@ for mod in modname:
         # extract comments and write to file
         ext_docstring(f,slines)
 
-        # add example
-        f.write('  Usage:\n')
-        f.write('    :'+','.join(pout)+' = '+hunc+':\n')
         f.write('  """\n')
         for p in pops:
             f.write('  if '+p[0]+' is None: '+p[0]+'='+p[1]+'\n')

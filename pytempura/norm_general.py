@@ -17,8 +17,6 @@ def qtt(est,lmax,rlmin,rlmax,TT,fTT,OCT,gtype=''):
   Returns:
     :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
-  Usage:
-    :Al = _libtempura.norm_general.qtt(est,lmax,rlmin,rlmax,TT,fTT,OCT,gtype):
   """
   return _libtempura.norm_general.qtt(est,lmax,rlmin,rlmax,TT,fTT,OCT,gtype)
 
@@ -42,8 +40,6 @@ def qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype=''):
   Returns:
     :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
-  Usage:
-    :Al = _libtempura.norm_general.qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype):
   """
   return _libtempura.norm_general.qtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype)
 
@@ -65,8 +61,6 @@ def qte(est,lmax,rlmin,rlmax,TE,fTE,OCT,OCE,gtype=''):
   Returns:
     :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
-  Usage:
-    :Al = _libtempura.norm_general.qte(est,lmax,rlmin,rlmax,TE,fTE,OCT,OCE,gtype):
   """
   return _libtempura.norm_general.qte(est,lmax,rlmin,rlmax,TE,fTE,OCT,OCE,gtype)
 
@@ -88,8 +82,6 @@ def qtb(est,lmax,rlmin,rlmax,TE,fTE,OCT,OCB,gtype=''):
   Returns:
     :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
-  Usage:
-    :Al = _libtempura.norm_general.qtb(est,lmax,rlmin,rlmax,TE,fTE,OCT,OCB,gtype):
   """
   return _libtempura.norm_general.qtb(est,lmax,rlmin,rlmax,TE,fTE,OCT,OCB,gtype)
 
@@ -110,8 +102,6 @@ def qee(est,lmax,rlmin,rlmax,EE,fEE,OCE,gtype=''):
   Returns:
     :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
-  Usage:
-    :Al = _libtempura.norm_general.qee(est,lmax,rlmin,rlmax,EE,fEE,OCE,gtype):
   """
   return _libtempura.norm_general.qee(est,lmax,rlmin,rlmax,EE,fEE,OCE,gtype)
 
@@ -133,8 +123,6 @@ def qeb(est,lmax,rlmin,rlmax,EE,fEE,OCE,OCB,gtype=''):
   Returns:
     :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
-  Usage:
-    :Al = _libtempura.norm_general.qeb(est,lmax,rlmin,rlmax,EE,fEE,OCE,OCB,gtype):
   """
   return _libtempura.norm_general.qeb(est,lmax,rlmin,rlmax,EE,fEE,OCE,OCB,gtype)
 
@@ -155,8 +143,6 @@ def qbb(est,lmax,rlmin,rlmax,BB,fBB,OCB,gtype=''):
   Returns:
     :Al [*2,l*] (*double*): Normalizations (1 is dummy except lens = 0 and curl = 1), with bounds (0:lmax)
 
-  Usage:
-    :Al = _libtempura.norm_general.qbb(est,lmax,rlmin,rlmax,BB,fBB,OCB,gtype):
   """
   return _libtempura.norm_general.qbb(est,lmax,rlmin,rlmax,BB,fBB,OCB,gtype)
 
@@ -181,8 +167,6 @@ def qttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype=''):
     :Ig [*l*] (*double*): Correlation between lensing potential estimators, with bounds (0:lmax)
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
-  Usage:
-    :Ig,Ic = _libtempura.norm_general.qttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype):
   """
   return _libtempura.norm_general.qttte(est,lmax,rlmin,rlmax,fCTT,fCTE,OCT,OCE,OCTE,gtype)
 
@@ -207,8 +191,6 @@ def qttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype=''):
     :Ig [*l*] (*double*): Correlation between lensing potential estimators, with bounds (0:lmax)
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
-  Usage:
-    :Ig,Ic = _libtempura.norm_general.qttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype):
   """
   return _libtempura.norm_general.qttee(est,lmax,rlmin,rlmax,fCTT,fCEE,OCT,OCE,OCTE,gtype)
 
@@ -233,8 +215,6 @@ def qteee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype=''):
     :Ig [*l*] (*double*): Correlation between lensing potential estimators, with bounds (0:lmax)
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
-  Usage:
-    :Ig,Ic = _libtempura.norm_general.qteee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype):
   """
   return _libtempura.norm_general.qteee(est,lmax,rlmin,rlmax,fCEE,fCTE,OCT,OCE,OCTE,gtype)
 
@@ -260,8 +240,6 @@ def qtbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype=''):
     :Ig [*l*] (*double*): Correlation between lensing potential estimators, with bounds (0:lmax)
     :Ic [*l*] (*double*): Correlation between curl mode estimators, with bounds (0:lmax)
 
-  Usage:
-    :Ig,Ic = _libtempura.norm_general.qtbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype):
   """
   return _libtempura.norm_general.qtbeb(est,lmax,rlmin,rlmax,fCEE,fCBB,fCTE,OCT,OCE,OCB,OCTE,gtype)
 
@@ -285,10 +263,29 @@ def qall(est,QDO,lmax,rlmin,rlmax,fC,fwC,OC,gtype=''):
     :Nlg [*6,l*] (*double*): Weights for TT, TE, EE, TB, EB, and BB (=0) estimators for lensing potential, with bounds (6,0:lmax)
     :Nlc [*6,l*] (*double*): Same as Nlg but for curl mode
 
-  Usage:
-    :Ag,Ac,Nlg,Nlc = _libtempura.norm_general.qall(est,QDO,lmax,rlmin,rlmax,fC,fwC,OC,gtype):
   """
   return _libtempura.norm_general.qall(est,QDO,lmax,rlmin,rlmax,fC,fwC,OC,gtype)
+
+def qgmv(est,lmax,rlmin,rlmax,tC,fC,OC,gtype='',th_vary=False):
+  """
+  Compute GMV estimator normalization. Currently BB is ignored. 
+
+  Args:
+    :est (*str*): Estimator type
+    :lmax (*int*): Maximum multipole of the output power spectra
+    :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
+    :tC,fC/OC [*l*] (*double*): Theory/True/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax)
+
+  Args(optional):
+    :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
+    :th_vary (*bool*): Vary theory or not, default = False
+
+  Returns:
+    :Ag [*6,l*] (*double*): Normalization of the TT, TE, EE, TB, EB, and MV estimators for x, with bounds (6,0:lmax)
+    :Ac [*6,l*] (*double*): Same as Ag but for parity-odd counterpart of x
+
+  """
+  return _libtempura.norm_general.qgmv(est,lmax,rlmin,rlmax,tC,fC,OC,gtype,th_vary)
 
 def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,fCE,OCE,OCB,Cpp,iter=1,conv=1e-6):
   """
@@ -312,8 +309,6 @@ def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,fCE,OCE,OCB,Cpp,iter=1,conv=1
     :Ag [*l*] (*double*): CMB lensing potential normalization, with bounds (0:lmax)
     :Ac [*l*] (*double*): Curl mode (pseudo lensing potential) normalization, with bounds (0:lmax)
 
-  Usage:
-    :Ag,Ac = _libtempura.norm_general.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,fCE,OCE,OCB,Cpp,iter,conv):
   """
   return _libtempura.norm_general.qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,fCE,OCE,OCB,Cpp,iter,conv)
 
@@ -334,8 +329,6 @@ def xtt(est,lmax,rlmin,rlmax,fC,OCT,gtype=''):
   Returns:
     :Rxy [*l*] (*double*): Unnormalized response, with bounds (0:lmax)
 
-  Usage:
-    :Rxy = _libtempura.norm_general.xtt(est,lmax,rlmin,rlmax,fC,OCT,gtype):
   """
   return _libtempura.norm_general.xtt(est,lmax,rlmin,rlmax,fC,OCT,gtype)
 
@@ -359,8 +352,6 @@ def xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype=''):
   Returns:
     :Rxy [*l*] (*double*): Unnormalized response, with bounds (0:lmax)
 
-  Usage:
-    :Rxy = _libtempura.norm_general.xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype):
   """
   return _libtempura.norm_general.xtt_asym(est,lmax,glmin,glmax,llmin,llmax,rlmax,TT,OCTG,OCTL,gtype)
 
