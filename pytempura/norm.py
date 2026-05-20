@@ -116,8 +116,7 @@ def get_norms(estimators, response_cls,response_cls_weights, total_cls, lmin, lm
 
             OC = np.asarray((tcl['TT'],tcl['EE'],tcl['BB'],tcl['TE']))
             if gmv:
-                # TODO: Distinguish between fC and fC1
-                Ag, Ac = norm_lens.qgmv(k_ellmax,lmin,lmax,fC,OC,gtype= '')
+                Ag, Ac = norm_lens.qgmv(k_ellmax,lmin,lmax,fC,fC1,OC,gtype= '')
             else:
                 Ag,Ac,Wg,Wc = norm_lens.qall([True,True,True,True,True,include_bb_mv],k_ellmax,lmin,lmax,fC,fC1,OC,gtype= '')
             res[_gk('MV')] = np.asarray((Ag[-1,:],Ac[-1,:]))
