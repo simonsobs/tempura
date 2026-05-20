@@ -400,16 +400,17 @@ subroutine qall(QDO,lmax,rlmin,rlmax,fC,fwC,OC,Ag,Ac,Nlg,Nlc,gtype,temp_arg)
 
 end subroutine qall
 
-subroutine qgmv(lmax,rlmin,rlmax,fC,OC,Ag,Ac,gtype,temp_arg)
+subroutine qgmv(lmax,rlmin,rlmax,tC,fC,OC,Ag,Ac,gtype,th_vary,temp_arg)
 !*  Compute GMV estimator normalization. Currently BB is ignored. 
 !*
 !*  Args:
-!*    :lmax (int):    Maximum multipole of the output power spectra
-!*    :rlmin/rlmax (int)   : Minimum/Maximum multipole of CMB for reconstruction
-!*    :fC/OC [l] (double): Theory/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax) 
+!*    :lmax (int)            : Maximum multipole of the output power spectra
+!*    :rlmin/rlmax (int)     : Minimum/Maximum multipole of CMB for reconstruction
+!*    :tC/fC/OC [l] (double) : Theory/True/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax) 
 !*
 !*  Args(optional):
-!*    :gtype (str): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
+!*    :gtype (str)    : Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
+!*    :th_vary (bool) : Vary theory or not, default = False
 !*
 !*  Returns:
 !*    :Ag [6,l] (double)  : Normalization of the TT, TE, EE, TB, EB, and MV estimators for lensing potential, with bounds (6,0:lmax)
@@ -419,13 +420,15 @@ subroutine qgmv(lmax,rlmin,rlmax,fC,OC,Ag,Ac,gtype,temp_arg)
   !I/O
   integer :: temp_arg ! this argument is removed by f2py since it appears in the size of an input array argument
   integer, intent(in) :: rlmin, rlmax, lmax
-  double precision, intent(in), dimension(4,0:temp_arg) :: fC, OC
+  logical, intent(in) :: th_vary
+  double precision, intent(in), dimension(4,0:temp_arg) :: tC, fC, OC
   double precision, intent(out), dimension(6,0:lmax) :: Ag, Ac
   !optional
   character(1), intent(in) :: gtype
   !opt4py :: gtype = ''
+  !opt4py :: th_vary = False
 
-  call quad_gmv('lens',lmax,rlmin,rlmax,fC,OC,Ag,Ac,gtype)
+  call quad_gmv('lens',lmax,rlmin,rlmax,tC,fC,OC,Ag,Ac,gtype,th_vary)
 
 end subroutine qgmv
 

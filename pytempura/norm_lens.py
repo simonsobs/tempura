@@ -240,24 +240,25 @@ def qall(QDO,lmax,rlmin,rlmax,fC,fwC,OC,gtype=''):
   """
   return _libtempura.norm_lens.qall(QDO,lmax,rlmin,rlmax,fC,fwC,OC,gtype)
 
-def qgmv(lmax,rlmin,rlmax,fC,OC,gtype=''):
+def qgmv(lmax,rlmin,rlmax,tC,fC,OC,gtype='',th_vary=False):
   """
   Compute GMV estimator normalization. Currently BB is ignored. 
 
   Args:
     :lmax (*int*): Maximum multipole of the output power spectra
     :rlmin/rlmax (*int*): Minimum/Maximum multipole of CMB for reconstruction
-    :fC/OC [*l*] (*double*): Theory/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax)
+    :tC/fC/OC [*l*] (*double*): Theory/True/Observed CMB angular power spectra (TT, EE, BB, TE), with bounds (0:rlmax)
 
   Args(optional):
     :gtype (*str*): Type of output, i.e., convergence (gtype='k') or lensing potential (gtype='', default)
+    :th_vary (*bool*): Vary theory or not, default = False
 
   Returns:
     :Ag [*6,l*] (*double*): Normalization of the TT, TE, EE, TB, EB, and MV estimators for lensing potential, with bounds (6,0:lmax)
     :Ac [*6,l*] (*double*): Same as Ag but for curl mode
 
   """
-  return _libtempura.norm_lens.qgmv(lmax,rlmin,rlmax,fC,OC,gtype)
+  return _libtempura.norm_lens.qgmv(lmax,rlmin,rlmax,tC,fC,OC,gtype,th_vary)
 
 def qeb_iter(lmax,elmax,rlmin,rlmax,dlmin,dlmax,CE,fCE,OCE,OCB,Cpp,iter=1,conv=1e-6):
   """
